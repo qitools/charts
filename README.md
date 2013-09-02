@@ -5,15 +5,15 @@ Simple OpenCPU Application. To install in R:
 
     library(devtools)
     install_github("opencpu", "jeroenooms")
-    install_github("gitstats", "opencpu")
+    install_github("qitools", "opencpu")
 
     library(opencpu)
-    opencpu$browse("library/gitstats/www")
+    opencpu$browse("library/qitools/www")
 
 Use the same function locally:
 
-    library(gitstats)
-    gitstats()
-    ?gitstats
+    library(qitools)
+    qitools()
+    ?qitools
 
 For more information about OpenCPU apps, see [opencpu.js](https://github.com/jeroenooms/opencpu.js#readme)
