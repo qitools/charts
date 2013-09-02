@@ -1,8 +1,8 @@
-\name{gitstats}
-\alias{gitstats}
+\name{qitools}
+\alias{qitools}
 \title{Plot github stats}
 \usage{
-  gitstats(id = "hadley", type = c("users", "orgs"),
+  qitools(id = "hadley", type = c("users", "orgs"),
     max = 20)
 }
 \arguments{
