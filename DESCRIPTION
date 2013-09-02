@@ -11,6 +11,7 @@ Imports:
     ggplot2,
     httr,
     RJSONIO,
-    reshape2
+    reshape2,
+    qcc
 Collate:
     'qitools.R'
