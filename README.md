@@ -1,4 +1,4 @@
-OpenCPU App: Gitstats
+OpenCPU App: QItools
 ---------------------
 
 Simple OpenCPU Application. To install in R:
