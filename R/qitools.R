@@ -8,7 +8,7 @@
 #' @author Scott Chamberlain, Jeroen Ooms
 #' @import ggplot2 httr RJSONIO reshape2
 #' @export
-gitstats <- function (id = "hadley", type = c("users", "orgs"), max=20) {
+qitools <- function (id = "hadley", type = c("users", "orgs"), max=20) {
 	type <- match.arg(type, choices=c('users','orgs'))
 	
 	#call github API using httr
