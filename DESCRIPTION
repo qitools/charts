@@ -1,16 +1,17 @@
-Package: gitstats
+Package: qitools
 Type: OpenCPU Application
-Title: Gitstats application for OpenCPU
+Title: QItools application for OpenCPU
 Version: 0.1
-Date: 2013-07-07
-Author: Scott Chamberlain, Jeroen Ooms
-Maintainer: Jeroen Ooms <jeroenooms@gmail.com>
-Description: OpenCPU application to chart github statistics.
+Date: 2013-09-02
+Author: Robert Badgett, Scott Chamberlain, Jeroen Ooms
+Maintainer: Robert Badgett <rbadgett@kumc.edu>
+Description: OpenCPU application for selected QI tools in package QCC. 
 License: GPL
 Imports:
     ggplot2,
     httr,
     RJSONIO,
-    reshape2
+    reshape2,
+    qcc
 Collate:
-    'gitstats.R'
+    'qitools.R'
