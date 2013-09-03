@@ -11,6 +11,7 @@ Imports:
     ggplot2,
     httr,
     RJSONIO,
+    readbitmap,
     reshape2,
 	qcc
 Collate:
