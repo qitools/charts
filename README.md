@@ -5,7 +5,7 @@ Simple OpenCPU Application. To install in R:
 
     library(devtools)
     install_github("opencpu", "jeroenooms")
-    install_github("qitools", "opencpu")
+    install_github("qitools", "badgettrg")
 
     library(opencpu)
     opencpu$browse("library/qitools/www")
