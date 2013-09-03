@@ -12,6 +12,9 @@ Imports:
     httr,
     RJSONIO,
     reshape2,
-    qcc
+	qcc
 Collate:
     'qitools.R'
+	'ishikawa.R'
+	'make_charts.R'
+	'display_logo.R'
