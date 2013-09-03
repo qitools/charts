@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Gitstats OpenCPU application</title>
+<title>QI Tools</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -11,28 +11,23 @@
 <script src="opencpu/opencpu.js"> </script>
 
 <!-- some optional styling stuff -->
-<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="jqueryui/css/ui-lightness/jquery-ui-1.10.3.custom.css" rel="stylesheet" media="screen">
 
 <script src="bootstrap/js/bootstrap.js"> </script>
 <script src="jqueryui/jquery-ui-1.10.3.custom.js"> </script>
-
-
 
 <script> 
 $(function(){
 
   //optional, requires jquery-ui.
-  $("#plotdiv").resizable()
+  //$("#plotdiv").resizable()
   
   //button handler
   $("#plotbutton").on("click", function(e){
     e.preventDefault();
     $("#plotbutton").attr("disabled", "disabled")
-    var req = $("#plotdiv").r_fun_plot("gitstats", {
-      id : $("#githubid").val(),
-      type : $("#type").val(),
-      max : parseInt($("#max").val())      
+    var req = $('#target').contents().find('#plotdiv').r_fun_plot("ishikawa", {
+	  content: $("#content").val()
+	  //content : encodeURIComponent(editor.getSession().getValue())
     }).always(function(){
       $("#plotbutton").removeAttr("disabled");
     }).fail(function(){
@@ -41,20 +36,16 @@ $(function(){
   });
   
   //plot the default values on page load
-  $("#plotbutton").trigger("click")
+  //$("#plotbutton").trigger("click")
 });
 </script>
 <style>
 
 #plotdiv {
-  width: 100%;
+  width: 1000px;
   height: 400px;
   border: 1px solid #e3e3e3;
   border-radius: 4px;
-}
-
-#type {
-  width: 164px;
 }
 
 #plotbutton{
@@ -66,42 +57,44 @@ $(function(){
 </head>
 
 <body>
-  <div class="container">
+  <div class="container" style="width:1000px;">
 
     <div class="page-header">
-      <h1>Github Stats Plot</h1>
+      <h1>QI Tools</h1>
     </div>
     
     <div class="row">
       <div class="span3">
 
-        <form class="well" id="paramform">
+        <form class="well" id="paramform" target="target">
           <fieldset>
-            <legend>Plot Parameters</legend>
-            <label>User / Organization Name</label> 
-            <input class="input-medium" id="githubid" type="text" value="hadley"></input>
+            <legend>Ishikawa Plot Parameters</legend>
+            <label>Causes</label><br/>
+<textarea name="content" id="content" rows="18" cols="100">
+causes<-list(
+##Edit the branches below
 
-            <label>Type</label> 
-            <select class="input-medium" id="type">
-              <option value="users">Github User</option>
-              <option value="orgs">Github Organization</option>
-            </select> 
-            
-            <label>Max Repos</label> 
-            <input class="input-medium" type="number" id="max" min="5" max="50" value="20" />
-            
+Provider=c('Distracted','Unaware','Inaccessible \n  knowledge','Nonparsable documentation','Not motivated','Not done: reason unknown'),
+
+Patient=c('No visit during time period','Multiple complaints','TTM: early stage','HBM factor', 'No resource: _____'),
+
+System=c('Acute vs continuity visit', 'Specialty vs primary care', 'Personnel absent','Supplies unavailable','Bean counting error'),
+
+Personnel=c('Distracted','Inaccessible knowledge','Nonparsable documentation','Not done: reason unknown','Not motivated','Not empowered')
+
+##Edit the branches above. No comma after last branch
+)</textarea>	
             <br />
             
             <button class="btn btn-small btn-primary" id="plotbutton"><i class="icon-ok icon-white"></i> Update Plot</button>
           </fieldset>
         </form>
       </div>
-      
-      <div class="span9">
-        <div id="plotdiv"></div>
-      </div>
+<div id="">&nbsp;</div>
+<iframe id="target" style="width:1000px;height:600px" name="target" width="700px" height="600px" src="output.html">
+</iframe>
     </div>
-      
+     
     <div class="row">
       <div class="span12">
         <h3>About</h3>
@@ -111,10 +104,10 @@ $(function(){
           <tr><th>Resource</th> <th>link</th> <th>API URL</th></tr>
           <tr><td>Package Info</td> <td><a href=".." target="blank">link</a></td> <td><code>GET /library/package</code></td> </tr>       
           <tr><td>Package Objects</td><td> <a href="../R" target="blank">link</a></td><td><code>GET /library/package/R</code></td></tr>           
-          <tr><td>Function Source</td><td><a href="../R/gitstats/print" target="blank">link</a></td><td><code>GET /library/package/R/function/print</code></td></tr>
-          <tr><td>Help Page (txt)</td><td><a href="../man/gitstats/text" target="blank">link</a></td><td><code>GET /library/package/man/function/text</code></td></tr>   
-          <tr><td>Help Page (html)</td><td><a href="../man/gitstats/html" target="blank">link</a></td><td><code>GET /library/package/man/function/html</code></td></tr>
-          <tr><td>Help Page (pdf)</td><td><a href="../man/gitstats/pdf" target="blank">link</a></td><td><code>GET /library/package/man/function/pdf</code></td></tr>          
+          <tr><td>Function Source</td><td><a href="../R/qitools/print" target="blank">link</a></td><td><code>GET /library/package/R/function/print</code></td></tr>
+          <tr><td>Help Page (txt)</td><td><a href="../man/qitools/text" target="blank">link</a></td><td><code>GET /library/package/man/function/text</code></td></tr>   
+          <tr><td>Help Page (html)</td><td><a href="../man/qitools/html" target="blank">link</a></td><td><code>GET /library/package/man/function/html</code></td></tr>
+          <tr><td>Help Page (pdf)</td><td><a href="../man/qitools/pdf" target="blank">link</a></td><td><code>GET /library/package/man/function/pdf</code></td></tr>          
         </table>
                
       </div>
