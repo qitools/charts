@@ -25,8 +25,11 @@ $(function(){
   $("#plotbutton").on("click", function(e){
     e.preventDefault();
     $("#plotbutton").attr("disabled", "disabled")
-    var req = $('#target').contents().find('#plotdiv').r_fun_plot("ishikawa", {
-	  content: $("#content").val()
+    temp = $("#content").val()
+	temp = temp.replace(/\s+$/g, "")
+	temp = temp.replace(/,$/g, "")
+	var req = $('#target').contents().find('#plotdiv').r_fun_plot("ishikawa", {
+	  content: temp
 	  //content : encodeURIComponent(editor.getSession().getValue())
     }).always(function(){
       $("#plotbutton").removeAttr("disabled");
