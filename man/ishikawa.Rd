@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Ishikawa}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+This function implements the cause and effect diagrams of package \href{https://public.opencpu.org/ocpu/cran/qcc/}{qcc} in a OpenCPU app.
 }
 \usage{
 ishikawa(content)
@@ -11,24 +11,20 @@ ishikawa(content)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{content}{
-%%     ~~Describe \code{content} here~~
+One or more lists of string values. Each list will become a branch of the diagram.
 }
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+This function returns a plot.
 }
 \references{
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  Robert Badgett <rbadgett@kumc.edu>
+  Robert Badgett \email{rbadgett@kumc.edu}
 }
 \note{
 %%  ~~further notes~~
@@ -45,9 +41,8 @@ ishikawa(content)
 ##--	or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
-function (tttt) 
+function (content) 
 {
-    library(qcc)
     KUBlue = "#0022B4"
     SkyBlue = "#6DC6E7"
     par(col.axis = "black", col.lab = KUBlue, col.main = KUBlue, 
