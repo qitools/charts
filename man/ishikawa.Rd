@@ -10,7 +10,7 @@ ishikawa(content)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{tttt}{
+  \item{content}{
 %%     ~~Describe \code{content} here~~
 }
 }
