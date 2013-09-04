@@ -70,10 +70,7 @@ $(function(){
           <fieldset>
             <legend>Ishikawa Plot Parameters</legend>
             <label>Causes</label><br/>
-<textarea name="content" id="content" rows="18" cols="100">
-causes<-list(
-##Edit the branches below
-
+<textarea name="content" id="content" rows="15" cols="100">
 Provider=c('Distracted','Unaware','Inaccessible \n  knowledge','Nonparsable documentation','Not motivated','Not done: reason unknown'),
 
 Patient=c('No visit during time period','Multiple complaints','TTM: early stage','HBM factor', 'No resource: _____'),
@@ -81,9 +78,7 @@ Patient=c('No visit during time period','Multiple complaints','TTM: early stage'
 System=c('Acute vs continuity visit', 'Specialty vs primary care', 'Personnel absent','Supplies unavailable','Bean counting error'),
 
 Personnel=c('Distracted','Inaccessible knowledge','Nonparsable documentation','Not done: reason unknown','Not motivated','Not empowered')
-
-##Edit the branches above. No comma after last branch
-)</textarea>	
+</textarea>	
             <br />
             
             <button class="btn btn-small btn-primary" id="plotbutton"><i class="icon-ok icon-white"></i> Update Plot</button>
