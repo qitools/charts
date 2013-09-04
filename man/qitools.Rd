@@ -1,23 +1,17 @@
 \name{qitools}
 \alias{qitools}
-\title{Plot github stats}
-\usage{
-  qitools(id = "hadley", type = c("users", "orgs"),
-    max = 20)
-}
-\arguments{
-  \item{id}{name of the github user or organization}
-
-  \item{type}{either "users" or "orgs"}
-
-  \item{max}{maximum number of repositories to plot}
-}
+\title{qitools}
 \description{
-  This function plots the total number of forks and
-  followers for all repositories of a certain user or
-  organization.
-}
-\author{
-  Scott Chamberlain, Jeroen Ooms
+This collection of functions implements selected tools from 
+\url{http://cran.r-project.org/web/packages/qcc} at 
+\url{https://public.opencpu.org}
 }
 
+\author{
+  Robert Badgett \email{rbadgett@kumc.edu}, Scott Chamberlain, Jeroen Ooms
+}
+\seealso{
+\code{\link{ishikawa}}.
+\code{\link{make_charts}}.
+\code{\link{pareto}}.
+}
