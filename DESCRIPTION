@@ -19,4 +19,4 @@ Collate:
 	'ishikawa.R'
 	'make_charts.R'
 	'display_logo.R'
-	'pareto'
+	'pareto.R'
