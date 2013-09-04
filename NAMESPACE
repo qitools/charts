@@ -1,6 +1,7 @@
 export(qitools)
 export(ishikawa)
 export(make_charts)
+export(pareto)
 export(display_logo)
 import(RJSONIO)
 import(ggplot2)
