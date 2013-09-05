@@ -2,9 +2,10 @@ ishikawa <-
 function(content) {
 KUBlue = "#0022B4"
 SkyBlue = "#6DC6E7"
-temp <- paste('list(',gsub('\n', '', fixed = TRUE, content),')')
-temp <- sub("\\s+$", "", temp, perl = TRUE) #Removing trailing whitespace
-temp <- sub(",+$", "", temp, perl = TRUE) #Remove trailing comma if accidentally added by user online
+temp <- gsub('\n', '', fixed = TRUE, content, perl = TRUE)
+temp <- gsub("\\s+$", "", temp, perl = TRUE) #Removing trailing whitespace
+temp <- gsub(",+$", "", temp, perl = TRUE) #Remove trailing comma if accidentally added by user online
+temp <- paste('list(',temp,')')
 causes<-eval(parse(file = "", n = NULL, text = temp))
 par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue,bg=SkyBlue,xaxt="s",yaxt="s",mai=c(.956,.769,.769,.394),pin=c(14,14))
 cause.and.effect(cause=causes,title="",effect="Nonconformity",cex = c(1, 1, 0.9), font = c(2, 3, 2))
