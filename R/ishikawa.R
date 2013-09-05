@@ -2,7 +2,7 @@ ishikawa <-
 function(content) {
 KUBlue = "#0022B4"
 SkyBlue = "#6DC6E7"
-temp <- gsub('\n', '', fixed = TRUE, content, perl = TRUE)
+temp <- gsub('\n', '', content, perl = TRUE)
 temp <- gsub("\\s+$", "", temp, perl = TRUE) #Removing trailing whitespace
 temp <- gsub(",+$", "", temp, perl = TRUE) #Remove trailing comma if accidentally added by user online
 temp <- paste('list(',temp,')')
