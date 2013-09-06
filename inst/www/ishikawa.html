@@ -26,6 +26,7 @@ $(function(){
     e.preventDefault();
     $("#plotbutton").attr("disabled", "disabled")
     temp = $("#content").val()
+	temp = temp.replace(/\r?\n/g, '')
 	temp = temp.replace(/\s+$/g, "")
 	temp = temp.replace(/,$/g, "")
 	var req = $('#target').contents().find('#plotdiv').r_fun_plot("ishikawa", {
