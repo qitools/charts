@@ -15,20 +15,30 @@
 <script src="bootstrap/js/bootstrap.js"> </script>
 <script src="jqueryui/jquery-ui-1.10.3.custom.js"> </script>
 
+<!-- Ajax.org Cloud9 Editor -->
+<script src="src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+
 <script> 
 $(function(){
 
   //optional, requires jquery-ui.
   //$("#plotdiv").resizable()
+
+  //For Ajax.org Cloud9 Editor
+  var editor = ace.edit("editor");
+  editor.setTheme("ace/theme/github");
+  editor.getSession().setMode("ace/mode/r");
+  editor.setFontSize("14px");
+  editor.getSession().setUseWrapMode(true);
   
   //button handler
   $("#plotbutton").on("click", function(e){
     e.preventDefault();
     $("#plotbutton").attr("disabled", "disabled")
-    temp = $("#content").val()
-	temp = temp.replace(/\r?\n/g, '')
-	temp = temp.replace(/\s+$/g, "")
-	temp = temp.replace(/,$/g, "")
+    temp = editor.getSession().getValue()
+	//temp = temp.replace(/\r?\n/g, '')
+	//temp = temp.replace(/\s+$/g, '')
+	//temp = temp.replace(/,$/g, '')
 	var req = $('#target').contents().find('#plotdiv').r_fun_plot("ishikawa", {
 	  content: temp
 	  //content : encodeURIComponent(editor.getSession().getValue())
@@ -39,12 +49,19 @@ $(function(){
     });
   });
   
-  //plot the default values on page load
-  //$("#plotbutton").trigger("click")
 });
 </script>
 <style>
+    body {
+        overflow: hidden;
+    }
 
+#editor { 
+  position: relative;
+  width: 950px;
+  height: 250px;
+}
+    
 #plotdiv {
   width: 1000px;
   height: 400px;
@@ -72,17 +89,16 @@ $(function(){
 
         <form class="well" id="paramform" target="target">
           <fieldset>
-            <legend>Ishikawa Plot Parameters</legend>
-            <label>Causes</label><br/>
-<textarea name="content" id="content" rows="15" cols="100">
-Provider=c('Distracted','Unaware','Inaccessible \n  knowledge','Nonparsable documentation','Not motivated','Not done: reason unknown'),
+            <legend>Ishikawa Plot</legend>
+            <div>Replace these examples of causes with your observations. The branches ('Provider', 'Patient', etc) can be removed, replaced, or added to.</div><br/>
+<div id="editor">Provider=c('Distracted','Unaware','Inaccessible \n  knowledge','Nonparsable documentation','Not motivated','Not done: reason unknown'),
 
 Patient=c('No visit during time period','Multiple complaints','TTM: early stage','HBM factor', 'No resource: _____'),
 
 System=c('Acute vs continuity visit', 'Specialty vs primary care', 'Personnel absent','Supplies unavailable','Bean counting error'),
 
 Personnel=c('Distracted','Inaccessible knowledge','Nonparsable documentation','Not done: reason unknown','Not motivated','Not empowered')
-</textarea>	
+</div>	
             <br />
             
             <button class="btn btn-small btn-primary" id="plotbutton"><i class="icon-ok icon-white"></i> Update Plot</button>
