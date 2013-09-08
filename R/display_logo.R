@@ -1,8 +1,9 @@
-display_logo <- function(x=0.8,y=-1) {
-#par(new=TRUE,xaxt="n",yaxt="n",mai=c(0,0,0,0))
-#plot(0,0,axes=F,type="n",xlab="", ylab = "",new=TRUE)
-#img <- read.bitmap(file.path('qitools','www','jayhawk.jpg'), IdentifyByExtension = TRUE)
-#mag=2
-#rasterImage(img,x, y, x + mag*45/400, y + mag*40/400, interpolate=TRUE)
-#par(xaxt="s",yaxt="s",mai=c(.956,.769,.769,.394))
+display_logo <- function(x=0.9,y=0.05) {
+#library(EBImage)
+plot.window(c(0,dev.size(units = "px")[1]), c(0,dev.size(units = "px")[2]), log = "", asp = 1, mai=c(0,0,0,0))
+img2 = readImage("http://sumsearch.org/images/jayhawk.tiff")
+x=dev.size(units = "px")[1]*x
+y=dev.size(units = "px")[2]*y
+rasterImage(img2,x, y, x + 50, y - 60, angle = 270, interpolate=FALSE)
+par(xaxt="s",yaxt="s",mai=c(.956,.769,.769,.394))
 }
