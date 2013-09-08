@@ -40,7 +40,7 @@ $(document).ready(function(){
 	temp = temp.replace(/,$/g, '')
 	var req = $('#target').contents().find('#plotdiv').r_fun_plot("ishikawa", {
 	  content: temp,
-	  plotbgcolor : $("#plotbgcolor").val()
+	  theme : $("#theme").val()
     }).always(function(){
       $("#plotbutton").removeAttr("disabled");
     }).fail(function(){
@@ -55,7 +55,7 @@ $(document).ready(function(){
   });
 
   //init on start
-  drawplot();
+  //drawplot();
   
 });
 </script>
@@ -123,10 +123,10 @@ Personnel=c('Distracted','Inaccessible knowledge','Nonparsable documentation','N
 </div>	
             <br />
 
-            <label>Plot background color</label> 
-            <select id="plotbgcolor">
-              <option selected="#FFFFFF" value="white">White</option>
-              <option value="#6DC6E7">Blue</option>
+            <label>Plot logo</label> 
+            <select id="theme">
+              <option value="white" selected>None</option>
+              <option value="KU">KU</option>
             </select> 
 
             <br />
