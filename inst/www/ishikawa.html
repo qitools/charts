@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
 <title>QI Tools: Ishikawa diagram</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
@@ -36,12 +35,13 @@ $(function(){
     e.preventDefault();
     $("#plotbutton").attr("disabled", "disabled")
     temp = editor.getSession().getValue()
-	//temp = temp.replace(/\r?\n/g, '')
-	//temp = temp.replace(/\s+$/g, '')
-	//temp = temp.replace(/,$/g, '')
+	//Three replacements below are not required on a local server, but are at https://public.opencpu.org/ocpu/github/
+	temp = temp.replace(/\r?\n/g, '')
+	temp = temp.replace(/\s+$/g, '')
+	temp = temp.replace(/,$/g, '')
 	var req = $('#target').contents().find('#plotdiv').r_fun_plot("ishikawa", {
-	  content: temp
-	  //content : encodeURIComponent(editor.getSession().getValue())
+	  content: temp,
+	  plotbgcolor : $("#plotbgcolor").val()
     }).always(function(){
       $("#plotbutton").removeAttr("disabled");
     }).fail(function(){
@@ -52,9 +52,6 @@ $(function(){
 });
 </script>
 <style>
-    body {
-        overflow: hidden;
-    }
 
 #editor { 
   position: relative;
@@ -74,55 +71,73 @@ $(function(){
   margin-left: 20px;
 }
 
+.twocolumns
+{
+columns:100px 2;
+-webkit-columns:100px 2; /* Safari and Chrome */
+-moz-columns:100px 2; /* Firefox */
+}
+
 </style>
 </head>
 
 <body>
+
   <div class="container" style="width:1000px;">
 
     <div class="page-header">
-      <h1>QI Tools</h1>
+      <h1 style="float:left;color:#0022B4">QI Tools</h1>
+      <span style="float:right"><a href="mailto:rbadgett@kumc.edu">rbadgett@kumc.edu</a></span>
     </div>
-    
+    <div style="clear:both"></div>
+	
     <div class="row">
       <div class="span3">
 
         <form class="well" id="paramform" target="target">
-          <fieldset>
+          <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;">
             <legend>Ishikawa Plot</legend>
-            <div>Replace these examples of causes with your observations. The branches ('Provider', 'Patient', etc) can be removed, replaced, or added to.</div><br/>
-<div id="editor">Provider=c('Distracted','Unaware','Inaccessible \n  knowledge','Nonparsable documentation','Not motivated','Not done: reason unknown'),
+            <div>Replace these examples of causes with your observations. The branches ('Provider', 'Patient', etc) can be removed, replaced, or added to. See Wikipedia for explanations of:</div>
+			<ul class="twocolumns">
+			<li><a href="https://en.wikipedia.org/wiki/Health_belief_model#Constructs">HBM</a> (Health belief model)</li>
+			<li><a href="https://en.wikipedia.org/wiki/Transtheoretical_model#Stages_of_change">TTM</a> (Transtheoretical model)</li>
+			</ul>
+<div id="editor">Provider=c('Distracted','Unaware','Inaccessible knowledge','Nonparsable documentation','Not motivated','Not done: reason unknown'),
 
-Patient=c('No visit during time period','Multiple complaints','TTM: early stage','HBM factor', 'No resource: _____'),
+Patient=c('No visit during time period','Multiple complaints','TTM: early stage','HBM: ____', 'No resource: _____'),
 
 System=c('Acute vs continuity visit', 'Specialty vs primary care', 'Personnel absent','Supplies unavailable','Bean counting error'),
 
 Personnel=c('Distracted','Inaccessible knowledge','Nonparsable documentation','Not done: reason unknown','Not motivated','Not empowered')
 </div>	
             <br />
-            
+
+            <label>Plot background color</label> 
+            <select id="plotbgcolor">
+              <option selected="#FFFFFF" value="white">White</option>
+              <option value="#6DC6E7">Blue</option>
+            </select> 
+
+            <br />
             <button class="btn btn-small btn-primary" id="plotbutton"><i class="icon-ok icon-white"></i> Update Plot</button>
           </fieldset>
         </form>
       </div>
-<div id="">&nbsp;</div>
-<iframe id="target" style="width:1000px;height:600px" name="target" width="700px" height="600px" src="output.html">
-</iframe>
-    </div>
-     
+	<div id="">&nbsp;</div>
+	<iframe id="target" style="width:1000px;height:600px;border: 3px solid #6DC6E7;" name="target" width="700px" height="600px" src="output.html">
+	</iframe>
+	</div>
+	 
     <div class="row">
       <div class="span12">
         <h3>About</h3>
-        <p>This is a simple OpenCPU application. Below some example API's to access the R source code and manual pages.</p>
-        
+        <h4>Technical details</h4>
+        <p>This is an OpenCPU application.</p>
         <table class="table table-striped">
-          <tr><th>Resource</th> <th>link</th> <th>API URL</th></tr>
-          <tr><td>Package Info</td> <td><a href=".." target="blank">link</a></td> <td><code>GET /library/package</code></td> </tr>       
-          <tr><td>Package Objects</td><td> <a href="../R" target="blank">link</a></td><td><code>GET /library/package/R</code></td></tr>           
-          <tr><td>Function Source</td><td><a href="../R/qitools/print" target="blank">link</a></td><td><code>GET /library/package/R/function/print</code></td></tr>
-          <tr><td>Help Page (txt)</td><td><a href="../man/qitools/text" target="blank">link</a></td><td><code>GET /library/package/man/function/text</code></td></tr>   
-          <tr><td>Help Page (html)</td><td><a href="../man/qitools/html" target="blank">link</a></td><td><code>GET /library/package/man/function/html</code></td></tr>
-          <tr><td>Help Page (pdf)</td><td><a href="../man/qitools/pdf" target="blank">link</a></td><td><code>GET /library/package/man/function/pdf</code></td></tr>          
+          <tr><th>Resource</th> <th>link</th></tr>
+          <tr><td>Package Info</td> <td><a href=".." target="blank">link</a></td></tr>       
+          <tr><td>Function Source</td><td><a href="../R/ishikawa/print" target="blank">link</a></td><td></tr>
+          <tr><td>Help Page (html)</td><td><a href="../man/qitools/html" target="blank">link</a></td><td></tr>
         </table>
                
       </div>
