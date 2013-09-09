@@ -93,7 +93,11 @@ columns:100px 2;
 </head>
 
 <body>
-
+<!-- 
+http://jquery-csv.googlecode.com/git/examples/basic-usage.html
+http://jquery-csv.googlecode.com/git/examples/flot.html -> seems best and most stable without reticulating spines error
+http://code.google.com/p/jquery-csv/wiki/API -> instructions
+-->
   <div class="container" style="width:1000px;">
 
     <div class="page-header">
@@ -126,9 +130,10 @@ columns:100px 2;
             <label>Plot type</label> 
             <select id="type">
               <option value="R" selected>Run chart</option>
-              <option value="B">Bar chart (comparing averages)</option>
-              <option value="P">Control chart</option>
-            </select> 
+              <option value="B">Bar chart (comparing average proportions)</option>
+              <option value="P">Control chart (proportions)</option>
+              <option value="C">Control chart (counts)</option>
+            </select> <br/>
             <label>Outcome</label> 
             <select id="outcome">
               <option value="nonconforming" selected>nonconforming</option>
