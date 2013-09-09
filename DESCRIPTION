@@ -11,7 +11,7 @@ Imports:
     ggplot2,
     httr,
     RJSONIO,
-    stringer,
+    stringr,
     EBImage,
     reshape2,
 	qcc
