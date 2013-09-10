@@ -5,20 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-<!-- ocpu library -->
 <script src="jquery/jquery-1.9.1.js"> </script>
+
+<!-- ocpu library -->
 <script src="opencpu/opencpu.js"> </script>
 
 <!-- some optional styling stuff -->
-
 <script src="bootstrap/js/bootstrap.js"> </script>
 <script src="jqueryui/jquery-ui-1.10.3.custom.js"> </script>
 
-<!-- Ajax.org Cloud9 Editor -->
+<!-- jquery-csv from http://code.google.com/p/jquery-csv/ -->
+<script src="http://jquery-csv.googlecode.com/git/src/jquery.csv.js"></script>
+
+<!-- Ajax.org Cloud9 Editor from http://ace.c9.io/#nav=api&api=editor -->
 <script src="src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 
 <script> 
 $(document).ready(function(){
+
+    if(isAPIAvailable()) {
+      $('#files').bind('change', handleFileSelect);
+    }
 
   //optional, requires jquery-ui.
   $("#plotdiv").resizable()
@@ -51,12 +58,77 @@ $(document).ready(function(){
     });
   }
 
-  //button handler
+  //button handlers
   $("#plotbutton").on("click", function(e){
     e.preventDefault();
     drawplot();
   });
+  
+  $(".example").click(function(){
+	if($(this).val()=="ex_0a") {$("#type").val("R");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0\n",1);}
+	if($(this).val()=="ex_0b") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0\n",1);}
+	if($(this).val()=="ex_1a") {$("#type").val("B");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0,\n4, 15,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);}
+	if($(this).val()=="ex_1b") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0,\n4, 15,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);}
+	if($(this).val()=="ex_1c") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0,\n4, 15,30, 1,\n5, 10,30, 1,\n6, 5,30, 1,\n6, 5,30, 1,\n6, 5,30, 1,\n6, 5,30, 1",1);}
+	if($(this).val()=="ex_1d") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0,\n4, 11,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);}
+	if($(this).val()=="ex_2a") {$("#type").val("P");editor.setValue("1, 1,1, 0,\n2, 1,1, 0,\n3, 1,1, 0,\n4, 0,1, 0,\n5, 3,3, 0,\n6, 2,5, 0,\n7, 1,4, 0,\n8, 7,8, 1,\n9, 9,19, 1,\n10, 9,20, 1,\n11, 10,23, 1",1);}
+	if($(this).val()=="ex_2b") {$("#type").val("C");editor.setValue("1, 1,1, 0,\n2, 1,1, 0,\n3, 1,1, 0,\n4, 0,1, 0,\n5, 3,3, 0,\n6, 2,5, 0,\n7, 1,4, 0,\n8, 7,8, 1,\n9, 9,19, 1,\n10, 9,20, 1,\n11, 10,23, 1",1);}
+  });
 
+  function isAPIAvailable() {
+    // Check for the various File API support.
+    if (window.File && window.FileReader && window.FileList && window.Blob) {
+      // Great success! All the File APIs are supported.
+      return true;
+    } else {
+      // source: File API availability - http://caniuse.com/#feat=fileapi
+      // source: <output> availability - http://html5doctor.com/the-output-element/
+      document.writeln('The HTML5 APIs used in this form are only available in the following browsers:<br />');
+      // 6.0 File API & 13.0 <output>
+      document.writeln(' - Google Chrome: 13.0 or later<br />');
+      // 3.6 File API & 6.0 <output>
+      document.writeln(' - Mozilla Firefox: 6.0 or later<br />');
+      // 10.0 File API & 10.0 <output>
+      document.writeln(' - Internet Explorer: Not supported (partial support expected in 10.0)<br />');
+      // ? File API & 5.1 <output>
+      document.writeln(' - Safari: Not supported<br />');
+      // ? File API & 9.2 <output>
+      document.writeln(' - Opera: Not supported');
+      return false;
+    }
+  }
+
+  function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+    var file = files[0];
+
+    // read the file contents
+    printTable(file);
+
+  }
+
+  function printTable(file) {
+    var reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = function(event){
+      var csv = event.target.result;
+      var data = $.csv.toArrays(csv);
+      var html = '';
+      for(var row in data) {
+	  if($("#header").val() == "FALSE" || [row] > 1 ){
+        for(var item in data[row]) {
+          html += data[row][item] + ', ';
+        }
+        html += '\r\n';
+      }
+	  }
+      editor.setValue(html,1);
+
+    };
+    
+	reader.onerror = function(){ alert('Unable to read ' + file.fileName); };
+	}
+	
   //init on start
   //drawplot();
   
@@ -115,12 +187,15 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
         <form id="paramform" target="target" style="width:500px;">
           <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:500px;">
             <legend style="font-weight:bold">Enter inputs</legend>
-            <div>Replace the observations in this example data with your own observations in order to make either a <a href="https://en.wikipedia.org/wiki/Run_chart">Run chart</a> or <a href="https://en.wikipedia.org/wiki/Control_chart">Control chart</a>. See Wikipedia for <a href="https://en.wikipedia.org/wiki/Control_chart#Rules_for_detecting_signals">interpreting control charts</a> </div>
-			<ul class="twocolumns">
-			<li><a href="http://en.wikipedia.org/wiki/Western_Electric_rules">Western Electric rules</a></li>
-			<li><a href="http://en.wikipedia.org/wiki/Nelson_rules">Nelson rules</a></li>
+            <div>To make either a <a href="https://en.wikipedia.org/wiki/Run_chart">Run chart</a> or <a href="https://en.wikipedia.org/wiki/Control_chart">Control chart</a>, either:</div>
+			<ul>
+			<li>Replace the example data below with your data.</li>
+			<li>Upload a csv file of the same format.<br/>
+			<input type=file id=files name=files style="width:200px"/>
+			1st row is column names? <select id="header" name="header"><option value=TRUE> TRUE </option> <option value=FALSE> FALSE </option> </select>
+			</li>
 			</ul>
-<div id="">Four columns: month, events, total, trial. <br/>For trial, 0 = pre-intervention or no trial and 1 = after intervention.</div>
+<div id="">Four columns: month #, events, total, trial. <br/>For trial, 0 = pre-intervention or no trial and 1 = after intervention.</div>
 <div id="editor" style="width:500px;">1, 26,30, 0,
 2, 24,30, 0,
 3, 25,30, 0
@@ -130,7 +205,7 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
             <label>Plot type</label> 
             <select id="type">
               <option value="R" selected>Run chart</option>
-              <option value="B">Bar chart (comparing average proportions)</option>
+              <option value="B">Box chart (comparing average proportions)</option>
               <option value="P">Control chart (proportions)</option>
               <option value="C">Control chart (counts)</option>
             </select> <br/>
@@ -147,7 +222,7 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
               <option value="KU">KU</option>
             </select> 
             <br />
-            <button class="btn btn-small btn-primary" id="plotbutton"><i class="icon-ok icon-white"></i> Update Plot</button>
+            <button class="btn btn-small btn-primary" id="plotbutton"><i class="icon-ok icon-white"></i> Update Plot (below)</button>
           </fieldset>
         </form>
       </div>
@@ -155,9 +230,34 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
 	          <form name="form2" action="#" style="width:450px;">
           <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:450px;">
 		  <legend style="font-weight:bold">Example projects</legend>
-	  <div>1. Screening performed for depression</div>
+<h3>Baseline data</h3>
+<div><input type="radio" name="example" class="example" value="ex_0a" id="ex_0a" checked /><label for="ex_0a">Baseline data (run chart)</label></div>
+<div><input type="radio" name="example" class="example" value="ex_0b" id="ex_0b"/><label for="ex_0b">Baseline data (p-chart)</label></div>
+<h3>Project 1: screening performed for depression</h3>
+<div>We now have added 3 months of data after an intervention was made in the clinical process. <i>Does this project show benefit?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_1a" id="ex_1a"/><label for="ex_1a">First analysis (box chart)</label> What are problems with this analytic approach?</div>
+<div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Second analysis (p-chart)</label></div>
+<div><input type="radio" name="example" class="example" value="ex_1c" id="ex_1c"/><label for="ex_1c">Another scenario (longer trial)</label></div>
+<div><input type="radio" name="example" class="example" value="ex_1d" id="ex_1d"/><label for="ex_1d">Another scenario (steeper drop - value for month #4 dropped from 15 to 11)</label></div>
+<div>Is the benefit entirely from the trial?</div>
+<div>What does this say about the rigor of a QI study and its ability to control for coincident interventions?</div>
+
+<h3>Project 2: counseling for smoking cessation</h3>
+<div>Does this project show benefit?</div>
+<div><input type="radio" name="example" value="ex_2a" id="ex_2a"/><label for="ex_2a">First analysis (p-chart)</label></div>
+<div><input type="radio" name="example" value="ex_2b" id="ex_2b" /><label for="ex_2b">Second analysis (c-chart)</label></div>
+
 	  </fieldset>
+</form>
 	  </form>
+	</div>
+      <div style="width:450px;float:right">
+			<div id="">&nbsp;</div>
+			<div>See Wikipedia for <a href="https://en.wikipedia.org/wiki/Control_chart#Rules_for_detecting_signals">interpreting control charts</a></div>
+			<ul class="twocolumns">
+			<li><a href="http://en.wikipedia.org/wiki/Western_Electric_rules">Western Electric rules</a></li>
+			<li><a href="http://en.wikipedia.org/wiki/Nelson_rules">Nelson rules</a></li>
+			</ul>
 	</div>
 	
 	<div style="clear:both">&nbsp;</div>
