@@ -17,11 +17,18 @@
 <!-- jquery-csv from http://code.google.com/p/jquery-csv/ -->
 <script src="http://jquery-csv.googlecode.com/git/src/jquery.csv.js"></script>
 
+<!-- http://jqueryui.com/dialog/ -->
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
 <!-- Ajax.org Cloud9 Editor from http://ace.c9.io/#nav=api&api=editor -->
 <script src="src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 
 <script> 
 $(document).ready(function(){
+
+$(function() {
+$( "#dialog" ).dialog();
+});
 
     if(isAPIAvailable()) {
       $('#files').bind('change', handleFileSelect);
@@ -251,21 +258,33 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
 </form>
 	  </form>
 	</div>
-      <div style="width:450px;float:right">
-			<div id="">&nbsp;</div>
-			<div>See Wikipedia for <a href="https://en.wikipedia.org/wiki/Control_chart#Rules_for_detecting_signals">interpreting control charts</a></div>
-			<ul class="twocolumns">
-			<li><a href="http://en.wikipedia.org/wiki/Western_Electric_rules">Western Electric rules</a></li>
-			<li><a href="http://en.wikipedia.org/wiki/Nelson_rules">Nelson rules</a></li>
-			</ul>
-	</div>
 	
 	<div style="clear:both">&nbsp;</div>
 	<iframe id="target" style="width:1000px;height:600px;border: 3px solid #6DC6E7;" name="target" width="700px" height="600px" src="output.html">
 	</iframe>
 	</div>
-	 
-    <div class="row">
+
+<div>
+
+
+			<div id="spc-interpretation" style="float:left;display:block;width:400px;border:3px solid #6DC6E7;">
+			<h3>Interpreting control charts</h3>
+			<ol>
+				<li>Are all points within the 3-sigma control limits? If so, the process is in control.</li>
+				<li>Is there a signal that an effective change has occurred (if a prior QI effort has been done)?
+					<ul>
+						<li>Shift 6 or more consecutive points above or below the median</li>
+						<li>Trend - 5 or more consecutively increasing or decreasing points</li>
+						<li>Runs - Are there too many or too few for just common cause variation?</li>
+						<li>Astronomical Point-A dramatically different value</li>
+						<li>From: <a href="http://www.ihi.org/knowledge/Pages/Tools/RunChart.aspx">Run Chart Tool</a>. Institute for Health Care Innovation (IHI)</li>
+						<li>More detail from Wikipedia: <a href="http://en.wikipedia.org/wiki/Control_chart#Rules_for_detecting_signals">Control Charts</a>: <a href="http://en.wikipedia.org/wiki/Western_Electric_rules">Western Electric rules</a> and <a href="http://en.wikipedia.org/wiki/Nelson_rules">Nelson rules</a></li>
+					</ul>
+				</li>
+			</ol>
+			</div>
+
+    <div class="row" style="float:right">
       <div class="span12">
         <h3>About</h3>
         <h4>Technical details</h4>
@@ -280,6 +299,9 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
                
       </div>
     </div>
+	<div style="clear:both"></div>
+	</div>
+	
   </div>
 </body>
 </html>
