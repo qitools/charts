@@ -12,7 +12,6 @@ Imports:
     httr,
     RJSONIO,
     stringr,
-    EBImage,
     reshape2,
 	qcc
 Collate:
