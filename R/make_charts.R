@@ -14,7 +14,7 @@ qcc.options(cex.stats=1, cex.stats=0.9, bg.margin=SkyBlue)
 sequential = FALSE
 for(i in 1: length(myframe$month))
 {
-if(Trial[i]>0)
+if(Trial[i]>0 || Trial[i] == TRUE)
 	{
 	sequential = TRUE
 	}
@@ -22,7 +22,10 @@ else
 	{
 	}
 Trial[i] =as.logical(Trial[i])
+myframe$month[i] <- i
 }
+
+attach(myframe)
 
 if (type == "r" || type == "R"){sequential = FALSE}
 
@@ -30,8 +33,8 @@ if (sequential == FALSE)
 	{
 	if (type == "p" || type == "P")
 		{
-		baseline <- qcc(count,sizes=total,type="p", xlab="",ylab="",title="",labels=month,ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-		mtext(paste("Proportion of visits ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
+		baseline <- qcc(count,sizes=total,type="p", xlab="",ylab="",title="",labels=myframe$month,ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+		mtext(paste("Proportion of encounters ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
 		average = paste("Average ",outcome," = ",round(baseline$center*100,digits = 1),"%", sep = "")
 		if(theme=="KU"){display_logo(x=1.2,y=0.2)}
 		}
@@ -47,18 +50,18 @@ if (sequential == FALSE)
 				denominator <- denominator + total[i]
 				}
 			par(fin=c(8.8,6))
-			plot (month,count/total, ylim=c(0,1), xlab="", ylab="", type="b",xaxs="r",axes=F)
+			plot (myframe$month,count/total, ylim=c(0,1), xlab="", ylab="", type="b",xaxs="r",axes=F)
 			axis(1, at= 1:length(month))
 			axis(2,  xaxp=c(0,1,10))
 			box()
-			mtext(paste("Proportion of visits ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
-			average = paste0("Average ",outcome," = ",round(100*numerator/denominator,digits = 1),"%", collapse = NULL)
+			mtext(paste("Proportion of encounters ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
+			average = paste("Average ",outcome," = ",round(100*numerator/denominator,digits = 1),"%", collapse = NULL)
 			if(theme=="KU"){display_logo(x=1.15,y=0.06)}
 			}
 		else #c-chart
 			{
-			baseline <- qcc(count,type="c", xlab="",ylab="",title="",labels=month, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-			mtext(paste("Count of visits ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
+			baseline <- qcc(count,type="c", xlab="",ylab="",title="",labels=myframe$month, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+			mtext(paste("Count of encounters ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
 			average = paste("Average ",outcome," = ",round(baseline$center,digits = 1),"", sep = "")
 			}
 		}
@@ -69,8 +72,8 @@ if (sequential == FALSE)
 		}
 	else
 		{
-		mtext("Month", side=1, line=-1.5, col=KUBlue , cex=1.5)
-		mtext(average, side=1, line=-0.7, col=KUBlue , cex=1)
+		mtext("Month", side=1, line=-1.0, col=KUBlue , cex=1.5)
+		mtext(average, side=1, line=-0.2, col=KUBlue , cex=1)
 		}
 	mtext(topic, side=3,line=2.5,col=KUBlue,font=2, cex=1.3)
 	}
@@ -99,7 +102,7 @@ else #sequential == TRUE
 		print("###########################################")
 		print(twobytwo)
 		names(Trial) <- c("Baseline","Trial")
-		boxplot(count/total ~ Trial,ylab=paste("Mean proportion of visits ", outcome),main=topic, ylim=c(0,1),names.arg=c("Baseline","Trial"))
+		boxplot(count/total ~ Trial,ylab=paste("Mean proportion of encounters ", outcome),main=topic, ylim=c(0,1),names.arg=c("Baseline","Trial"))
 		axis(1, at= 1:2, lab=c("Baseline","Trial"),tick=FALSE)
 		mtext(side=3,line=0.5,"(before and after analysis)", font=1)
 		mm<-tapply(count/total,Trial, median,na.rm=TRUE)
@@ -117,9 +120,9 @@ else #sequential == TRUE
 		if (type == "p" || type == "P")
 			{
 			sequential <- qcc(count[Trial==0],sizes=total[Trial==0],newdata=count[Trial==1], newsizes=total[Trial==1],type="p", xlab="",ylab="",title="",labels=month[Trial==0],newlabels=month[Trial==1],ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-			mtext(paste("Proportion of visits ",outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
-			mtext(side=3,line=1,paste("proportion of visits ", outcome, " (p chart): before-after trial"), font=2)
-			#mtext(side=3,line=1,"count "~italic(outcome)~" of visits (p chart): before-after trial", font=2)
+			mtext(paste("Proportion of encounters ",outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
+			mtext(side=3,line=1,paste("proportion of encounters ", outcome, " (p chart): before-after trial"), font=2)
+			#mtext(side=3,line=1,"count "~italic(outcome)~" of encounters (p chart): before-after trial", font=2)
 			average = paste("Average (pretrial) = ",round(sequential$center*100,digits = 1),"%", sep = "")
 			##Sig testing
 			#Linear regression
@@ -128,17 +131,17 @@ else #sequential == TRUE
 		if (type == "c" || type == "C")
 			{
 			sequential <- qcc(count[Trial==0],newdata=count[Trial==1],type="c", xlab="",ylab="",title="",labels=month[Trial==0],newlabels=month[Trial==1], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-			mtext("Count of visits non-conforming", side=2, line=2.5, col=KUBlue , cex=1.5)
-			mtext(side=3,line=1,paste("proportion of visits ", outcome, " (c chart): before-after trial"), font=2)
-			#mtext(side=3,line=1,"count "~italic(outcome)~" of visits (c chart): before-after trial", font=2)
+			mtext("Count of encounters non-conforming", side=2, line=2.5, col=KUBlue , cex=1.5)
+			mtext(side=3,line=1,paste("Count of encounters ", outcome, " (c chart): before-after trial"), font=2)
+			#mtext(side=3,line=1,"count "~italic(outcome)~" of encounters (c chart): before-after trial", font=2)
 			average = paste("Average (pretrial) = ",round(sequential$center,digits = 1),"", sep = "")
 			##Sig testing
 			#Linear regression
 			glm.out1=glm(count ~ Trial + month, family=poisson(log))
 			}
 		mtext(topic, side=3,line=2.5,col=KUBlue,font=2, cex=1.3)
-		mtext("Month", side=1, line=-1.5, col=KUBlue , cex=1.5)
-		mtext(average, side=1, line=-0.7, col=KUBlue , cex=1)
+		mtext("Month", side=1, line=-1.0, col=KUBlue , cex=1.5)
+		mtext(average, side=1, line=-0.2, col=KUBlue , cex=1)
 
 		sum.sig <- summary(glm.out1)
 		coef(sum.sig)["Trial",4] # or coef(sum.sig)[2,4]
