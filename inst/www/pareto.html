@@ -41,7 +41,7 @@ $(document).ready(function(){
 	var req = $('#target').contents().find('#plotdiv').r_fun_plot("pareto", {
 	  content: temp,
 	  type: $("#type").val(),
-	  plotbgcolor : $("#plotbgcolor").val()
+	  theme : $("#theme").val()
     }).always(function(){
       $("#plotbutton").removeAttr("disabled");
     }).fail(function(){
@@ -56,7 +56,7 @@ $(document).ready(function(){
   });
 
   //init on start
-  drawplot();
+  //drawplot();
   
 });
 </script>
@@ -64,7 +64,7 @@ $(document).ready(function(){
 
 #editor { 
   position: relative;
-  width: 950px;
+  width: 450px;
   height: 125px;
 }
     
@@ -104,36 +104,50 @@ columns:100px 2;
     <div style="clear:both"></div>
 	
     <div class="row">
-      <div class="span3">
-
-        <form class="well" id="paramform" target="target">
-          <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;">
-            <legend style="font-weight:bold">Enter inputs</legend>
-            <div>Replace the reasons and their counts in this example <a href="https://en.wikipedia.org/wiki/Pareto_chart">Pareto chart</a> with your observations.<div id="editor">"Non-parsable", 7,
+		<!-- Left column -->
+		<div style="width:500px;float:left">
+			<form class="well" id="paramform" target="target" style="width:500px;">
+			<fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF; width:500px;">
+			<legend style="font-weight:bold">Enter inputs</legend>
+			<div>Replace the reasons and their counts in this example <a href="https://en.wikipedia.org/wiki/Pareto_chart">Pareto chart</a> with your observations.</div>
+			<div id="editor">"Non-parsable", 7,
 "Refused (cost)", 4,
 "Refused (other)", 4,
 "No documentation", 8,
 "Not PCP visit", 1
 </div>	
             <br />
-
             <label>Chart type</label> 
             <select id="type">
               <option value="b" selected>Bar chart</option>
               <option value="p">Pareto chart</option>
             </select> 
-            <label>Plot background color</label> 
-            <select id="plotbgcolor">
-              <option value="#FFFFFF" selected>White</option>
-              <option value="#6DC6E7">Blue</option>
+            <label>Plot logo</label> 
+            <select id="theme">
+              <option value="white" selected>None</option>
+              <option value="KU">KU</option>
             </select> 
 
             <br />
             <button class="btn btn-small btn-primary" id="plotbutton"><i class="icon-ok icon-white"></i> Update Plot</button>
           </fieldset>
         </form>
-      </div>
-	<div id="">&nbsp;</div>
+	</div>
+	
+	<!-- Right column-->
+    <div style="width:450px;float:right;background-color: #FFFFFF;">
+	<fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF; width:450px;">
+		<legend style="font-weight:bold">Pareto vs sorted bar chart?</legend>
+		<ul>
+			<li>The most common barrier will always be the same for both charts and in the left-most bar</li>
+			<li>The two charts conflict when more than one barrier occurs for a given patient</li>
+			<li>Sorted bar charts are much easier to make</li>
+			</ul>
+		</fieldset>
+	  </div>
+	
+	<div style="clear:both">&nbsp;</div>
+	
 	<iframe id="target" style="width:1000px;height:600px;border: 3px solid #6DC6E7;" name="target" width="700px" height="600px" src="output.html">
 	</iframe>
 	</div>
