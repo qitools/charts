@@ -18,7 +18,7 @@ make_charts(x, y)
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+%%  Names of periods, either numbers, or characters surrounded by single quoates and without embedded commas.
 }
 \value{
 %%  ~Describe the value returned
