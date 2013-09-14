@@ -9,6 +9,7 @@ temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=4, byrow=TRUE, dimnames = li
 x<-eval(parse(file = "", n = NULL, text = temp))
 myframe <- data.frame (x)
 myframe$period<-str_trim(myframe$period)
+#myframe$period<- gsub('\'', '', fixed = TRUE, myframe$period, perl = TRUE) "Does not work, needs to be before eval function
 myframe$count<-as.numeric(as.character(str_trim(myframe$count)))
 myframe$total<-as.numeric(as.character(str_trim(myframe$total)))
 #myframe$Trial<-as.logical(str_trim(myframe$Trial))
@@ -32,7 +33,7 @@ else
 	}
 Trial[i] =as.logical(Trial[i])
 #Below done to avoid handling strings such as "Jan, 2013"
-myframe$period[i] <- i
+#myframe$period[i] <- i
 }
 
 attach(myframe)
@@ -60,8 +61,8 @@ if (sequential == FALSE)
 				denominator <- denominator + total[i]
 				}
 			par(fin=c(8.8,6))
-			plot (myframe$period,count/total, ylim=c(0,1), xlab="", ylab="", type="b",xaxs="r",axes=F)
-			axis(1, at= 1:length(period))
+			plot (row(myframe)[,1],count/total, ylim=c(0,1), xlab="", ylab="", type="b",xaxs="r",axes=F,,xaxt="n")
+			axis(side=1,at=1:length(myframe$period),labels=myframe$period)
 			axis(2,  xaxp=c(0,1,10))
 			box()
 			mtext(paste("Proportion of encounters ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
