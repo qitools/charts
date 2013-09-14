@@ -56,6 +56,7 @@ $( "#dialog" ).dialog();
 	  content: temp,
 	  topic: $("#topic").val(),
 	  outcome: $("#outcome").val(),
+	  timeperiod: $("#timeperiod").val(),
 	  type: $("#type").val(),
 	  theme : $("#theme").val()
     }).always(function(){
@@ -76,10 +77,10 @@ $( "#dialog" ).dialog();
 	if($(this).val()=="ex_0b") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0\n",1);}
 	if($(this).val()=="ex_1a") {$("#type").val("B");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0,\n4, 15,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);}
 	if($(this).val()=="ex_1b") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0,\n4, 15,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);}
-	if($(this).val()=="ex_1c") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0,\n4, 15,30, 1,\n5, 10,30, 1,\n6, 5,30, 1,\n6, 5,30, 1,\n6, 5,30, 1,\n6, 5,30, 1",1);}
-	if($(this).val()=="ex_1d") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0,\n4, 11,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);}
-	if($(this).val()=="ex_2a") {$("#type").val("P");editor.setValue("1, 1,1, 0,\n2, 1,1, 0,\n3, 1,1, 0,\n4, 0,1, 0,\n5, 3,3, 0,\n6, 2,5, 0,\n7, 1,4, 0,\n8, 7,8, 1,\n9, 9,19, 1,\n10, 9,20, 1,\n11, 10,23, 1",1);}
-	if($(this).val()=="ex_2b") {$("#type").val("C");editor.setValue("1, 1,1, 0,\n2, 1,1, 0,\n3, 1,1, 0,\n4, 0,1, 0,\n5, 3,3, 0,\n6, 2,5, 0,\n7, 1,4, 0,\n8, 7,8, 1,\n9, 9,19, 1,\n10, 9,20, 1,\n11, 10,23, 1",1);}
+	if($(this).val()=="ex_1c") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0,\n4, 10,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);}
+	if($(this).val()=="ex_1d") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0,\n4, 15,30, 1,\n5, 10,30, 1,\n6, 5,30, 1,\n6, 5,30, 1,\n6, 5,30, 1,\n6, 5,30, 1",1);}
+	if($(this).val()=="ex_2a") {$("#type").val("P");editor.setValue("1, 1,1, 0,\n2, 1,1, 0,\n3, 1,1, 0,\n4, 0,1, 0,\n5, 2,3, 0,\n6, 2,5, 0,\n7, 1,4, 0,\n8, 7,8, 1,\n9, 9,19, 1,\n10, 9,20, 1,\n11, 10,23, 1",1);}
+	if($(this).val()=="ex_2b") {$("#type").val("C");editor.setValue("1, 1,1, 0,\n2, 1,1, 0,\n3, 1,1, 0,\n4, 0,1, 0,\n5, 2,3, 0,\n6, 2,5, 0,\n7, 1,4, 0,\n8, 7,8, 1,\n9, 9,19, 1,\n10, 9,20, 1,\n11, 10,23, 1",1);}
   });
 
   function isAPIAvailable() {
@@ -192,12 +193,12 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
       <div style="width:500px;float:left">
 
         <form id="paramform" target="target" style="width:500px;">
-          <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:500px;">
+          <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:500px;height:580px;">
             <legend style="font-weight:bold">Enter inputs</legend>
             <div>To make either a <a href="https://en.wikipedia.org/wiki/Run_chart">Run chart</a> or <a href="https://en.wikipedia.org/wiki/Control_chart">Control chart</a>, either:</div>
 			<ul>
 			<li>Replace the example data below with your data.</li>
-			<li>Upload a csv file of the same format.<br/>
+			<li>Upload a csv file formatted like this <a href="example.csv">example</a>.<br/>
 			<input type=file id=files name=files style="width:200px"/>
 			1st row is column names? <select id="header" name="header"><option value=TRUE> TRUE </option> <option value=FALSE> FALSE </option> </select>
 			</li>
@@ -220,14 +221,20 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
             <select id="outcome">
               <option value="nonconforming" selected>nonconforming</option>
               <option value="conforming">conforming</option>
-            </select><br/>
-            <label>Topic</label> 
+            </select>&nbsp;&nbsp;
+			<label>Time period</label> 			
+            <select id="timeperiod">
+              <option value="Month" selected>Month</option>
+              <option value="Week">Week</option>
+            </select>
+			<br/>
+            <label>Topic (for title - optional)</label> 
             <input type="text" id="topic" /> 
-            <label>Plot logo</label> 
+            <div style="display:none"><label>Plot logo</label> 
             <select id="theme">
               <option value="white" selected>None</option>
               <option value="KU">KU</option>
-            </select> 
+            </select></div> 
             <br />
             <button class="btn btn-small btn-primary" id="plotbutton"><i class="icon-ok icon-white"></i> Update Plot (below)</button>
           </fieldset>
@@ -235,23 +242,22 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
       </div>
       <div style="width:450px;float:right">
 	          <form name="form2" action="#" style="width:450px;">
-          <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:450px;">
+          <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:450px;height:580px;">
 		  <legend style="font-weight:bold">Example projects</legend>
 <h3>Baseline data</h3>
 <div><input type="radio" name="example" class="example" value="ex_0a" id="ex_0a" checked /><label for="ex_0a">Baseline data (run chart)</label></div>
 <div><input type="radio" name="example" class="example" value="ex_0b" id="ex_0b"/><label for="ex_0b">Baseline data (p-chart)</label> <i>What does this control chart add to the run chart?</i></div>
-<h3>Project 1: screening performed for depression</h3>
-<div>We now have added 3 months of data after an intervention was made in the clinical process. <i>Does this project show benefit?</i></div>
+<h3>QI project 1: screening performed for depression</h3>
+<div>We now have added 3 months of data after an intervention to increase screening for depression.</div>
 <div><input type="radio" name="example" class="example" value="ex_1a" id="ex_1a"/><label for="ex_1a">First analysis (box chart)</label> <i>What are problems with this analytic approach?</i></div>
-<div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Second analysis (p-chart)</label> <i>What does this control chart add to the box chart?</i></div>
-<div><input type="radio" name="example" class="example" value="ex_1c" id="ex_1c"/><label for="ex_1c">Another scenario (longer trial)</label> <i>What are the significant findings?</i></div>
-<div><input type="radio" name="example" class="example" value="ex_1d" id="ex_1d"/><label for="ex_1d">Another scenario (steeper drop - value for month #4 dropped from 15 to 11)</label> <i>What are the significant findings?</i></div>
-<div><i>What does this say about the rigor of a QI study and its ability to control for coincident interventions?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Second analysis (p-chart)</label> <i>What does this control chart add to the box chart? What are the significant findings?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_1c" id="ex_1c"/><label for="ex_1c">Another scenario (note the events dropped from 15 to 10 in the 4th row)</label> <i>What is significant if the drop is more abrupt?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_1d" id="ex_1d"/><label for="ex_1d">Another scenario (longer trial)</label> <i>What is significant findings if the trial is lengthened?</i></div>
+<div><i>What do these simulations say about the rigor of a QI study and its ability to control for coincident interventions?</i></div>
 
-<h3>Project 2: counseling for smoking cessation</h3>
-<div>Does this project show benefit?</div>
-<div><input type="radio" name="example" class="example" value="ex_2a" id="ex_2a"/><label for="ex_2a">First analysis (p-chart)</label></div>
-<div><input type="radio" name="example" class="example" value="ex_2b" id="ex_2b" /><label for="ex_2b">Second analysis (c-chart)</label></div>
+<h3>QI project 2: counseling for smoking cessation</h3>
+<div><input type="radio" name="example" class="example" value="ex_2a" id="ex_2a"/><label for="ex_2a">First analysis (p-chart)</label> <i>Does the intervention help?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_2b" id="ex_2b" /><label for="ex_2b">Second analysis (c-chart)</label><i>Why do these two charts suggest contradictory interpretations of the same data?</i></div>
 
 	  </fieldset>
 </form>
@@ -268,6 +274,7 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
 
 			<div id="spc-interpretation" style="float:left;display:block;width:400px;border:3px solid #6DC6E7;">
 			<h3>Interpreting control charts</h3>
+			<div id="">This chart will automatically color points <span style="color:red;font-weight:bold">red</span> that fulfill criteria for being signals.</div>
 			<ol>
 				<li>Are all points within the 3-sigma control limits? If so, the process is in control.</li>
 				<li>Is there a signal that an effective change has occurred (if a prior QI effort has been done)?
