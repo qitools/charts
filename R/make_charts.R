@@ -1,10 +1,19 @@
-make_charts <- function(content, topic, outcome, type, theme) {
-temp <- gsub('\n', '', fixed = TRUE, content, perl = TRUE)
-temp <- gsub("\\s+$", "", temp, perl = TRUE) #Removing trailing whitespace
-temp <- gsub(",+$", "", temp, perl = TRUE) #Remove trailing comma if accidentally added by user online
-temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=4, byrow=TRUE, dimnames = list(NULL, c("month", "count", "total","Trial")))')
+make_charts <- function(content, topic, outcome, timeperiod, type, theme) {
+temp <- content
+#temp <- gsub('\n', '', fixed = TRUE, temp, perl = TRUE)
+#temp <- gsub("\\s+$", "", temp, perl = TRUE) #Removing trailing whitespace
+#temp <- gsub(",+$", "", temp, perl = TRUE) #Remove trailing comma if accidentally added by user online
+temp <- gsub(',', '","', fixed = TRUE, temp, perl = TRUE)
+temp <- paste('"',temp,'"')
+temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=4, byrow=TRUE, dimnames = list(NULL, c("period", "count", "total","Trial")))')
 x<-eval(parse(file = "", n = NULL, text = temp))
 myframe <- data.frame (x)
+myframe$period<-str_trim(myframe$period)
+myframe$count<-as.numeric(as.character(str_trim(myframe$count)))
+myframe$total<-as.numeric(as.character(str_trim(myframe$total)))
+#myframe$Trial<-as.logical(str_trim(myframe$Trial))
+myframe$Trial<-str_trim(myframe$Trial)
+
 attach(myframe)
 # http://www.identity.ku.edu/colors/index.shtml
 KUBlue = "#0022B4"
@@ -12,7 +21,7 @@ SkyBlue = "#6DC6E7"
 par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue)
 qcc.options(cex.stats=1, cex.stats=0.9, bg.margin=SkyBlue)
 sequential = FALSE
-for(i in 1: length(myframe$month))
+for(i in 1: length(myframe$period))
 {
 if(Trial[i]>0 || Trial[i] == TRUE)
 	{
@@ -22,7 +31,8 @@ else
 	{
 	}
 Trial[i] =as.logical(Trial[i])
-myframe$month[i] <- i
+#Below done to avoid handling strings such as "Jan, 2013"
+myframe$period[i] <- i
 }
 
 attach(myframe)
@@ -33,7 +43,7 @@ if (sequential == FALSE)
 	{
 	if (type == "p" || type == "P")
 		{
-		baseline <- qcc(count,sizes=total,type="p", xlab="",ylab="",title="",labels=myframe$month,ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+		baseline <- qcc(count,sizes=total,type="p", xlab="",ylab="",title="",labels=myframe$period,ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 		mtext(paste("Proportion of encounters ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
 		average = paste("Average ",outcome," = ",round(baseline$center*100,digits = 1),"%", sep = "")
 		if(theme=="KU"){display_logo(x=1.2,y=0.2)}
@@ -44,14 +54,14 @@ if (sequential == FALSE)
 			{
 			numerator = 0
 			denominator = 0
-			for(i in 1:length(month))
+			for(i in 1:length(period))
 				{
 				numerator <- numerator + count[i]
 				denominator <- denominator + total[i]
 				}
 			par(fin=c(8.8,6))
-			plot (myframe$month,count/total, ylim=c(0,1), xlab="", ylab="", type="b",xaxs="r",axes=F)
-			axis(1, at= 1:length(month))
+			plot (myframe$period,count/total, ylim=c(0,1), xlab="", ylab="", type="b",xaxs="r",axes=F)
+			axis(1, at= 1:length(period))
 			axis(2,  xaxp=c(0,1,10))
 			box()
 			mtext(paste("Proportion of encounters ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
@@ -60,19 +70,19 @@ if (sequential == FALSE)
 			}
 		else #c-chart
 			{
-			baseline <- qcc(count,type="c", xlab="",ylab="",title="",labels=myframe$month, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+			baseline <- qcc(count,type="c", xlab="",ylab="",title="",labels=myframe$period, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 			mtext(paste("Count of encounters ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
 			average = paste("Average ",outcome," = ",round(baseline$center,digits = 1),"", sep = "")
 			}
 		}
 	if (type=="R" || type=="r")
 		{
-		mtext("Month", side=1, line=3, col=KUBlue , cex=1.5)
+		mtext(timeperiod, side=1, line=3, col=KUBlue , cex=1.5)
 		mtext(average, side=1, line=4.5, col=KUBlue , cex=1)
 		}
 	else
 		{
-		mtext("Month", side=1, line=-1.0, col=KUBlue , cex=1.5)
+		mtext(timeperiod, side=1, line=-1.0, col=KUBlue , cex=1.5)
 		mtext(average, side=1, line=-0.2, col=KUBlue , cex=1)
 		}
 	mtext(topic, side=3,line=2.5,col=KUBlue,font=2, cex=1.3)
@@ -85,7 +95,7 @@ else #sequential == TRUE
 		cellb = 0
 		cellc = 0
 		celld = 0
-		for(i in 1: length (month))
+		for(i in 1: length (period))
 			{
 			if (!Trial[i])
 				{
@@ -119,38 +129,38 @@ else #sequential == TRUE
 		{
 		if (type == "p" || type == "P")
 			{
-			sequential <- qcc(count[Trial==0],sizes=total[Trial==0],newdata=count[Trial==1], newsizes=total[Trial==1],type="p", xlab="",ylab="",title="",labels=month[Trial==0],newlabels=month[Trial==1],ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+			sequential <- qcc(count[Trial==0],sizes=total[Trial==0],newdata=count[Trial==1], newsizes=total[Trial==1],type="p", xlab="",ylab="",title="",labels=period[Trial==0],newlabels=period[Trial==1],ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 			mtext(paste("Proportion of encounters ",outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
 			mtext(side=3,line=1,paste("proportion of encounters ", outcome, " (p chart): before-after trial"), font=2)
 			#mtext(side=3,line=1,"count "~italic(outcome)~" of encounters (p chart): before-after trial", font=2)
 			average = paste("Average (pretrial) = ",round(sequential$center*100,digits = 1),"%", sep = "")
 			##Sig testing
 			#Linear regression
-			glm.out1=glm(count/total ~ Trial + month, family=binomial(logit),weights = total)
+			glm.out1=glm(count/total ~ Trial + period, family=binomial(logit),weights = total)
 			}
 		if (type == "c" || type == "C")
 			{
-			sequential <- qcc(count[Trial==0],newdata=count[Trial==1],type="c", xlab="",ylab="",title="",labels=month[Trial==0],newlabels=month[Trial==1], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+			sequential <- qcc(count[Trial==0],newdata=count[Trial==1],type="c", xlab="",ylab="",title="",labels=period[Trial==0],newlabels=period[Trial==1], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 			mtext("Count of encounters non-conforming", side=2, line=2.5, col=KUBlue , cex=1.5)
 			mtext(side=3,line=1,paste("Count of encounters ", outcome, " (c chart): before-after trial"), font=2)
 			#mtext(side=3,line=1,"count "~italic(outcome)~" of encounters (c chart): before-after trial", font=2)
 			average = paste("Average (pretrial) = ",round(sequential$center,digits = 1),"", sep = "")
 			##Sig testing
 			#Linear regression
-			glm.out1=glm(count ~ Trial + month, family=poisson(log))
+			glm.out1=glm(count ~ Trial + period, family=poisson(log))
 			}
 		mtext(topic, side=3,line=2.5,col=KUBlue,font=2, cex=1.3)
-		mtext("Month", side=1, line=-1.0, col=KUBlue , cex=1.5)
+		mtext(timeperiod, side=1, line=-1.0, col=KUBlue , cex=1.5)
 		mtext(average, side=1, line=-0.2, col=KUBlue , cex=1)
 
 		sum.sig <- summary(glm.out1)
-		coef(sum.sig)["Trial",4] # or coef(sum.sig)[2,4]
-		#plot(month, count/total,xlab="", ylim=c(0,1))
-		#mtext("Month", side=1, line=2, col=KUBlue , cex=1)
-		#lines(month, glm.out1$fitted,type="l",col="red")
+		#coef(sum.sig)["Trial",4] or coef(sum.sig)[2,4]
+		#plot(period, count/total,xlab="", ylim=c(0,1))
+		#mtext(period, side=1, line=2, col=KUBlue , cex=1)
+		#lines(period, glm.out1$fitted,type="l",col="red")
 		significance = paste("P-value for trial (linear regression) = ",format(round(coef(sum.sig)["Trial",4],digits = 3), nsmall = 3), sep = "")
 		mtext(significance, side=1, line=0.5, col=KUBlue , cex=1,adj = 1)
-		significance = paste("P-value for month (linear regression) = ",format(round(coef(sum.sig)["month",4],digits = 3), nsmall = 3), sep = "")
+		significance = paste("P-value for period (linear regression) = ",format(round(coef(sum.sig)["period",4],digits = 3), nsmall = 3), sep = "")
 		mtext(significance, side=1, line=1.5, col=KUBlue , cex=1,adj = 1)
 		if(theme=="KU"){display_logo(x=1.2,y=0.2)}
 		}
