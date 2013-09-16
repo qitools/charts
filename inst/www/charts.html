@@ -23,6 +23,8 @@
 <!-- Ajax.org Cloud9 Editor from http://ace.c9.io/#nav=api&api=editor -->
 <script src="src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 
+<!-- http://www.w3schools.com/jsref/jsref_obj_regexp.asp -->
+
 <script> 
 $(document).ready(function(){
 
@@ -51,11 +53,13 @@ $( "#dialog" ).dialog();
 	//Three replacements below are not required on a local server, but are at https://public.opencpu.org/ocpu/github/
 	temp = temp.replace(/\r?\n/g, '')
 	temp = temp.replace(/\s+$/g, '')
+	temp = temp.replace(/$\s+/g, '')
 	temp = temp.replace(/,$/g, '')
 	var req = $('#target').contents().find('#plotdiv').r_fun_plot("make_charts", {
 	  content: temp,
 	  topic: $("#topic").val(),
 	  outcome: $("#outcome").val(),
+	  counted: $("#counted").val(),
 	  timeperiod: $("#timeperiod").val(),
 	  type: $("#type").val(),
 	  theme : $("#theme").val()
@@ -72,6 +76,25 @@ $( "#dialog" ).dialog();
     drawplot();
   });
   
+  $("#type").on("change", function(e){
+    e.preventDefault();
+    if ($("#type").val() == "C"){$("#countedshow").css("display","block")}
+	else {$("#countedshow").css("display","none")}
+  });
+
+  $("#addcommas").on("click", function(e){
+    e.preventDefault();
+    temp = editor.getValue()
+	temp = temp.replace(/\n/g, ',\n')
+	temp = temp.replace(/$\s+/g, '')
+	temp = temp.replace(/\s+$/g, '')
+	temp = temp.replace(/ +/g, ', ')
+	temp = temp.replace(/\t/g, ', ')
+	temp = temp + ","
+	temp = temp.replace(/,,/g, ',')
+    editor.setValue(temp,1);
+  });
+
   $(".example").click(function(){
 	if($(this).val()=="ex_0a") {$("#type").val("R");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0\n",1);}
 	if($(this).val()=="ex_0b") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0\n",1);}
@@ -147,7 +170,7 @@ $( "#dialog" ).dialog();
 #editor { 
   position: relative;
   width: 950px;
-  height: 250px;
+  height: 225px;
 }
     
 #plotdiv {
@@ -203,34 +226,44 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
 			1st row is column names? <select id="header" name="header"><option value=TRUE> TRUE </option> <option value=FALSE> FALSE </option> </select>
 			</li>
 			</ul>
-<div id="">Four columns: month #, events, total, trial. <br/>For trial, 0 = pre-intervention or no trial and 1 = after intervention.</div>
+<div id="">Four columns: 1) time period name, 2) # events, 3) total, 4) trial. <br/>
+For trial, 0 = pre-intervention or no trial and 1 = after intervention.<br/>
+Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add commas.</div>
 <div id="editor" style="width:500px;">1, 26,30, 0,
 2, 24,30, 0,
 3, 25,30, 0
 </div>	
             <br />
 
-            <label>Plot type</label> 
-            <select id="type">
+            <label>Plot type:</label> 
+            <select id="type" name="type">
               <option value="R" selected>Run chart</option>
               <option value="B">Box chart (comparing average proportions)</option>
               <option value="P">Control chart (proportions)</option>
               <option value="C">Control chart (counts)</option>
-            </select> <br/>
-            <label>Outcome</label> 
+            </select>
+			<div id="countedshow" style="display:none">
+			<label>Plot:</label>
+            <select id="counted" name="counted">
+              <option value="events" selected>Events</option>
+              <option value="total">Total</option>
+            </select>
+			</div>
+			<br/>
+            <label>Outcome:</label> 
             <select id="outcome">
               <option value="nonconforming" selected>nonconforming</option>
               <option value="conforming">conforming</option>
             </select>&nbsp;&nbsp;
-			<label>Time period</label> 			
+			<label>Time period:</label> 			
             <select id="timeperiod">
               <option value="Month" selected>Month</option>
               <option value="Week">Week</option>
             </select>
 			<br/>
-            <label>Topic (for title - optional)</label> 
+            <label>Topic (for title - optional):</label> 
             <input type="text" id="topic" /> 
-            <div style="display:none"><label>Plot logo</label> 
+            <div style="display:none"><label>Plot logo:</label> 
             <select id="theme">
               <option value="white" selected>None</option>
               <option value="KU">KU</option>
