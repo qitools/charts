@@ -1,15 +1,17 @@
-make_charts <- function(content, topic, outcome, timeperiod, type, theme) {
+make_charts <- function(content, topic, outcome, counted, timeperiod, type, theme) {
 temp <- content
+# http://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html
 #temp <- gsub('\n', '', fixed = TRUE, temp, perl = TRUE)
 #temp <- gsub("\\s+$", "", temp, perl = TRUE) #Removing trailing whitespace
 #temp <- gsub(",+$", "", temp, perl = TRUE) #Remove trailing comma if accidentally added by user online
+temp <- gsub("\t", ' ', fixed = TRUE, temp)
 temp <- gsub(',', '","', fixed = TRUE, temp)
-temp <- paste('"',temp,'"')
-temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=4, byrow=TRUE, dimnames = list(NULL, c("periodname", "count", "total","Trial")))')
+temp <- paste('"',temp,'"',sep = '')
+temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=4, byrow=TRUE, dimnames = list(NULL, c("periodname", "count", "total","Trial")))',sep = '')
 x<-eval(parse(file = "", n = NULL, text = temp))
 myframe <- data.frame (x)
 myframe$period<-gsub("\'", '', fixed = TRUE, myframe$period)
-myframe$period<-str_trim(myframe$period)
+myframe$period<-str_trim(as.character(myframe$period))
 myframe$count<-as.numeric(as.character(str_trim(myframe$count)))
 myframe$total<-as.numeric(as.character(str_trim(myframe$total)))
 #myframe$Trial<-as.logical(str_trim(myframe$Trial))
@@ -74,8 +76,16 @@ if (sequential == FALSE)
 			}
 		else #c-chart
 			{
-			baseline <- qcc(count,type="c", xlab="",ylab="",title="",labels=myframe$period, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-			mtext(paste("Count of encounters ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
+			if (counted == "events") 
+				{
+				baseline <- qcc(count,type="c", xlab="",ylab="",title="",labels=myframe$period, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+				mtext(paste("Count of encounters ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
+				}
+			if (counted == "total")  
+				{
+				baseline <- qcc(total,type="c", xlab="",ylab="",title="",labels=myframe$period, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+				mtext(paste("Count of encounters ", ''), side=2, line=2.5, col=KUBlue , cex=1.5)
+				}
 			average = paste("Average ",outcome," = ",round(baseline$center,digits = 1),"", sep = "")
 			}
 		}
@@ -144,14 +154,24 @@ else #sequential == TRUE
 			}
 		if (type == "c" || type == "C")
 			{
-			sequential <- qcc(count[Trial=="0"],newdata=count[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-			mtext("Count of encounters non-conforming", side=2, line=2.5, col=KUBlue , cex=1.5)
-			mtext(side=3,line=1,paste("Count of encounters ", outcome, " (c chart): before-after trial"), font=2)
+			if (counted == "events") 
+				{
+				sequential <- qcc(count[Trial=="0"],newdata=count[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+				glm.out1=glm(count ~ as.numeric(Trial) + period, family=poisson(log))
+				mtext("Count of encounters non-conforming", side=2, line=2.5, col=KUBlue , cex=1.5)
+				mtext(side=3,line=1,paste("Count of encounters ", outcome, " (c chart): before-after trial"), font=2)
+				}
+			if (counted == "total") 
+				{
+				sequential <- qcc(total[Trial=="0"],newdata=total[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+				glm.out1=glm(total ~ as.numeric(Trial) + period, family=poisson(log))
+				mtext("Count of encounters", side=2, line=2.5, col=KUBlue , cex=1.5)
+				mtext(side=3,line=1,paste("Count of encounters ", outcome, " (c chart): before-after trial"), font=2)
+				}
 			#mtext(side=3,line=1,"count "~italic(outcome)~" of encounters (c chart): before-after trial", font=2)
 			average = paste("Average (pretrial) = ",round(sequential$center,digits = 1),"", sep = "")
 			##Sig testing
 			#Linear regression
-			glm.out1=glm(count ~ as.numeric(Trial) + period, family=poisson(log))
 			}
 		mtext(topic, side=3,line=2.5,col=KUBlue,font=2, cex=1.3)
 		mtext(timeperiod, side=1, line=-1.0, col=KUBlue , cex=1.5)
