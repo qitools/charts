@@ -147,7 +147,7 @@ $( "#dialog" ).dialog();
       var data = $.csv.toArrays(csv);
       var html = '';
       for(var row in data) {
-	  if($("#header").val() == "FALSE" || [row] > 1 ){
+	  if($("#header").val() == "FALSE" || [row] > 0 ){
         for(var item in data[row]) {
           html += data[row][item] + ', ';
         }
