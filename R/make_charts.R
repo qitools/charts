@@ -23,7 +23,7 @@ attach(myframe)
 KUBlue = "#0022B4"
 SkyBlue = "#6DC6E7"
 par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue)
-qcc.options(cex.stats=1, cex.stats=0.9, bg.margin=SkyBlue)
+qcc.options(cex.stats=0.9, bg.margin=SkyBlue,"run.length" = 6, "beyond.limits" = list(pch = 20, col = "black"), "violating.runs" = list(pch = 16, col = "orange")) #Shift. A run
 sequential = FALSE
 period = 0
 for(i in 1: length(myframe$periodname))
@@ -49,9 +49,10 @@ if (sequential == FALSE)
 	{
 	if (type == "p" || type == "P")
 		{
-		baseline <- qcc(count,sizes=total,type="p", xlab="",ylab="",title="",labels=myframe$period,ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+		currentvalue <- count/total
+		spc <- qcc(count,sizes=total,type="p", xlab="",ylab="",title="",labels=myframe$period,ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 		mtext(paste("Proportion of encounters ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
-		average = paste("Average ",outcome," = ",round(baseline$center*100,digits = 1),"%", sep = "")
+		average = paste("Average ",outcome," = ",round(spc$center*100,digits = 1),"%", sep = "")
 		if(theme=="KU"){display_logo(x=1.2,y=0.2)}
 		}
 	else 
@@ -78,15 +79,17 @@ if (sequential == FALSE)
 			{
 			if (counted == "events") 
 				{
-				baseline <- qcc(count,type="c", xlab="",ylab="",title="",labels=myframe$period, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+				currentvalue <- count
+				spc <- qcc(count,type="c", xlab="",ylab="",title="",labels=myframe$period, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 				mtext(paste("Count of encounters ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
 				}
 			if (counted == "total")  
 				{
-				baseline <- qcc(total,type="c", xlab="",ylab="",title="",labels=myframe$period, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+				currentvalue <- total
+				spc <- qcc(total,type="c", xlab="",ylab="",title="",labels=myframe$period, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 				mtext(paste("Count of encounters ", ''), side=2, line=2.5, col=KUBlue , cex=1.5)
 				}
-			average = paste("Average ",outcome," = ",round(baseline$center,digits = 1),"", sep = "")
+			average = paste("Average ",outcome," = ",round(spc$center,digits = 1),"", sep = "")
 			}
 		}
 	if (type=="R" || type=="r")
@@ -143,11 +146,12 @@ else #sequential == TRUE
 		{
 		if (type == "p" || type == "P")
 			{
-			sequential <- qcc(data=count[Trial=='0'],sizes=total[Trial=='0'],newdata=count[Trial=='1'], newsizes=total[Trial=='1'],type="p", xlab="",ylab="",title="",labels=periodname[Trial=='0'],newlabels=periodname[Trial=='1'],ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+			currentvalue <- count/total
+			spc <- qcc(data=count[Trial=='0'],sizes=total[Trial=='0'],newdata=count[Trial=='1'], newsizes=total[Trial=='1'],type="p", xlab="",ylab="",title="",labels=periodname[Trial=='0'],newlabels=periodname[Trial=='1'],ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 			mtext(paste("Proportion of encounters ",outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
 			mtext(side=3,line=1,paste("proportion of encounters ", outcome, " (p chart): before-after trial"), font=2)
 			#mtext(side=3,line=1,"count "~italic(outcome)~" of encounters (p chart): before-after trial", font=2)
-			average = paste("Average (pretrial) = ",round(sequential$center*100,digits = 1),"%", sep = "")
+			average = paste("Average (pretrial) = ",round(spc$center*100,digits = 1),"%", sep = "")
 			##Sig testing
 			#Linear regression
 			glm.out1=glm(count/total ~ as.numeric(Trial) + period, family=binomial(logit),weights = total)
@@ -156,20 +160,22 @@ else #sequential == TRUE
 			{
 			if (counted == "events") 
 				{
-				sequential <- qcc(count[Trial=="0"],newdata=count[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+				currentvalue <- count
+				spc <- qcc(count[Trial=="0"],newdata=count[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 				glm.out1=glm(count ~ as.numeric(Trial) + period, family=poisson(log))
 				mtext("Count of encounters non-conforming", side=2, line=2.5, col=KUBlue , cex=1.5)
 				mtext(side=3,line=1,paste("Count of encounters ", outcome, " (c chart): before-after trial"), font=2)
 				}
 			if (counted == "total") 
 				{
-				sequential <- qcc(total[Trial=="0"],newdata=total[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+				currentvalue <- total
+				spc <- qcc(total[Trial=="0"],newdata=total[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 				glm.out1=glm(total ~ as.numeric(Trial) + period, family=poisson(log))
 				mtext("Count of encounters", side=2, line=2.5, col=KUBlue , cex=1.5)
 				mtext(side=3,line=1,paste("Count of encounters ", outcome, " (c chart): before-after trial"), font=2)
 				}
 			#mtext(side=3,line=1,"count "~italic(outcome)~" of encounters (c chart): before-after trial", font=2)
-			average = paste("Average (pretrial) = ",round(sequential$center,digits = 1),"", sep = "")
+			average = paste("Average (pretrial) = ",round(spc$center,digits = 1),"", sep = "")
 			##Sig testing
 			#Linear regression
 			}
@@ -189,4 +195,82 @@ else #sequential == TRUE
 		if(theme=="KU"){display_logo(x=1.2,y=0.2)}
 		}
 	}
+	#Shewhart rules start
+	lastvalue = 0
+	Trend = 0
+	Trend.items<- numeric()
+	#currentvalue <- numeric()
+	for(i in 1: length (myframe$period))
+	{
+	#$IHI rules http://www.ihi.org/knowledge/Pages/Tools/RunChart.aspx
+	# IHI1: Trend of 5 or more consecutively changing in the same direction
+	#if (type=="p" || type=="P") {currentvalue[i] <- myframe$d[i]/myframe$total[i]}
+	#if (type=="c" || type=="C") {currentvalue[i] <- myframe$d[i]}
+	if(currentvalue[i] > lastvalue)
+		{
+		if (Trend < 0) {Trend = 2}
+		else {Trend = Trend + 1}
+		}
+	if(currentvalue[i] < lastvalue)
+		{
+		if (Trend > 0) {Trend = - 2}
+		else{Trend = Trend - 1}
+		}
+	if (Trend > 4 || Trend < -4)
+		{
+		Trend.items <- c(Trend.items, i)
+		}
+	# IHI2: Run of 6 or more on same size of median
+	# Built in so not coded here
+	lastvalue = currentvalue[i]
+	}
+	#Trend.items
+
+	shewhart <- shewhart.rules(spc, run.length = 6)
+		
+	for(i in 1: length (myframe$period))
+		{
+		points (row(myframe)[i,1],currentvalue[i], col="black",pch=16, cex = 1)
+		}
+
+	# IHI1: Trend of 5 or more consecutively changing in the same direction
+	#Trend.items
+	for(i in 1: length (myframe$period))
+	{
+	if (any(Trend.items == i+1) == TRUE)
+		{
+		Trend.items <- c(i-3,i-2,i-1,i,Trend.items)
+		}
+	}
+	Trend.items <- sort(Trend.items)
+	Trend.items<-unique(Trend.items)
+	for(i in 1: length (Trend.items))
+		{
+		#points (Trend.items[i],currentvalue[Trend.items[i]], col="blue",pch=21, cex = 1.5)
+		#lines (Trend.items[i],currentvalue[Trend.items[i]],col="blue",lwd=1.5)
+		}
+	lines (Trend.items,currentvalue[Trend.items],type="l",col="blue",lwd=1.5)
+
+		# IHI2: Run of 6 or more on same size of median
+	#shewhart$violating.runs
+	for(i in 1: length (myframe$period))
+	{
+	if (any(shewhart$violating.runs == i + 1) == TRUE)
+		{
+		shewhart$violating.runs <- c(i-4,i-3,i-2,i-1,i,shewhart$violating.runs)
+		}
+	}
+	shewhart$violating.runs <- sort(shewhart$violating.runs)
+	shewhart$violating.runs <- unique(shewhart$violating.runs)
+	for(i in 1: length (shewhart$violating.runs))
+		{
+		points (shewhart$violating.runs[i],currentvalue[shewhart$violating.runs[i]], col="orange",pch=16, cex = 1)
+		}
+
+	# IHI4:astronomical points
+	for(i in 1: length (shewhart$beyond.limits))
+		{
+		points (shewhart$beyond.limits[i],currentvalue[shewhart$beyond.limits[i]], col="red",pch=21, cex = 2)
+		}
+	#Shewhart rules end
 }
