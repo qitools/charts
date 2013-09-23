@@ -98,6 +98,7 @@ $( "#dialog" ).dialog();
   $(".example").click(function(){
 	if($(this).val()=="ex_0a") {$("#type").val("R");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0\n",1);}
 	if($(this).val()=="ex_0b") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0\n",1);}
+	if($(this).val()=="ex_0c") {$("#type").val("P");editor.setValue("1, 26,30,0,\n2, 28,30,0,\n3, 21,30,0,\n4, 19,30,0,\n5, 17,30,0,\n6, 20,30,0,\n7, 20,30,0,\n8, 17,30,0,\n9, 15,30,0,\n10, 16,30,0,\n11, 15,30,0,\n12, 14,30,0,\n13, 13,30,0,\n14, 12,30,0,\n15, 8,30,0",1);}
 	if($(this).val()=="ex_1a") {$("#type").val("B");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0,\n4, 15,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);}
 	if($(this).val()=="ex_1b") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0,\n4, 15,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);}
 	if($(this).val()=="ex_1c") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0,\n4, 10,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);}
@@ -277,10 +278,11 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 	          <form name="form2" action="#" style="width:450px;">
           <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:450px;height:580px;">
 		  <legend style="font-weight:bold">Example projects</legend>
-<h3>Baseline data</h3>
+<h3 style="margin-bottom:0px">Baseline data</h3>
 <div><input type="radio" name="example" class="example" value="ex_0a" id="ex_0a" checked /><label for="ex_0a">Baseline data (run chart)</label></div>
 <div><input type="radio" name="example" class="example" value="ex_0b" id="ex_0b"/><label for="ex_0b">Baseline data (p-chart)</label> <i>What does this control chart add to the run chart?</i></div>
-<h3>QI project 1: screening performed for depression</h3>
+<div><input type="radio" name="example" class="example" value="ex_0c" id="ex_0c"/><label for="ex_0c">Baseline data (p-chart)</label> <i>What do the colored dots, circles, and lines mean on this chart (hint: see infobox below chart)?</i></div>
+<h3 style="margin-bottom:0px">QI project 1: screening performed for depression</h3>
 <div>We now have added 3 months of data after an intervention to increase screening for depression.</div>
 <div><input type="radio" name="example" class="example" value="ex_1a" id="ex_1a"/><label for="ex_1a">First analysis (box chart)</label> <i>What are problems with this analytic approach?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Second analysis (p-chart)</label> <i>What does this control chart add to the box chart? What are the significant findings?</i></div>
@@ -288,9 +290,9 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 <div><input type="radio" name="example" class="example" value="ex_1d" id="ex_1d"/><label for="ex_1d">Another scenario (longer trial)</label> <i>What is significant if the trial is lengthened?</i></div>
 <div><i>What do these simulations say about the rigor of a QI study and its ability to control for coincident interventions?</i></div>
 
-<h3>QI project 2: counseling for smoking cessation</h3>
+<h3 style="margin-bottom:0px">QI project 2: counseling for smoking cessation</h3>
 <div><input type="radio" name="example" class="example" value="ex_2a" id="ex_2a"/><label for="ex_2a">First analysis (p-chart)</label> <i>Does the intervention help?</i></div>
-<div><input type="radio" name="example" class="example" value="ex_2b" id="ex_2b" /><label for="ex_2b">Second analysis (c-chart)</label><i>Why do these two charts suggest contradictory interpretations of the same data?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_2b" id="ex_2b" /><label for="ex_2b">Second analysis (c-chart)</label> <i>Why do these two charts suggest contradictory interpretations of the same data?</i></div>
 
 	  </fieldset>
 </form>
@@ -312,14 +314,14 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 				<li>Are all points within the 3-sigma control limits? If so, the process is in control.</li>
 				<li>Is there a signal that an effective change has occurred (if a prior QI effort has been done)?
 					<ul>
-						<li>Shift 6 or more consecutive points above or below the median</li>
-						<li>Trend - 5 or more consecutively increasing or decreasing points</li>
-						<li>Runs - Are there too many or too few for just common cause variation?</li>
-						<li>Astronomical Point-A dramatically different value</li>
+						<li>Astronomical Point - A dramatically different value (<span style="font-weight:bold;color:red">red circles</span>)</li>
+						<li>Shift - 6 or more consecutive points above or below the median (<span style="font-weight:bold;color:orange">orange points</span>)</li>
+						<li>Trend - 5 or more consecutively increasing or decreasing points (<span style="font-weight:bold;color:blue">blue line</span>)</li>
+						<li>Runs - Are there too many or too few for just common cause variation (not implemented)?</li>
 						<li>From: <a href="http://www.ihi.org/knowledge/Pages/Tools/RunChart.aspx">Run Chart Tool</a>. Institute for Health Care Innovation (IHI)</li>
-						<li>More detail from Wikipedia: <a href="http://en.wikipedia.org/wiki/Control_chart#Rules_for_detecting_signals">Control Charts</a>: <a href="http://en.wikipedia.org/wiki/Western_Electric_rules">Western Electric rules</a> and <a href="http://en.wikipedia.org/wiki/Nelson_rules">Nelson rules</a></li>
 					</ul>
 				</li>
+				<li>More detail from Wikipedia: <a href="http://en.wikipedia.org/wiki/Control_chart#Rules_for_detecting_signals">Control Charts</a>: <a href="http://en.wikipedia.org/wiki/Western_Electric_rules">Western Electric rules</a> and <a href="http://en.wikipedia.org/wiki/Nelson_rules">Nelson rules</a></li>
 			</ol>
 			</div>
 
