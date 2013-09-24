@@ -196,81 +196,84 @@ else #sequential == TRUE
 		}
 	}
 	#Shewhart rules start
-	lastvalue = 0
-	Trend = 0
-	Trend.items<- numeric()
-	#currentvalue <- numeric()
-	for(i in 1: length (myframe$period))
-	{
-	#$IHI rules http://www.ihi.org/knowledge/Pages/Tools/RunChart.aspx
-	# IHI1: Trend of 5 or more consecutively changing in the same direction
-	#if (type=="p" || type=="P") {currentvalue[i] <- myframe$d[i]/myframe$total[i]}
-	#if (type=="c" || type=="C") {currentvalue[i] <- myframe$d[i]}
-	if(currentvalue[i] > lastvalue)
+	if (type != "r" && type != "R")
 		{
-		if (Trend < 0) {Trend = 2}
-		else {Trend = Trend + 1}
-		}
-	if(currentvalue[i] < lastvalue)
+		lastvalue = 0
+		Trend = 0
+		Trend.items<- numeric()
+		#currentvalue <- numeric()
+		for(i in 1: length (myframe$period))
 		{
-		if (Trend > 0) {Trend = - 2}
-		else{Trend = Trend - 1}
-		}
-	if (Trend > 4 || Trend < -4)
-		{
-		Trend.items <- c(Trend.items, i)
-		}
-	# IHI2: Run of 6 or more on same size of median
-	# Built in so not coded here
-	lastvalue = currentvalue[i]
-	}
-	#Trend.items
-
-	shewhart <- shewhart.rules(spc, run.length = 6)
-		
-	for(i in 1: length (myframe$period))
-		{
-		points (row(myframe)[i,1],currentvalue[i], col="black",pch=16, cex = 1)
-		}
-
-	# IHI1: Trend of 5 or more consecutively changing in the same direction
-	#Trend.items
-	for(i in 1: length (myframe$period))
-	{
-	if (any(Trend.items == i+1) == TRUE)
-		{
-		Trend.items <- c(i-3,i-2,i-1,i,Trend.items)
-		}
-	}
-	Trend.items <- sort(Trend.items)
-	Trend.items<-unique(Trend.items)
-	for(i in 1: length (Trend.items))
-		{
-		#points (Trend.items[i],currentvalue[Trend.items[i]], col="blue",pch=21, cex = 1.5)
-		#lines (Trend.items[i],currentvalue[Trend.items[i]],col="blue",lwd=1.5)
-		}
-	lines (Trend.items,currentvalue[Trend.items],type="l",col="blue",lwd=1.5)
-
+		#$IHI rules http://www.ihi.org/knowledge/Pages/Tools/RunChart.aspx
+		# IHI1: Trend of 5 or more consecutively changing in the same direction
+		#if (type=="p" || type=="P") {currentvalue[i] <- myframe$d[i]/myframe$total[i]}
+		#if (type=="c" || type=="C") {currentvalue[i] <- myframe$d[i]}
+		if(currentvalue[i] > lastvalue)
+			{
+			if (Trend < 0) {Trend = 2}
+			else {Trend = Trend + 1}
+			}
+		if(currentvalue[i] < lastvalue)
+			{
+			if (Trend > 0) {Trend = - 2}
+			else{Trend = Trend - 1}
+			}
+		if (Trend > 4 || Trend < -4)
+			{
+			Trend.items <- c(Trend.items, i)
+			}
 		# IHI2: Run of 6 or more on same size of median
-	#shewhart$violating.runs
-	for(i in 1: length (myframe$period))
-	{
-	if (any(shewhart$violating.runs == i + 1) == TRUE)
-		{
-		shewhart$violating.runs <- c(i-4,i-3,i-2,i-1,i,shewhart$violating.runs)
+		# Built in so not coded here
+		lastvalue = currentvalue[i]
 		}
-	}
-	shewhart$violating.runs <- sort(shewhart$violating.runs)
-	shewhart$violating.runs <- unique(shewhart$violating.runs)
-	for(i in 1: length (shewhart$violating.runs))
+		#Trend.items
+	
+		shewhart <- shewhart.rules(spc, run.length = 6)
+			
+		for(i in 1: length (myframe$period))
+			{
+			points (row(myframe)[i,1],currentvalue[i], col="black",pch=16, cex = 1)
+			}
+	
+		# IHI1: Trend of 5 or more consecutively changing in the same direction
+		#Trend.items
+		for(i in 1: length (myframe$period))
 		{
-		points (shewhart$violating.runs[i],currentvalue[shewhart$violating.runs[i]], col="orange",pch=16, cex = 1)
+		if (any(Trend.items == i+1) == TRUE)
+			{
+			Trend.items <- c(i-3,i-2,i-1,i,Trend.items)
+			}
 		}
-
-	# IHI4:astronomical points
-	for(i in 1: length (shewhart$beyond.limits))
+		Trend.items <- sort(Trend.items)
+		Trend.items<-unique(Trend.items)
+		for(i in 1: length (Trend.items))
+			{
+			#points (Trend.items[i],currentvalue[Trend.items[i]], col="blue",pch=21, cex = 1.5)
+			#lines (Trend.items[i],currentvalue[Trend.items[i]],col="blue",lwd=1.5)
+			}
+		lines (Trend.items,currentvalue[Trend.items],type="l",col="blue",lwd=1.5)
+	
+			# IHI2: Run of 6 or more on same size of median
+		#shewhart$violating.runs
+		for(i in 1: length (myframe$period))
 		{
-		points (shewhart$beyond.limits[i],currentvalue[shewhart$beyond.limits[i]], col="red",pch=21, cex = 2)
+		if (any(shewhart$violating.runs == i + 1) == TRUE)
+			{
+			shewhart$violating.runs <- c(i-4,i-3,i-2,i-1,i,shewhart$violating.runs)
+			}
 		}
-	#Shewhart rules end
+		shewhart$violating.runs <- sort(shewhart$violating.runs)
+		shewhart$violating.runs <- unique(shewhart$violating.runs)
+		for(i in 1: length (shewhart$violating.runs))
+			{
+			points (shewhart$violating.runs[i],currentvalue[shewhart$violating.runs[i]], col="orange",pch=16, cex = 1)
+			}
+	
+		# IHI4:astronomical points
+		for(i in 1: length (shewhart$beyond.limits))
+			{
+			points (shewhart$beyond.limits[i],currentvalue[shewhart$beyond.limits[i]], col="red",pch=21, cex = 2)
+			}
+		#Shewhart rules end
+		}
 }
