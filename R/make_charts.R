@@ -103,6 +103,12 @@ if (sequential == FALSE)
 		mtext(average, side=1, line=-0.2, col=KUBlue , cex=1)
 		}
 	mtext(topic, side=3,line=2.5,col=KUBlue,font=2, cex=1.3)
+	if (grepl("re-admission", topic) > 0)
+		{
+		abline(a = 0.178, b = 0, col="red", lty = 2)
+		abline(a = 0.122, b = 0, col="green", lty = 2)
+		legend("topright", legend=c("Medicare (17.8%)","Kaiser (12.2%)"),col=c("red","green"),lty=2, inset=0.05)
+		}
 	}
 else #sequential == TRUE
 	{
@@ -193,6 +199,12 @@ else #sequential == TRUE
 		significance = paste("P-value for period (linear regression) = ",format(round(coef(sum.sig)["period",4],digits = 3), nsmall = 3), sep = "")
 		mtext(significance, side=1, line=1.5, col=KUBlue , cex=1,adj = 1)
 		if(theme=="KU"){display_logo(x=1.2,y=0.2)}
+		if (grepl("re-admission", topic))
+			{
+			abline(a = 0.178, b = 0, col="red", lty = 2)
+			abline(a = 0.122, b = 0, col="green", lty = 2)
+			legend("topright", legend=c("Medicare (17.8%)","Kaiser (12.2%)"),col=c("red","green"),lty=2, inset=0.05)
+			}
 		}
 	}
 	#Shewhart rules start
@@ -227,14 +239,14 @@ else #sequential == TRUE
 		lastvalue = currentvalue[i]
 		}
 		#Trend.items
-	
+
 		shewhart <- shewhart.rules(spc, run.length = 6)
 			
 		for(i in 1: length (myframe$period))
 			{
 			points (row(myframe)[i,1],currentvalue[i], col="black",pch=16, cex = 1)
 			}
-	
+
 		# IHI1: Trend of 5 or more consecutively changing in the same direction
 		#Trend.items
 		for(i in 1: length (myframe$period))
@@ -252,7 +264,7 @@ else #sequential == TRUE
 			#lines (Trend.items[i],currentvalue[Trend.items[i]],col="blue",lwd=1.5)
 			}
 		lines (Trend.items,currentvalue[Trend.items],type="l",col="blue",lwd=1.5)
-	
+
 			# IHI2: Run of 6 or more on same size of median
 		#shewhart$violating.runs
 		for(i in 1: length (myframe$period))
@@ -268,7 +280,7 @@ else #sequential == TRUE
 			{
 			points (shewhart$violating.runs[i],currentvalue[shewhart$violating.runs[i]], col="orange",pch=16, cex = 1)
 			}
-	
+
 		# IHI4:astronomical points
 		for(i in 1: length (shewhart$beyond.limits))
 			{
