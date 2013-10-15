@@ -208,7 +208,7 @@ else #sequential == TRUE
 		}
 	}
 	#Shewhart rules start
-	if (type != "r" && type != "R")
+	if (type != "r" && type != "R" && type != "b" && type != "B")
 		{
 		lastvalue = 0
 		Trend = 0
