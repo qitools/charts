@@ -49,6 +49,7 @@ $( "#dialog" ).dialog();
   // drawplot
   function drawplot(){
     $("#plotbutton").attr("disabled", "disabled")
+	$('#target').contents().find('#plotdiv').find('#baselineimage').css("display","none")
 	temp = editor.getSession().getValue()
 	//Three replacements below are not required on a local server, but are at https://public.opencpu.org/ocpu/github/
 	temp = temp.replace(/\r?\n/g, '')
@@ -61,6 +62,8 @@ $( "#dialog" ).dialog();
 	  outcome: $("#outcome").val(),
 	  counted: $("#counted").val(),
 	  timeperiod: $("#timeperiod").val(),
+	  goalu: $("#goalu").val(),
+	  goall: $("#goall").val(),
 	  type: $("#type").val(),
 	  theme : $("#theme").val()
     }).always(function(){
@@ -261,6 +264,11 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
               <option value="Month" selected>Month</option>
               <option value="Week">Week</option>
             </select>
+			<br/>
+			<label>Goal (lower):</label> 			
+            <input type="text" id="goall" /> 
+			<label>Goal (upper):</label>		
+            <input type="text" id="goalu" /> 
 			<br/>
             <label>Topic (for title - optional):</label> 
             <input type="text" id="topic" /> 
