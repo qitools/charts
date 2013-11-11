@@ -1,4 +1,4 @@
-make_charts <- function(content, topic, outcome, counted, timeperiod, type, theme) {
+make_charts <- function(content, topic, outcome, counted, timeperiod, goalu, goall, type, theme) {
 temp <- content
 # http://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html
 #temp <- gsub('\n', '', fixed = TRUE, temp, perl = TRUE)
@@ -103,28 +103,28 @@ if (sequential == FALSE)
 		mtext(average, side=1, line=-0.2, col=KUBlue , cex=1)
 		}
 	mtext(topic, side=3,line=2.5,col=KUBlue,font=2, cex=1.3)
+	#Goals or targets
+		if (goalu > 0 && goall > 0)
+			{
+			regionx = c(0,0,10,10)
+			regiony = c(goall,goalu,goalu,goall)
+			polygon(regionx,regiony,col=rgb(0,1,0,alpha=0.05),border = NA)
+			axis(4,at=c(goall,goalu),labels=c(goall,goalu),col.ticks="green")
+			}
 	if (grepl("flu", topic) > 0 && grepl("vaccin", topic) > 0)
 		{ #http://www.cdc.gov/flu/fluvaxview/reports/reporti1213/reportii/index.htm
-		if (outcome == "nonconforming")
-			{
-			abline(a = 0.434, b = 0, col="red", lty = 2, lwd = 2)
-			abline(a = 0.61, b = 0, col="red4", lty = 2, lwd = 2)
-			abline(a = 0.1, b = 0, col="green", lty = 2, lwd = 2)
-			regionx = c(0,0,10,10)
-			regiony = c(0.1,0.434,0.434,0.1)
-			polygon(regionx,regiony,col=rgb(0,1,0,alpha=0.05),border = NA)
-			legend("topright", legend=c("Kansas rate 2012-2013 (39%)","National rate 2012-2013 (56.6%)","Healthy People 2020 goal (90%)"),col=c("red4","red","green"),lty=2, lwd = 2, inset=0.05)
-			}
-		if (outcome == "conforming")
-			{
-			abline(a = 0.566, b = 0, col="red", lty = 2, lwd = 2)
-			abline(a = 0.39, b = 0, col="red4", lty = 2, lwd = 2)
-			abline(a = 0.9, b = 0, col=rgb(0,1,0,alpha=0.05), lty = 2, lwd = 2)
-			regionx = c(0,0,10,10)
-			regiony = c(0.566,0.9,0.9,0.566)
-			polygon(regionx,regiony,col=rgb(0,1,0,alpha=0.05),border = NA)
-			legend("topleft", legend=c("Kansas rate 2012-2013 (39%)","National rate 2012-2013 (56.6%)","Healthy People 2020 goal (90%)"),col=c("red4","red","green"),lty=2, lwd = 2,  inset=0.05)
-			}
+			if (outcome == "nonconforming")
+				{
+				abline(a = 0.585, b = 0, col="red", lty = 2, lwd = 2)
+				abline(a = 0.1, b = 0, col="green", lty = 2, lwd = 2)
+				legend("topright", legend=c("National rate 2012-2013 (41.5%)","Healthy People 2020 goal (90%)"),col=c("red","green"),lty=2, lwd = 2, inset=0.05)
+				}
+			if (outcome == "conforming")
+				{
+				abline(a = 0.415, b = 0, col="red", lty = 2, lwd = 2)
+				abline(a = 0.9, b = 0, col="green", lty = 2, lwd = 2)
+				legend("topleft", legend=c("Healthy People 2020 goal (90%)","National rate 2012-2013 (41.5%)"),col=c("green","red"),lty=2, lwd = 2,  inset=0.05)
+				}
 		}
 	if (grepl("re-admission", topic) > 0)
 		{
@@ -222,30 +222,29 @@ else #sequential == TRUE
 		significance = paste("P-value for period (linear regression) = ",format(round(coef(sum.sig)["period",4],digits = 3), nsmall = 3), sep = "")
 		mtext(significance, side=1, line=1.5, col=KUBlue , cex=1,adj = 1)
 		if(theme=="KU"){display_logo(x=1.2,y=0.2)}
+		#Goals or targets
+		if (goalu > 0 && goall > 0)
+			{
+			regionx = c(0,0,10,10)
+			regiony = c(goall,goalu,goalu,goall)
+			polygon(regionx,regiony,col=rgb(0,1,0,alpha=0.05),border = NA)
+			axis(4,at=c(goall,goalu),labels=c(goall,goalu),col.ticks="green")
+			}
 		if (grepl("flu", topic) > 0 && grepl("vaccin", topic) > 0)
-	if (grepl("flu", topic) > 0 && grepl("vaccin", topic) > 0)
-		{ #http://www.cdc.gov/flu/fluvaxview/reports/reporti1213/reportii/index.htm
-		if (outcome == "nonconforming")
-			{
-			abline(a = 0.434, b = 0, col="red", lty = 2, lwd = 2)
-			abline(a = 0.61, b = 0, col="red4", lty = 2, lwd = 2)
-			abline(a = 0.1, b = 0, col="green", lty = 2, lwd = 2)
-			regionx = c(0,0,10,10)
-			regiony = c(0.1,0.434,0.434,0.1)
-			polygon(regionx,regiony,col=rgb(0,1,0,alpha=0.05),border = NA)
-			legend("topright", legend=c("Kansas rate 2012-2013 (39%)","National rate 2012-2013 (56.6%)","Healthy People 2020 goal (90%)"),col=c("red4","red","green"),lty=2, lwd = 2, inset=0.05)
+			{ #http://www.cdc.gov/flu/fluvaxview/reports/reporti1213/reportii/index.htm
+			if (outcome == "nonconforming")
+				{
+				abline(a = 0.585, b = 0, col="red", lty = 2, lwd = 2)
+				abline(a = 0.1, b = 0, col="green", lty = 2, lwd = 2)
+				legend("topright", legend=c("National rate 2012-2013 (41.5%)","Healthy People 2020 goal (90%)"),col=c("red","green"),lty=2, lwd = 2, inset=0.05)
+				}
+			if (outcome == "conforming")
+				{
+				abline(a = 0.415, b = 0, col="red", lty = 2, lwd = 2)
+				abline(a = 0.9, b = 0, col="green", lty = 2, lwd = 2)
+				legend("topleft", legend=c("Healthy People 2020 goal (90%)","National rate 2012-2013 (41.5%)"),col=c("green","red"),lty=2, lwd = 2,  inset=0.05)
+				}
 			}
-		if (outcome == "conforming")
-			{
-			abline(a = 0.566, b = 0, col="red", lty = 2, lwd = 2)
-			abline(a = 0.39, b = 0, col="red4", lty = 2, lwd = 2)
-			abline(a = 0.9, b = 0, col="green", lty = 2, lwd = 2)
-			regionx = c(0,0,10,10)
-			regiony = c(0.566,0.9,0.9,0.566)
-			polygon(regionx,regiony,col=rgb(0,1,0,alpha=0.05),border = NA)
-			legend("topleft", legend=c("Kansas rate 2012-2013 (39%)","National rate 2012-2013 (56.6%)","Healthy People 2020 goal (90%)"),col=c("red4","red","green"),lty=2, lwd = 2,  inset=0.05)
-			}
-		}
 		if (grepl("re-admission", topic))
 			{
 			abline(a = 0.178, b = 0, col="red", lty = 2)
