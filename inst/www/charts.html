@@ -108,6 +108,16 @@ $( "#dialog" ).dialog();
 	if($(this).val()=="ex_1d") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25,30, 0,\n4, 15,30, 1,\n5, 10,30, 1,\n6, 5,30, 1,\n6, 5,30, 1,\n6, 5,30, 1,\n6, 5,30, 1",1);}
 	if($(this).val()=="ex_2a") {$("#type").val("P");editor.setValue("1, 1,1, 0,\n2, 1,1, 0,\n3, 1,1, 0,\n4, 0,1, 0,\n5, 2,3, 0,\n6, 2,5, 0,\n7, 1,4, 0,\n8, 7,8, 1,\n9, 9,19, 1,\n10, 9,20, 1,\n11, 10,23, 1",1);}
 	if($(this).val()=="ex_2b") {$("#type").val("C");editor.setValue("1, 1,1, 0,\n2, 1,1, 0,\n3, 1,1, 0,\n4, 0,1, 0,\n5, 2,3, 0,\n6, 2,5, 0,\n7, 1,4, 0,\n8, 7,8, 1,\n9, 9,19, 1,\n10, 9,20, 1,\n11, 10,23, 1",1);}
+	if($(this).val()=="ex_2c")
+		{
+		$("#type").val("R");
+		$("#goalu").val("0.8");
+		$("#goall").val("0.6");
+		$("#timeperiod").val("Week");
+		$("#outcome").val("conforming");
+		$("#topic").val("Influenza vaccination in clinic");
+		editor.setValue("\'10-7 to 10-11\', 25, 57,0,\n\'10-14 to 10-18\', 30, 64,0,\n\'10-21 to 10-25\', 23, 58,0,\n\'10-28 to 11-1\', 18, 44,0,\n\'11-4 to 11-8\', 20, 52,0,",1);
+		}
   });
 
   function isAPIAvailable() {
@@ -288,19 +298,22 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 		  <legend style="font-weight:bold">Example projects</legend>
 <h3 style="margin-bottom:0px">Baseline data</h3>
 <div><input type="radio" name="example" class="example" value="ex_0a" id="ex_0a" checked /><label for="ex_0a">Baseline data (run chart)</label></div>
-<div><input type="radio" name="example" class="example" value="ex_0b" id="ex_0b"/><label for="ex_0b">Baseline data (p-chart)</label> <i>What does this control chart add to the run chart?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_0b" id="ex_0b"/><label for="ex_0b">Baseline data (p-chart)</label> <i>What does this control chart add?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_0c" id="ex_0c"/><label for="ex_0c">Baseline data (p-chart)</label> <i>What do the colored dots, circles, and lines mean on this chart (hint: see infobox below chart)?</i></div>
 <h3 style="margin-bottom:0px">QI project 1: screening performed for depression</h3>
 <div>We now have added 3 months of data after an intervention to increase screening for depression.</div>
-<div><input type="radio" name="example" class="example" value="ex_1a" id="ex_1a"/><label for="ex_1a">First analysis (box chart)</label> <i>What are problems with this analytic approach?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_1a" id="ex_1a"/><label for="ex_1a">First analysis (box chart)</label> <i>What are problems with this approach?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Second analysis (p-chart)</label> <i>What does this control chart add to the box chart? What are the significant findings?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_1c" id="ex_1c"/><label for="ex_1c">Another scenario (note the events dropped from 15 to 10 in the 4th row)</label> <i>What is significant if the drop is more abrupt?</i></div>
-<div><input type="radio" name="example" class="example" value="ex_1d" id="ex_1d"/><label for="ex_1d">Another scenario (longer trial)</label> <i>What is significant if the trial is lengthened?</i></div>
-<div><i>What do these simulations say about the rigor of a QI study and its ability to control for coincident interventions?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_1d" id="ex_1d"/><label for="ex_1d">Another scenario (longer trial)</label> <i>What is significant if the trial is longer?</i></div>
+<div><i>What about controlling for coincident interventions?</i></div>
 
 <h3 style="margin-bottom:0px">QI project 2: counseling for smoking cessation</h3>
 <div><input type="radio" name="example" class="example" value="ex_2a" id="ex_2a"/><label for="ex_2a">First analysis (p-chart)</label> <i>Does the intervention help?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_2b" id="ex_2b" /><label for="ex_2b">Second analysis (c-chart)</label> <i>Why do these two charts suggest contradictory interpretations of the same data?</i></div>
+
+<h3 style="margin-bottom:0px">QI project 3: audit and feedback with SPC charts</h3>
+<div><input type="radio" name="example" class="example" value="ex_2c" id="ex_2a"/><label for="ex_2c">Placing goals and benchmarks on a chart</label> <i>Currently, national benchmarks will be place when the topic contains either 'readmission' or 'flu' and vacc'.</i></div>
 
 	  </fieldset>
 </form>
