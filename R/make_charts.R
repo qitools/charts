@@ -113,17 +113,18 @@ if (sequential == FALSE)
 			}
 	if (grepl("flu", topic) > 0 && grepl("vaccin", topic) > 0)
 		{ #http://www.cdc.gov/flu/fluvaxview/reports/reporti1213/reportii/index.htm
+		  # http://www.healthypeople.gov/2020/topicsobjectives2020/objectiveslist.aspx?topicId=23
 			if (outcome == "nonconforming")
 				{
 				abline(a = 0.585, b = 0, col="red", lty = 2, lwd = 2)
-				abline(a = 0.1, b = 0, col="green", lty = 2, lwd = 2)
-				legend("topright", legend=c("National rate 2012-2013 (41.5%)","Healthy People 2020 goal (90%)"),col=c("red","green"),lty=2, lwd = 2, inset=0.05)
+				abline(a = 0.2, b = 0, col="green", lty = 2, lwd = 2)
+				legend("topright", legend=c("National rate 2012-2013 (41.5%)","Healthy People 2020 goal (80%)"),col=c("red","green"),lty=2, lwd = 2, inset=0.05)
 				}
 			if (outcome == "conforming")
 				{
 				abline(a = 0.415, b = 0, col="red", lty = 2, lwd = 2)
-				abline(a = 0.9, b = 0, col="green", lty = 2, lwd = 2)
-				legend("topleft", legend=c("Healthy People 2020 goal (90%)","National rate 2012-2013 (41.5%)"),col=c("green","red"),lty=2, lwd = 2,  inset=0.05)
+				abline(a = 0.8, b = 0, col="green", lty = 2, lwd = 2)
+				legend("topleft", legend=c("Healthy People 2020 goal (80%)","National rate 2012-2013 (41.5%)"),col=c("green","red"),lty=2, lwd = 2,  inset=0.05)
 				}
 		}
 	if (grepl("re-admission", topic) > 0)
@@ -232,17 +233,18 @@ else #sequential == TRUE
 			}
 		if (grepl("flu", topic) > 0 && grepl("vaccin", topic) > 0)
 			{ #http://www.cdc.gov/flu/fluvaxview/reports/reporti1213/reportii/index.htm
+			  # http://www.healthypeople.gov/2020/topicsobjectives2020/objectiveslist.aspx?topicId=23
 			if (outcome == "nonconforming")
 				{
 				abline(a = 0.585, b = 0, col="red", lty = 2, lwd = 2)
-				abline(a = 0.1, b = 0, col="green", lty = 2, lwd = 2)
-				legend("topright", legend=c("National rate 2012-2013 (41.5%)","Healthy People 2020 goal (90%)"),col=c("red","green"),lty=2, lwd = 2, inset=0.05)
+				abline(a = 0.2, b = 0, col="green", lty = 2, lwd = 2)
+				legend("topright", legend=c("National rate 2012-2013 (41.5%)","Healthy People 2020 goal (80%)"),col=c("red","green"),lty=2, lwd = 2, inset=0.05)
 				}
 			if (outcome == "conforming")
 				{
 				abline(a = 0.415, b = 0, col="red", lty = 2, lwd = 2)
-				abline(a = 0.9, b = 0, col="green", lty = 2, lwd = 2)
-				legend("topleft", legend=c("Healthy People 2020 goal (90%)","National rate 2012-2013 (41.5%)"),col=c("green","red"),lty=2, lwd = 2,  inset=0.05)
+				abline(a = 0.8, b = 0, col="green", lty = 2, lwd = 2)
+				legend("topleft", legend=c("Healthy People 2020 goal (80%)","National rate 2012-2013 (41.5%)"),col=c("green","red"),lty=2, lwd = 2,  inset=0.05)
 				}
 			}
 		if (grepl("re-admission", topic))
