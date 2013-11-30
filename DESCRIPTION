@@ -1,4 +1,4 @@
-Package: qitools
+Package: charts
 Type: OpenCPU Application
 Title: QItools application for OpenCPU
 Version: 0.1
@@ -15,8 +15,5 @@ Imports:
     reshape2,
 	qcc
 Collate:
-    'qitools.R'
-	'ishikawa.R'
-	'make_charts.R'
+	'charts.R'
 	'display_logo.R'
-	'pareto.R'
