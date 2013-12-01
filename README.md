@@ -1,4 +1,4 @@
-OpenCPU App: QItools
+OpenCPU App: charts
 ---------------------
 
 Simple OpenCPU Application. 
@@ -12,7 +12,7 @@ To install in R on your computer:
     install_github("charts", "qitools")
 
     library(opencpu)
-    opencpu$browse("library/qitools/www")
+    opencpu$browse("library/charts/www")
 
 Use the same function using a local webserver on your computer:
 
