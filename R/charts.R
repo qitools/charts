@@ -17,6 +17,8 @@ myframe$total<-as.numeric(as.character(str_trim(myframe$total)))
 #myframe$Trial<-as.logical(str_trim(myframe$Trial))
 myframe$Trial<-str_trim(as.character(myframe$Trial))
 #myframe$Trial<-str_trim(myframe$Trial)
+goalu <- as.numeric(goalu)
+goall <- as.numeric(goall)
 
 attach(myframe)
 # http://www.identity.ku.edu/colors/index.shtml
@@ -106,7 +108,7 @@ if (sequential == FALSE)
 	#Goals or targets
 		if (goalu > 0 && goall > 0)
 			{
-			regionx = c(0,0,10,10)
+			regionx = c(0,0,length(period) + 1,length(period) + 1)
 			regiony = c(goall,goalu,goalu,goall)
 			polygon(regionx,regiony,col=rgb(0,1,0,alpha=0.05),border = NA)
 			axis(4,at=c(goall,goalu),labels=c(goall,goalu),col.ticks="green")
@@ -226,7 +228,7 @@ else #sequential == TRUE
 		#Goals or targets
 		if (goalu > 0 && goall > 0)
 			{
-			regionx = c(0,0,10,10)
+			regionx = c(0,0,length(period) + 1,length(period) + 1)
 			regiony = c(goall,goalu,goalu,goall)
 			polygon(regionx,regiony,col=rgb(0,1,0,alpha=0.05),border = NA)
 			axis(4,at=c(goall,goalu),labels=c(goall,goalu),col.ticks="green")
