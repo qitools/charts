@@ -17,6 +17,8 @@ myframe$total<-as.numeric(as.character(str_trim(myframe$total)))
 #myframe$Trial<-as.logical(str_trim(myframe$Trial))
 myframe$Trial<-str_trim(as.character(myframe$Trial))
 #myframe$Trial<-str_trim(myframe$Trial)
+if (goalu < 0){goalu = 0}
+if (goall < 0){goall = 0}
 goalu <- as.numeric(goalu)
 goall <- as.numeric(goall)
 
