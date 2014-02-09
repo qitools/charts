@@ -14,6 +14,8 @@ myframe$period<-gsub("\'", '', fixed = TRUE, myframe$period)
 myframe$period<-str_trim(as.character(myframe$period))
 myframe$count<-as.numeric(as.character(str_trim(myframe$count)))
 myframe$total<-as.numeric(as.character(str_trim(myframe$total)))
+if (length(timeperiod) > 0)
+	{timeperiod<-paste("Time period (",timeperiod,")",sep="")}
 #myframe$Trial<-as.logical(str_trim(myframe$Trial))
 myframe$Trial<-str_trim(as.character(myframe$Trial))
 #myframe$Trial<-str_trim(myframe$Trial)
