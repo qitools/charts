@@ -8,7 +8,7 @@ temp <- gsub("\t", ' ', fixed = TRUE, temp)
 temp <- gsub(',', '","', fixed = TRUE, temp)
 temp <- paste('"',temp,'"',sep = '')
 temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=4, byrow=TRUE, dimnames = list(NULL, c("periodname", "count", "total","Trial")))',sep = '')
-x<-eval(parse(file = "", n = NULL, text = temp))
+x <- eval(parse(file = "", n = NULL, text = temp))
 myframe <- data.frame (x)
 myframe$period<-gsub("\'", '', fixed = TRUE, myframe$period)
 myframe$period<-str_trim(as.character(myframe$period))
@@ -29,7 +29,7 @@ attach(myframe)
 KUBlue = "#0022B4"
 SkyBlue = "#6DC6E7"
 par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue)
-qcc.options(cex.stats=0.9, bg.margin=SkyBlue,"run.length" = 6, "beyond.limits" = list(pch = 20, col = "black"), "violating.runs" = list(pch = 16, col = "orange")) #Shift. A run
+qcc.options("cex.stats"=0.9, "cex" = 2, "bg.margin"=SkyBlue,"run.length" = 6, "beyond.limits" = list(pch = 20, col = "black"), "violating.runs" = list(pch = 16, col = "orange")) #Shift. A run
 sequential = FALSE
 period = 0
 for(i in 1: length(myframe$periodname))
@@ -58,6 +58,7 @@ if (sequential == FALSE)
 		currentvalue <- count/total
 		spc <- qcc(count,sizes=total,type="p", xlab="",ylab="",title="",labels=myframe$period,ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 		mtext(paste("Proportion of encounters ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
+		y.label = paste("Count of encounters ", outcome)
 		average = paste("Average ",outcome," = ",round(spc$center*100,digits = 1),"%", sep = "")
 		if(theme=="KU"){display_logo(x=1.2,y=0.2)}
 		}
@@ -81,23 +82,37 @@ if (sequential == FALSE)
 			average = paste("Average ",outcome," = ",round(100*numerator/denominator,digits = 1),"%", collapse = NULL)
 			if(theme=="KU"){display_logo(x=1.15,y=0.06)}
 			}
-		else #c-chart
+		else
 			{
-			if (counted == "events") 
+			if (type == "b" || type == "B") #Box plot
 				{
-				currentvalue <- count
-				spc <- qcc(count,type="c", xlab="",ylab="",title="",labels=myframe$period, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-				mtext(paste("Count of encounters ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
+				#This does not make sense. Cannot do box chart outside of a trial
+				plot.new()
+				topic= "Ooops"
+				y.label = "oops"
+				average=""
 				}
-			if (counted == "total")  
+			else #c-chart
 				{
-				currentvalue <- total
-				spc <- qcc(total,type="c", xlab="",ylab="",title="",labels=myframe$period, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-				mtext(paste("Count of encounters ", ''), side=2, line=2.5, col=KUBlue , cex=1.5)
+				if (counted == "events") 
+					{
+					currentvalue <- count
+					spc <- qcc(count,type="c", xlab="",ylab="",title="",labels=myframe$period, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+					y.label = paste("Count of encounters ", outcome)
+					}
+				if (counted == "total")  
+					{
+					currentvalue <- total
+					spc <- qcc(total,type="c", xlab="",ylab="",title="",labels=myframe$period, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+					y.label = paste("Count of encounters ")
+					}
+				average = paste("Average ",outcome," = ",round(spc$center,digits = 1),"", sep = "")
+				plot(spc, add.stats = TRUE, chart.all = TRUE, label.limits = c("LCL ", "UCL"), title = "", xlab="",ylab="", axes.las = 0, digits = 2)
 				}
-			average = paste("Average ",outcome," = ",round(spc$center,digits = 1),"", sep = "")
 			}
 		}
+	par(new=TRUE,xpd=NA)
+	plot.new()
 	if (type=="R" || type=="r")
 		{
 		mtext(timeperiod, side=1, line=3, col=KUBlue , cex=1.5)
@@ -105,18 +120,22 @@ if (sequential == FALSE)
 		}
 	else
 		{
+		#mtext(subtitle, side=3, line=0.5, col=KUBlue , cex=1.2)
+		mtext(y.label, side=2, line=3.5, col=KUBlue , cex=1.5)
 		mtext(timeperiod, side=1, line=-1.0, col=KUBlue , cex=1.5)
 		mtext(average, side=1, line=-0.2, col=KUBlue , cex=1)
+		
 		}
-	mtext(topic, side=3,line=2.5,col=KUBlue,font=2, cex=1.3)
+	mtext(topic, side=3,line=2,col=KUBlue,font=2, cex=3)
 	#Goals or targets
-		if (goalu > 0 && goall > 0)
-			{
-			regionx = c(0,0,length(period) + 1,length(period) + 1)
-			regiony = c(goall,goalu,goalu,goall)
-			polygon(regionx,regiony,col=rgb(0,1,0,alpha=0.05),border = NA)
-			axis(4,at=c(goall,goalu),labels=c(goall,goalu),col.ticks="green")
-			}
+	par(new=TRUE,xpd=FALSE)
+	if (goalu > 0 && goall > 0)
+		{
+		regionx = c(-1,-1,length(period) + 1,length(period) + 1)
+		regiony = c(goall,goalu,goalu,goall)
+		polygon(regionx,regiony,col=rgb(0,1,0,alpha=0.05),border = NA)
+		axis(4,at=c(goall,goalu),labels=c(goall,goalu),col.ticks="green")
+		}
 	if (grepl("flu", topic) > 0 && grepl("vaccin", topic) > 0)
 		{ #http://www.cdc.gov/flu/fluvaxview/reports/reporti1213/reportii/index.htm
 		  # http://www.healthypeople.gov/2020/topicsobjectives2020/objectiveslist.aspx?topicId=23
@@ -165,9 +184,10 @@ else #sequential == TRUE
 		print("###########################################")
 		print(twobytwo)
 		names(Trial) <- c("Baseline","Trial")
+		par(cex.main = 3)
 		boxplot(count/total ~ Trial,ylab=paste("Mean proportion of encounters ", outcome),main=topic, ylim=c(0,1),names.arg=c("Baseline","Trial"))
-		axis(1, at= 1:2, lab=c("Baseline","Trial"),tick=FALSE)
-		mtext(side=3,line=0.5,"(before and after analysis)", font=1)
+		axis(1, at= 1:2, lab=c("Baseline","Trial"),tick=FALSE, cex = 2)
+		mtext(side=3,line=0.2,"(before and after analysis)", font=1)
 		mm<-tapply(count/total,Trial, median,na.rm=TRUE)
 		text(1-0.4,mm[1],round(mm[1],2),pos=2)
 		text(2-0.4,mm[2],round(mm[2],2),pos=2)
@@ -184,9 +204,8 @@ else #sequential == TRUE
 			{
 			currentvalue <- count/total
 			spc <- qcc(data=count[Trial=='0'],sizes=total[Trial=='0'],newdata=count[Trial=='1'], newsizes=total[Trial=='1'],type="p", xlab="",ylab="",title="",labels=periodname[Trial=='0'],newlabels=periodname[Trial=='1'],ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-			mtext(paste("Proportion of encounters ",outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
-			mtext(side=3,line=1,paste("proportion of encounters ", outcome, " (p chart): before-after trial"), font=2)
-			#mtext(side=3,line=1,"count "~italic(outcome)~" of encounters (p chart): before-after trial", font=2)
+			subtitle = "(p chart): before-after trial"
+			y.label = paste("Proportion of encounters ",outcome)
 			average = paste("Average (pretrial) = ",round(spc$center*100,digits = 1),"%", sep = "")
 			##Sig testing
 			#Linear regression
@@ -199,25 +218,31 @@ else #sequential == TRUE
 				currentvalue <- count
 				spc <- qcc(count[Trial=="0"],newdata=count[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 				glm.out1=glm(count ~ as.numeric(Trial) + period, family=poisson(log))
-				mtext("Count of encounters non-conforming", side=2, line=2.5, col=KUBlue , cex=1.5)
-				mtext(side=3,line=1,paste("Count of encounters ", outcome, " (c chart): before-after trial"), font=2)
+				subtitle = "(c chart): before-after trial"
+				y.label = paste("Count of encounters ", outcome)
 				}
 			if (counted == "total") 
 				{
 				currentvalue <- total
 				spc <- qcc(total[Trial=="0"],newdata=total[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 				glm.out1=glm(total ~ as.numeric(Trial) + period, family=poisson(log))
-				mtext("Count of encounters", side=2, line=2.5, col=KUBlue , cex=1.5)
-				mtext(side=3,line=1,paste("Count of encounters ", outcome, " (c chart): before-after trial"), font=2)
+				#mtext("Count of encounters", side=2, line=2.5, col=KUBlue , cex=1.5)
+				subtitle = "(c chart): before-after trial"
+				y.label = paste("Count of encounters ", outcome)
 				}
-			#mtext(side=3,line=1,"count "~italic(outcome)~" of encounters (c chart): before-after trial", font=2)
+			mtext(side=3,line=1,"count "~italic(outcome)~" of encounters (c chart): before-after trial", font=2)
 			average = paste("Average (pretrial) = ",round(spc$center,digits = 1),"", sep = "")
 			##Sig testing
 			#Linear regression
 			}
-		mtext(topic, side=3,line=2.5,col=KUBlue,font=2, cex=1.3)
-		mtext(timeperiod, side=1, line=-1.0, col=KUBlue , cex=1.5)
-		mtext(average, side=1, line=-0.2, col=KUBlue , cex=1)
+		plot(spc, add.stats = TRUE, chart.all = TRUE, label.limits = c("LCL ", "UCL"), title = "", xlab="",ylab="", axes.las = 0, digits = 2)
+		par(new=TRUE,xpd=NA)
+		plot.new()
+		mtext(timeperiod, side=1, line=-1.2, col=KUBlue , cex=1.3, outer = FALSE)
+		mtext(average, side=1, line=-0.2, col=KUBlue , cex=1,  outer = FALSE)
+		mtext(y.label, side=2, line=3.5, col=KUBlue , cex=1.5)
+		mtext(topic, side=3, line=2, col=KUBlue, font = 2, cex=3)
+		mtext(subtitle, side=3, line=0.5, col=KUBlue , cex=1.2)
 
 		sum.sig <- summary(glm.out1)
 		#coef(sum.sig)["Trial",4] or coef(sum.sig)[2,4]
