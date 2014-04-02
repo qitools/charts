@@ -57,8 +57,8 @@ if (sequential == FALSE)
 		{
 		currentvalue <- count/total
 		spc <- qcc(count,sizes=total,type="p", xlab="",ylab="",title="",labels=myframe$period,ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-		mtext(paste("Proportion of encounters ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
-		y.label = paste("Count of encounters ", outcome)
+		#mtext(bquote("Proportion of encounters"~~bolditalic(.(outcome))), side=2, line=2.5, col=KUBlue , cex=1.5)
+		y.label = bquote("Count of encounters"~~bolditalic(.(outcome)))
 		average = paste("Average ",outcome," = ",round(spc$center*100,digits = 1),"%", sep = "")
 		if(theme=="KU"){display_logo(x=1.2,y=0.2)}
 		}
@@ -78,7 +78,7 @@ if (sequential == FALSE)
 			axis(side=1,at=1:length(myframe$period),labels=myframe$period)
 			axis(2,  xaxp=c(0,1,10))
 			box()
-			mtext(paste("Proportion of encounters ", outcome), side=2, line=2.5, col=KUBlue , cex=1.5)
+			mtext(bquote("Proportion of encounters"~~bolditalic(.(outcome))), side=2, line=2.5, col=KUBlue , cex=1.5)
 			average = paste("Average ",outcome," = ",round(100*numerator/denominator,digits = 1),"%", collapse = NULL)
 			if(theme=="KU"){display_logo(x=1.15,y=0.06)}
 			}
@@ -98,13 +98,13 @@ if (sequential == FALSE)
 					{
 					currentvalue <- count
 					spc <- qcc(count,type="c", xlab="",ylab="",title="",labels=myframe$period, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-					y.label = paste("Count of encounters ", outcome)
+					y.label = bquote("Count of encounters"~~bolditalic(.(outcome)))
 					}
 				if (counted == "total")  
 					{
 					currentvalue <- total
 					spc <- qcc(total,type="c", xlab="",ylab="",title="",labels=myframe$period, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-					y.label = paste("Count of encounters ")
+					y.label = bquote("Count of "~~bolditalic(total)~~"encounters")
 					}
 				average = paste("Average ",outcome," = ",round(spc$center,digits = 1),"", sep = "")
 				plot(spc, add.stats = TRUE, chart.all = TRUE, label.limits = c("LCL ", "UCL"), title = "", xlab="",ylab="", axes.las = 0, digits = 2)
@@ -185,7 +185,7 @@ else #sequential == TRUE
 		print(twobytwo)
 		names(Trial) <- c("Baseline","Trial")
 		par(cex.main = 3)
-		boxplot(count/total ~ Trial,ylab=paste("Mean proportion of encounters ", outcome),main=topic, ylim=c(0,1),names.arg=c("Baseline","Trial"))
+		boxplot(count/total ~ Trial,ylab=bquote("Mean proportion of encounters"~~bolditalic(.(outcome))),main=topic, ylim=c(0,1),names.arg=c("Baseline","Trial"))
 		axis(1, at= 1:2, lab=c("Baseline","Trial"),tick=FALSE, cex = 2)
 		mtext(side=3,line=0.2,"(before and after analysis)", font=1)
 		mm<-tapply(count/total,Trial, median,na.rm=TRUE)
@@ -204,12 +204,13 @@ else #sequential == TRUE
 			{
 			currentvalue <- count/total
 			spc <- qcc(data=count[Trial=='0'],sizes=total[Trial=='0'],newdata=count[Trial=='1'], newsizes=total[Trial=='1'],type="p", xlab="",ylab="",title="",labels=periodname[Trial=='0'],newlabels=periodname[Trial=='1'],ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-			subtitle = "(p chart): before-after trial"
-			y.label = paste("Proportion of encounters ",outcome)
+			subtitle = "p chart: before-after trial"
+			y.label = bquote("Proportion of encounters"~~bolditalic(.(outcome)))
 			average = paste("Average (pretrial) = ",round(spc$center*100,digits = 1),"%", sep = "")
 			##Sig testing
 			#Linear regression
 			glm.out1=glm(count/total ~ as.numeric(Trial) + period, family=binomial(logit),weights = total)
+			plot(spc, add.stats = TRUE, chart.all = TRUE, label.limits = c("LCL ", "UCL"), title = "", xlab="",ylab="", ylim=c(0,1),axes.las = 0, digits = 2)
 			}
 		if (type == "c" || type == "C")
 			{
@@ -218,8 +219,8 @@ else #sequential == TRUE
 				currentvalue <- count
 				spc <- qcc(count[Trial=="0"],newdata=count[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 				glm.out1=glm(count ~ as.numeric(Trial) + period, family=poisson(log))
-				subtitle = "(c chart): before-after trial"
-				y.label = paste("Count of encounters ", outcome)
+				subtitle = "c chart) before-after trial"
+				y.label = bquote("Count of encounters"~~bolditalic(.(outcome)))
 				}
 			if (counted == "total") 
 				{
@@ -227,22 +228,22 @@ else #sequential == TRUE
 				spc <- qcc(total[Trial=="0"],newdata=total[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 				glm.out1=glm(total ~ as.numeric(Trial) + period, family=poisson(log))
 				#mtext("Count of encounters", side=2, line=2.5, col=KUBlue , cex=1.5)
-				subtitle = "(c chart): before-after trial"
-				y.label = paste("Count of encounters ", outcome)
+				subtitle = "c chart: before-after trial"
+				y.label = bquote("Count of encounters"~~bolditalic(.(outcome)))
 				}
-			mtext(side=3,line=1,"count "~italic(outcome)~" of encounters (c chart): before-after trial", font=2)
+			mtext(side=3,line=1,"c chart: before-after trial", font=2)
 			average = paste("Average (pretrial) = ",round(spc$center,digits = 1),"", sep = "")
+			plot(spc, add.stats = TRUE, chart.all = TRUE, label.limits = c("LCL ", "UCL"), title = "", xlab="",ylab="", axes.las = 0, digits = 2)
 			##Sig testing
 			#Linear regression
 			}
-		plot(spc, add.stats = TRUE, chart.all = TRUE, label.limits = c("LCL ", "UCL"), title = "", xlab="",ylab="", axes.las = 0, digits = 2)
 		par(new=TRUE,xpd=NA)
 		plot.new()
-		mtext(timeperiod, side=1, line=-1.2, col=KUBlue , cex=1.3, outer = FALSE)
-		mtext(average, side=1, line=-0.2, col=KUBlue , cex=1,  outer = FALSE)
+		mtext(timeperiod, side=1, line=-1.1, col=KUBlue , cex=1.3, outer = FALSE)
+		mtext(average, side=1, line=-0.1, col=KUBlue , cex=1,  outer = FALSE)
 		mtext(y.label, side=2, line=3.5, col=KUBlue , cex=1.5)
 		mtext(topic, side=3, line=2, col=KUBlue, font = 2, cex=3)
-		mtext(subtitle, side=3, line=0.5, col=KUBlue , cex=1.2)
+		mtext(subtitle, side=3, line=0.8, col=KUBlue , cex=1.2)
 
 		sum.sig <- summary(glm.out1)
 		#coef(sum.sig)["Trial",4] or coef(sum.sig)[2,4]
@@ -291,14 +292,14 @@ else #sequential == TRUE
 		{
 		lastvalue = 0
 		Trend = 0
-		Trend.items<- numeric()
+		Trend.items <- numeric()
 		#currentvalue <- numeric()
 		for(i in 1: length (myframe$period))
 		{
-		#$IHI rules http://www.ihi.org/knowledge/Pages/Tools/RunChart.aspx
+		# $IHI rules http://www.ihi.org/knowledge/Pages/Tools/RunChart.aspx
 		# IHI1: Trend of 5 or more consecutively changing in the same direction
-		#if (type=="p" || type=="P") {currentvalue[i] <- myframe$d[i]/myframe$total[i]}
-		#if (type=="c" || type=="C") {currentvalue[i] <- myframe$d[i]}
+		# if (type=="p" || type=="P") {currentvalue[i] <- myframe$d[i]/myframe$total[i]}
+		# if (type=="c" || type=="C") {currentvalue[i] <- myframe$d[i]}
 		if(currentvalue[i] > lastvalue)
 			{
 			if (Trend < 0) {Trend = 2}
@@ -321,13 +322,19 @@ else #sequential == TRUE
 
 		shewhart <- shewhart.rules(spc, run.length = 6)
 			
+		#For debugging
+		#text (0.5,1,paste("Length of period: ", length (myframe$period)))
 		for(i in 1: length (myframe$period))
 			{
-			points (row(myframe)[i,1],currentvalue[i], col="black",pch=16, cex = 1)
+			#2014-04-01: This causes the last point to be missplaced
+			# Cannot easily be fixed with new QCC library
+			#points ((i-1)/(length(myframe$period) - 1),currentvalue[i], col="black",pch=16, cex = 1)
+			#For debugging
+			#text (row(myframe)[i,1],currentvalue[i],i,adj = c(0,-1))
 			}
 
 		# IHI1: Trend of 5 or more consecutively changing in the same direction
-		#Trend.items
+		# Trend.items
 		for(i in 1: length (myframe$period))
 		{
 		if (any(Trend.items == i+1) == TRUE)
@@ -335,35 +342,31 @@ else #sequential == TRUE
 			Trend.items <- c(i-3,i-2,i-1,i,Trend.items)
 			}
 		}
-		Trend.items <- sort(Trend.items)
-		Trend.items<-unique(Trend.items)
+
+		Trend.items <-   sort(Trend.items)
+		Trend.items <- unique(Trend.items)
 		for(i in 1: length (Trend.items))
 			{
 			#points (Trend.items[i],currentvalue[Trend.items[i]], col="blue",pch=21, cex = 1.5)
-			#lines (Trend.items[i],currentvalue[Trend.items[i]],col="blue",lwd=1.5)
+			#lines ((Trend.items[i]-1)/(length (myframe$period) - 1),currentvalue[Trend.items[i]],col="blue",lwd=1.5)
 			}
-		lines (Trend.items,currentvalue[Trend.items],type="l",col="blue",lwd=1.5)
+		#Below will work if can adjust for margins top and bottom
+		#lines ((Trend.items-1)/(length (myframe$period) - 1),currentvalue[Trend.items],type="l",col="blue",lwd=1.5)
 
-			# IHI2: Run of 6 or more on same size of median
-		#shewhart$violating.runs
-		for(i in 1: length (myframe$period))
-		{
-		if (any(shewhart$violating.runs == i + 1) == TRUE)
+		# IHI2: Run of 6 or more on same size of median
+		# shewhart$violating.runs
+		vr <- violating.runs(spc, run.length = 6)
+		for(i in 1: length (vr))
 			{
-			shewhart$violating.runs <- c(i-4,i-3,i-2,i-1,i,shewhart$violating.runs)
-			}
-		}
-		shewhart$violating.runs <- sort(shewhart$violating.runs)
-		shewhart$violating.runs <- unique(shewhart$violating.runs)
-		for(i in 1: length (shewhart$violating.runs))
-			{
-			points (shewhart$violating.runs[i],currentvalue[shewhart$violating.runs[i]], col="orange",pch=16, cex = 1)
-			}
+			#Below will work better if can adjust for margins top and bottom
+			points ((vr[i] - 1)/(length (myframe$period) - 1),currentvalue[vr[i]], col="orange",pch=16, cex = 1)
+			}			
 
 		# IHI4:astronomical points
 		for(i in 1: length (shewhart$beyond.limits))
 			{
-			points (shewhart$beyond.limits[i],currentvalue[shewhart$beyond.limits[i]], col="red",pch=21, cex = 2)
+			#Not needed with new library
+			#points ((shewhart$beyond.limits[i] - 1)/(length (myframe$period) - 1),currentvalue[shewhart$beyond.limits[i]], col="red",pch=21, cex = 2)
 			}
 		#Shewhart rules end
 		}
