@@ -359,7 +359,7 @@ else #sequential == TRUE
 		for(i in 1: length (vr))
 			{
 			#Below will work better if can adjust for margins top and bottom
-			points ((vr[i] - 1)/(length (myframe$period) - 1),currentvalue[vr[i]], col="orange",pch=16, cex = 1)
+			#points ((vr[i] - 1)/(length (myframe$period) - 1),currentvalue[vr[i]], col="orange",pch=16, cex = 1)
 			}			
 
 		# IHI4:astronomical points
