@@ -252,7 +252,7 @@ else #sequential == TRUE
 		#lines(period, glm.out1$fitted,type="l",col="red")
 		significance = paste("P-value for trial (linear regression) = ",format(round(coef(sum.sig)["as.numeric(Trial)",4],digits = 3), nsmall = 3), sep = "")
 		mtext(significance, side=1, line=0.5, col=KUBlue , cex=1,adj = 1)
-		significance = paste("P-value for period (linear regression) = ",format(round(coef(sum.sig)["period",4],digits = 3), nsmall = 3), sep = "")
+		significance = paste("P-value for secular change (linear regression) = ",format(round(coef(sum.sig)["period",4],digits = 3), nsmall = 3), sep = "")
 		mtext(significance, side=1, line=1.5, col=KUBlue , cex=1,adj = 1)
 		if(theme=="KU"){display_logo(x=1.2,y=0.2)}
 		#Goals or targets
