@@ -7,6 +7,10 @@
 
 <script src="jquery/jquery-1.9.1.js"> </script>
 
+<!-- tooltip -->
+<script type="text/javascript" src="//qtip2.com/v/2.2.0/jquery.qtip.js"></script>
+<link rel="stylesheet" type="text/css" href="//qtip2.com/v/2.2.0/jquery.qtip.min.css" />
+
 <!-- ocpu library -->
 <script src="opencpu/opencpu.js"> </script>
 
@@ -32,6 +36,19 @@ $(function() {
 $( "#dialog" ).dialog();
 });
 
+	var hash = window.location.hash 
+	if (hash.length > 1) //location.hash.substring.length
+		{
+		if (hash.indexOf('instruct')>0)
+			{
+			$(".hastip").css("display","inline")
+			}
+		}
+	else
+		{
+		$(".hastip").css("display","none")
+		}
+		
     if(isAPIAvailable()) {
       $('#files').bind('change', handleFileSelect);
     }
@@ -174,6 +191,33 @@ $( "#dialog" ).dialog();
     
 	reader.onerror = function(){ alert('Unable to read ' + file.fileName); };
 	}
+
+	//http://qtip2.com/
+	// Apply tooltip on all <a/> elements with title attributes. Mousing over
+    // these elements will the show tooltip as expected, but mousing onto the
+    // tooltip is now possible for interaction with it's contents.
+    //$('a').each(function () {
+    $('.hastip').each(function () {
+        $(this).qtip({
+            content: $(this).next('.tooltiptext'),
+            hide: {
+                fixed: true,
+                delay: 300
+            },
+			position: {
+				my: 'bottom left',  // Position my top left...
+				at: 'bottom right', // at the bottom right of...
+			},
+			style: { classes: 'ToolTipClass'
+			}
+		});
+    });
+
+	$('.hastip').click(function(e) {
+		e.stopPropagation();
+		return false;
+	});	
+
 	
   //init on start
   //drawplot();
@@ -239,6 +283,15 @@ background-color:#0022B4;
 color:#FFFFFF;
 }
 
+	  .tooltiptext{
+			display: none;
+		}
+	  .ToolTipClass{
+		color:black;
+		border-color:#0022B4;
+		background-color: #6DC6E7
+		}
+		
 </style>
 </head>
 
@@ -351,8 +404,16 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 <div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Second analysis (p-chart)</label> <i>What does this control chart add to the box chart? What are the significant findings?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_1c" id="ex_1c"/><label for="ex_1c">Another scenario (note the events dropped from 15 to 10 in the 4th row)</label> <i>What is significant if the drop is more abrupt?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_1d" id="ex_1d"/><label for="ex_1d">Another scenario (longer trial)</label> <i>What is significant if the trial is longer?</i></div>
-<div><i>What about controlling for coincident interventions?</i></div>
-
+<div><i>Why control for coincident interventions or trends over time?</i> <a href="#" class="hastip">Answer.</a>
+<div class="tooltiptext">
+	To control for these, use of these analyses:
+	<ul>
+		<li>Regression analysis</li>
+		<li>Segmented time series regression</li>
+	</ul>
+	<div id="">1. Fan E, Laupacis A, Pronovost PJ, Guyatt GH, Needham DM. How to use an article about quality improvement. JAMA. 2010. PMID: <a href="http://pubmed.gov/21098772">21098772</a></div>
+</div>
+</div>
 <h3 style="margin-bottom:0px">QI project 2: counseling for smoking cessation</h3>
 <div><input type="radio" name="example" class="example" value="ex_2a" id="ex_2a"/><label for="ex_2a">First analysis (p-chart)</label> <i>Does the intervention help?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_2b" id="ex_2b" /><label for="ex_2b">Second analysis (c-chart)</label> <i>Why do these two charts suggest contradictory interpretations of the same data?</i></div>
