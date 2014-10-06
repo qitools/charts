@@ -137,6 +137,13 @@ $( "#dialog" ).dialog();
 		editor.setValue("\'10-7 to 10-11\', 25, 57,0,\n\'10-14 to 10-18\', 30, 64,0,\n\'10-21 to 10-25\', 23, 58,0,\n\'10-28 to 11-1\', 18, 44,0,\n\'11-4 to 11-8\', 20, 52,0,",1);
 		$("#countedshow").css("display","none");
 		}
+	else
+		{
+		$("#goalu").val("");
+		$("#goall").val("");
+		$("#topic").val("");
+		$("#countedshow").css("display","inline");
+		}
   });
 
   function isAPIAvailable() {
@@ -398,7 +405,7 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 <h3 style="margin-bottom:0px">Baseline data</h3>
 <div><input type="radio" name="example" class="example" value="ex_0a" id="ex_0a" checked /><label for="ex_0a">Baseline data (run chart)</label></div>
 <div><input type="radio" name="example" class="example" value="ex_0b" id="ex_0b"/><label for="ex_0b">Baseline data (p-chart)</label> <i>What does this control chart add?</i></div>
-<div><input type="radio" name="example" class="example" value="ex_0c" id="ex_0c"/><label for="ex_0c">Baseline data (p-chart)</label> <i>The mean remains at 83.3%. What do the colored dots, mean on this chart (hint: see infobox below chart)?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_0c" id="ex_0c"/><label for="ex_0c">Baseline data (p-chart)</label> <i>The mean remains at 83.3%. What do the colored dots mean on this chart (hint: see infobox below chart)?</i></div>
 <h3 style="margin-bottom:0px">QI project 1: screening performed for depression</h3>
 <div>We now have added 3 months of data after an intervention to increase screening for depression.</div>
 <div><input type="radio" name="example" class="example" value="ex_1a" id="ex_1a"/><label for="ex_1a">First analysis (box chart)</label> <i>Did this intervention help?</i></div>
