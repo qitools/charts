@@ -42,11 +42,13 @@ $( "#dialog" ).dialog();
 		if (hash.indexOf('instruct')>0)
 			{
 			$(".hastip").css("display","inline")
+			$(".teach").css("display","inline")
 			}
 		}
 	else
 		{
 		$(".hastip").css("display","none")
+		$(".teach").css("display","none")
 		}
 		
     if(isAPIAvailable()) {
@@ -412,7 +414,7 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 <div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Second analysis (p-chart)</label> <i><ul style="margin-top:1px;margin-bottom:1px;"><li>What does this control chart add to the box chart?</li><li>What are the significant findings?</li></ul></i></div>
 <div><input type="radio" name="example" class="example" value="ex_1c" id="ex_1c"/><label for="ex_1c">Another scenario (note the events dropped from 15 to 10 in the 4th row)</label> <i>What is significant if the drop is more abrupt?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_1d" id="ex_1d"/><label for="ex_1d">Another scenario (longer trial)</label> <i>What is significant now?</i></div>
-<div style="display:none"><i>Why control for coincident interventions or trends over time?</i> <a href="#" class="hastip">Answer.</a>
+<div style="display:none" class="teach"><i>Why control for coincident interventions or trends over time?</i> <a href="#" class="hastip">Answer.</a>
 <div class="tooltiptext">
 	To control for these, use of these analyses:
 	<ul>
