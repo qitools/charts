@@ -129,14 +129,14 @@ if (sequential == FALSE)
 	mtext(topic, side=3,line=2,col=KUBlue,font=2, cex=3)
 	#Goals or targets
 	par(new=TRUE,xpd=FALSE)
-	if (goalu > 0 && goall > 0)
+	if (goalu >= 0 && goall >= 0)
 		{
 		regionx = c(-1,-1,length(period) + 1,length(period) + 1)
 		regiony = c(goall,goalu,goalu,goall)
 		polygon(regionx,regiony,col=rgb(0,1,0,alpha=0.05),border = NA)
 		axis(4,at=c(goall,goalu),labels=c(goall,goalu),col.ticks="green")
 		}
-	if (grepl("flu", topic) > 0 && grepl("vaccin", topic) > 0)
+	if (grepl("flu", topic, ignore.case = TRUE) > 0 && grepl("vaccin", topic, ignore.case = TRUE) > 0)
 		{ #http://www.cdc.gov/flu/fluvaxview/reports/reporti1213/reportii/index.htm
 		  # http://www.healthypeople.gov/2020/topicsobjectives2020/objectiveslist.aspx?topicId=23
 			if (outcome == "nonconforming")
@@ -152,7 +152,7 @@ if (sequential == FALSE)
 				legend("topleft", legend=c("Healthy People 2020 goal (80%)","National rate 2012-2013 (41.5%)"),col=c("green","red"),lty=2, lwd = 2,  inset=0.05)
 				}
 		}
-	if (grepl("re-admission", topic) > 0)
+	if (grepl("re-admission", topic, ignore.case = TRUE) > 0 | grepl("readmission", topic, ignore.case = TRUE) > 0)
 		{
 		abline(a = 0.178, b = 0, col="red", lty = 2)
 		abline(a = 0.122, b = 0, col="green", lty = 2)
@@ -256,14 +256,14 @@ else #sequential == TRUE
 		mtext(significance, side=1, line=1.5, col=KUBlue , cex=1,adj = 1)
 		if(theme=="KU"){display_logo(x=1.2,y=0.2)}
 		#Goals or targets
-		if (goalu > 0 && goall > 0)
+		if (goalu >= 0 && goall >= 0)
 			{
 			regionx = c(0,0,length(period) + 1,length(period) + 1)
 			regiony = c(goall,goalu,goalu,goall)
 			polygon(regionx,regiony,col=rgb(0,1,0,alpha=0.05),border = NA)
 			axis(4,at=c(goall,goalu),labels=c(goall,goalu),col.ticks="green")
 			}
-		if (grepl("flu", topic) > 0 && grepl("vaccin", topic) > 0)
+		if (grepl("flu", topic, ignore.case = TRUE) > 0 && grepl("vaccin", topic, ignore.case = TRUE) > 0)
 			{ #http://www.cdc.gov/flu/fluvaxview/reports/reporti1213/reportii/index.htm
 			  # http://www.healthypeople.gov/2020/topicsobjectives2020/objectiveslist.aspx?topicId=23
 			if (outcome == "nonconforming")
@@ -279,7 +279,7 @@ else #sequential == TRUE
 				legend("topleft", legend=c("Healthy People 2020 goal (80%)","National rate 2012-2013 (41.5%)"),col=c("green","red"),lty=2, lwd = 2,  inset=0.05)
 				}
 			}
-		if (grepl("re-admission", topic))
+		if (grepl("re-admission", topic, ignore.case = TRUE) | grepl("readmission", topic, ignore.case = TRUE))
 			{
 			abline(a = 0.178, b = 0, col="red", lty = 2)
 			abline(a = 0.122, b = 0, col="green", lty = 2)
