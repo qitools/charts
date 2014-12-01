@@ -242,7 +242,14 @@ $(".example").click(function(){
 });
 </script>
 <style>
-
+.container
+{
+  width: 860px;
+  margin-top: 0px;
+  margin-right: auto;
+  margin-bottom: 0px;
+  margin-left: auto;
+}
 #editor { 
   position: relative;
   width: 950px;
@@ -487,7 +494,17 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
     </div>
 	<div style="clear:both"></div>
 	</div>
-	
+
+<script>
+//For gh-pages
+//Page history and edit
+var pagename = location.pathname.split('/').slice(-1);
+if (pagename.length < 1){pagename = "index.html"}
+document.write("<div style='text-align:center'><a href='https://github.com/qitools/qitools.github.io/blob/master/" + pagename + "'>Edit this page</a> - <a href='https://github.com/qitools/qitools.github.io/commits/master/" + pagename + "'>Page history</a></div>")
+https://github.com/qitools/charts/blob/master/inst/www/index.html
+
+</script>
+
   </div>
 </body>
 </html>
