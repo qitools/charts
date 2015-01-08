@@ -250,10 +250,15 @@ $(".example").click(function(){
   margin-bottom: 0px;
   margin-left: auto;
 }
+fieldset{
+	border: 3px solid #6DC6E7;
+	background-color: #FFFFFF;
+	width:500px;height:625px;
+}
 #editor { 
   position: relative;
   width: 950px;
-  height: 225px;
+  height: 275px;
 }
     
 #plotdiv {
@@ -349,7 +354,7 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
       <div style="width:500px;float:left">
 
         <form id="paramform" target="target" style="width:500px;">
-          <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:500px;height:580px;">
+          <fieldset>
             <legend style="font-weight:bold">Enter inputs</legend>
             <div>To make either a <a href="https://en.wikipedia.org/wiki/Run_chart">Run chart</a> or <a href="https://en.wikipedia.org/wiki/Control_chart">Control chart</a>, either:</div>
 			<ul>
@@ -415,7 +420,7 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
       </div>
       <div style="width:450px;float:right">
 	          <form name="form2" action="#" style="width:450px;">
-          <fieldset style="border: 3px solid #6DC6E7; background-color: #FFFFFF;width:450px;height:580px;">
+          <fieldset>
 		  <legend style="font-weight:bold">Example scenarios</legend>
 <h3 style="margin-bottom:0px;margin-top:2px">Baseline data</h3>
 <div><input type="radio" name="example" class="example" value="ex_0a" id="ex_0a" checked /><label for="ex_0a">Baseline data (run chart)</label></div>
@@ -424,7 +429,7 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 <h3 style="margin-bottom:0px;margin-top:2px">QI project 1: implementing screening for depression</h3>
 <div>We now have added 3 months of data after an intervention to increase screening for depression.</div>
 <div><input type="radio" name="example" class="example" value="ex_1a" id="ex_1a"/><label for="ex_1a">First analysis (box chart)</label> <i>Did this intervention help?</i></div>
-<div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Second analysis (p-chart)</label> <i><ul style="margin-top:1px;margin-bottom:1px;"><li>What does this control chart add to the box chart?</li><li>What are the significant findings?</li></ul></i></div>
+<div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Second analysis (p-chart)</label> <i><ul style="margin-top:1px;margin-bottom:1px;"><li>What does this control chart add to the box chart?</li><li>What are the significant findings?</li><li>What shape would the line have if the intervention were perfectly effective?</li></ul></i></div>
 <div><input type="radio" name="example" class="example" value="ex_1c" id="ex_1c"/><label for="ex_1c">Another scenario (note the events dropped from 15 to 10 in the 4th row)</label> <i>What is significant if the drop is more abrupt?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_1d" id="ex_1d"/><label for="ex_1d">Another scenario (longer trial)</label> <i>What is significant now?</i></div>
 <div style="display:none" class="teach"><i>Why control for coincident interventions or trends over time?</i> <a href="#" class="hastip">Answer.</a>
