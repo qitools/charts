@@ -39,7 +39,7 @@ $( "#dialog" ).dialog();
 	var hash = window.location.hash 
 	if (hash.length > 1) //location.hash.substring.length
 		{
-		if (hash.indexOf('instruct')>0)
+		if (hash.indexOf('instruct')>0 || hash.indexOf('teach')>0)
 			{
 			$(".hastip").css("display","inline")
 			$(".teach").css("display","inline")
@@ -137,7 +137,7 @@ $(".example").click(function(){
 		$("#goalu").val("0.178");
 		$("#goall").val("0");
 		$("#timeperiod").val("Month");
-		$("#outcome").val("conforming");
+		$("#outcome").val("nonconforming");
 		$("#topic").val("Readmission rates in my hospital");
 		editor.setValue("Jul-12, 15, 66, 0,\nAug-12, 15, 74, 0,\nSep-12, 14, 73, 0,\nOct-12, 12, 59, 0,\nNov-12, 16, 79, 0,\nDec-12, 13, 70, 0,\nJan-13, 15, 77, 0,\nFeb-13, 10, 49, 0,\nMar-13, 17, 77, 0,\nApr-13, 18, 78, 0,\nMay-13, 21, 92, 0,\nJun-13, 16, 73, 0,",1);
 		$("#countedshow").css("display","none");
@@ -437,9 +437,8 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 <h3 style="margin-bottom:0px;margin-top:2px">QI project 3: audit and feedback and benchmarking</h3>
 <div><i>Currently, national benchmarks will be placed when the topic contains either 'readmission' or 'flu' and vacc'.</i></div>
 <div><input type="radio" name="example" class="example" value="ex_3a" id="ex_3a"/><label for="ex_3a">Comparing to an external benchmark.</label> <i><ul style="margin-top:1px;margin-bottom:1px;"><li>Are we performing better or worse than national comparisons?</li><li>How can we compare ourselves to an external rate?</li></ul></i></div>
-<div><input type="radio" name="example" class="example" value="ex_3b" id="ex_3b"/><label for="ex_3b">Placing goals and benchmarks on a chart for audit and feedback</label> </div>
-
-	  </fieldset>
+<div><input type="radio" name="example" class="example" value="ex_3b" id="ex_3b"/><label for="ex_3b">Placing goals and benchmarks on a chart for audit and feedback</label> <i>What motivates people at work?</i></div>
+</fieldset>
 </form>
 	  </form>
 	</div>
