@@ -58,7 +58,7 @@ if (sequential == FALSE)
 		currentvalue <- count/total
 		spc <- qcc(count,sizes=total,type="p", xlab="",ylab="",title="",labels=myframe$period,ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 		#mtext(bquote("Proportion of encounters"~~bolditalic(.(outcome))), side=2, line=2.5, col=KUBlue , cex=1.5)
-		y.label = bquote("Count of encounters"~~bolditalic(.(outcome)))
+		y.label = bquote("Proportion of encounters"~~bolditalic(.(outcome)))
 		average = paste("Average ",outcome," = ",round(spc$center*100,digits = 1),"%", sep = "")
 		if(theme=="KU"){display_logo(x=1.2,y=0.2)}
 		}
