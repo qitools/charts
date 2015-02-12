@@ -219,7 +219,7 @@ else #sequential == TRUE
 				currentvalue <- count
 				spc <- qcc(count[Trial=="0"],newdata=count[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 				glm.out1=glm(count ~ as.numeric(Trial) + period, family=poisson(log))
-				subtitle = "c chart) before-after trial"
+				subtitle = "c chart: before-after trial"
 				y.label = bquote("Count of encounters"~~bolditalic(.(outcome)))
 				}
 			if (counted == "total") 
