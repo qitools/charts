@@ -218,6 +218,8 @@ else #sequential == TRUE
 				{
 				currentvalue <- count
 				spc <- qcc(count[Trial=="0"],newdata=count[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+				#Should this regression have weights = count ? Seems to reduce standard error
+				#Per GLM: "For a binomial GLM prior weights are used to give the number of trials when the response is the proportion of successes: they would rarely be used for a Poisson GLM"
 				glm.out1=glm(count ~ as.numeric(Trial) + period, family=poisson(log))
 				subtitle = "c chart: before-after trial"
 				y.label = bquote("Count of encounters"~~bolditalic(.(outcome)))
