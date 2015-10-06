@@ -23,6 +23,7 @@ if (goalu < 0){goalu = 0}
 if (goall < 0){goall = 0}
 goalu <- as.numeric(goalu)
 goall <- as.numeric(goall)
+extremevalue = 0 #Later used in trials with outcomes of proportions. If = 1, will use quasibinomial
 
 attach(myframe)
 # http://www.identity.ku.edu/colors/index.shtml
@@ -32,11 +33,13 @@ par(col.axis="black" ,col.lab=KUBlue ,col.main=KUBlue ,col.sub=KUBlue)
 qcc.options("cex.stats"=0.9, "cex" = 2, "bg.margin"=SkyBlue,"run.length" = 6, "beyond.limits" = list(pch = 20, col = "black"), "violating.runs" = list(pch = 16, col = "orange")) #Shift. A run
 sequential = FALSE
 period = 0
+trialstart = 0
 for(i in 1: length(myframe$periodname))
 {
 period[i] = i
 if(myframe$Trial[i] == '1')
 	{
+	if (sequential == FALSE){trialstart = period[i]}
 	sequential = TRUE
 	}
 else
@@ -207,9 +210,17 @@ else #sequential == TRUE
 			subtitle = "p chart: before-after trial"
 			y.label = bquote("Proportion of encounters"~~bolditalic(.(outcome)))
 			average = paste("Average (pretrial) = ",round(spc$center*100,digits = 1),"%", sep = "")
-			##Sig testing
-			#Linear regression
-			glm.out1=glm(count/total ~ as.numeric(Trial) + period, family=binomial(logit),weights = total)
+			if (max(myframe$currentvalue) == 1 || min(myframe$currentvalue == 0)){extremevalue=1}
+			if (extremevalue==1)
+				{
+				glm.out1=glm(currentvalue ~ as.numeric(Trial) + period, family=quasibinomial(logit),weights = total)
+				glm.out2=glm(currentvalue ~ period, family=quasibinomial(logit),weights = total)
+				}
+			else
+				{
+				glm.out1=glm(currentvalue ~ as.numeric(Trial) + period, family=binomial(logit),weights = total)
+				glm.out2=glm(currentvalue ~ period, family=binomial(logit),weights = total)
+				}
 			plot(spc, add.stats = TRUE, chart.all = TRUE, label.limits = c("LCL ", "UCL"), title = "", xlab="",ylab="", ylim=c(0,1),axes.las = 0, digits = 2)
 			}
 		if (type == "c" || type == "C")
@@ -220,7 +231,8 @@ else #sequential == TRUE
 				spc <- qcc(count[Trial=="0"],newdata=count[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 				#Should this regression have weights = count ? Seems to reduce standard error
 				#Per GLM: "For a binomial GLM prior weights are used to give the number of trials when the response is the proportion of successes: they would rarely be used for a Poisson GLM"
-				glm.out1=glm(count ~ as.numeric(Trial) + period, family=poisson(log))
+				glm.out1=glm(currentvalue ~ as.numeric(Trial) + period, family=poisson(log))
+				glm.out2=glm(currentvalue ~ period, family=poisson(log))
 				subtitle = "c chart: before-after trial"
 				y.label = bquote("Count of encounters"~~bolditalic(.(outcome)))
 				}
@@ -228,7 +240,8 @@ else #sequential == TRUE
 				{
 				currentvalue <- total
 				spc <- qcc(total[Trial=="0"],newdata=total[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-				glm.out1=glm(total ~ as.numeric(Trial) + period, family=poisson(log))
+				glm.out1=glm(currentvalue ~ as.numeric(Trial) + period, family=poisson(log))
+				glm.out2=glm(currentvalue ~ period, family=poisson(log))
 				#mtext("Count of encounters", side=2, line=2.5, col=KUBlue , cex=1.5)
 				subtitle = "c chart: before-after trial"
 				y.label = bquote("Count of encounters"~~bolditalic(.(outcome)))
@@ -236,8 +249,6 @@ else #sequential == TRUE
 			mtext(side=3,line=1,"c chart: before-after trial", font=2)
 			average = paste("Average (pretrial) = ",round(spc$center,digits = 1),"", sep = "")
 			plot(spc, add.stats = TRUE, chart.all = TRUE, label.limits = c("LCL ", "UCL"), title = "", xlab="",ylab="", axes.las = 0, digits = 2)
-			##Sig testing
-			#Linear regression
 			}
 		par(new=TRUE,xpd=NA)
 		plot.new()
@@ -252,10 +263,22 @@ else #sequential == TRUE
 		#plot(period, count/total,xlab="", ylim=c(0,1))
 		#mtext(period, side=1, line=2, col=KUBlue , cex=1)
 		#lines(period, glm.out1$fitted,type="l",col="red")
-		significance = paste("P-value for trial (linear regression) = ",format(round(coef(sum.sig)["as.numeric(Trial)",4],digits = 3), nsmall = 3), sep = "")
-		mtext(significance, side=1, line=0.5, col=KUBlue , cex=1,adj = 1)
+		##Sig testing
+			#Linear regression
 		significance = paste("P-value for secular change (linear regression) = ",format(round(coef(sum.sig)["period",4],digits = 3), nsmall = 3), sep = "")
-		mtext(significance, side=1, line=1.5, col=KUBlue , cex=1,adj = 1)
+		mtext(significance, side=1, line=0, col=KUBlue , cex=1,adj = 1)
+		significance = paste("P-value for trial (linear regression) = ",format(round(coef(sum.sig)["as.numeric(Trial)",4],digits = 3), nsmall = 3), sep = "")
+		mtext(significance, side=1, line=1, col=KUBlue , cex=1,adj = 1)
+			#Segmented regression
+		#sum.sig <- summary(glm.out2)
+		#THIS SEEMS BEST< BUT NOT WORKING FOR SEGMENTED REGRESSION
+		#out.seg<-segmented(glm.out2,seg.Z=~period,k=1,psi=c(trialstart)) #Does not work 2015-10-06
+		#davies.out<-davies.test(out.seg,~period, k=10, values=trialstart,dispersion=1) #Does not work 2015-10-06
+		#***SEEMS INVALID if more than one deflection present
+		#davies.out<-davies.test(glm.out2,~period, values=trialstart,dispersion=1)
+		#significance = paste("P-value for trial (segmented regression) = ",format(round(davies.out$p.value,digits = 3), nsmall = 3), " (under development)", sep = "")
+		#mtext(significance, side=1, line=2, col=KUBlue , cex=1,adj = 1)
+		#Logo
 		if(theme=="KU"){display_logo(x=1.2,y=0.2)}
 		#Goals or targets
 		if (goalu >= 0 && goall >= 0)

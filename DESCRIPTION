@@ -13,7 +13,8 @@ Imports:
     RJSONIO,
     stringr,
     reshape2,
-	qcc
+	qcc,
+	segmented
 Collate:
 	'charts.R'
 	'display_logo.R'
