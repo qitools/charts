@@ -133,7 +133,7 @@ $(".example").click(function(){
 		$("#outcome").val("nonconforming");
 		}
 	if($(this).val()=="ex_1c") {
-		$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25, 30, 0,\n4, 10,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);$("#countedshow").css("display","none")
+		$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25, 30, 0,\n4, 9,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);$("#countedshow").css("display","none")
 		$("#outcome").val("nonconforming");
 		}
 	if($(this).val()=="ex_1d") {
@@ -270,12 +270,12 @@ $(".example").click(function(){
 fieldset{
 	border: 3px solid #6DC6E7;
 	background-color: #FFFFFF;
-	width:500px;height:650px;
+	width:450px;height:675px;
 }
 #editor { 
   position: relative;
-  width: 950px;
-  height: 300px;
+  width: 400px;
+  height: 325px;
 }
     
 #plotdiv {
@@ -347,7 +347,7 @@ http://jquery-csv.googlecode.com/git/examples/basic-usage.html
 http://jquery-csv.googlecode.com/git/examples/flot.html -> seems best and most stable without reticulating spines error
 http://code.google.com/p/jquery-csv/wiki/API -> instructions
 -->
-  <div class="container" style="width:1000px;">
+  <div class="container" style="width:950px;">
 
 	<div class="page-header">
 		<div style="float:left;color:#0022B4">
@@ -368,23 +368,23 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
 	<div id="">&nbsp;</div>
 	
     <div>
-      <div style="width:500px;float:left">
+      <div style="width:400px;float:left">
 
-        <form id="paramform" target="target" style="width:500px;">
+        <form id="paramform" target="target" style="width:400px;">
           <fieldset>
             <legend style="font-weight:bold">Enter inputs</legend>
             <div>To make either a <a href="https://en.wikipedia.org/wiki/Run_chart">Run chart</a> or <a href="https://en.wikipedia.org/wiki/Control_chart">Control chart</a>, either:</div>
 			<ul>
 			<li>Replace the example data below with your data.</li>
 			<li>Upload a csv file formatted like this <a href="example.csv">example</a>.<br/>
-			<input type=file id=files name=files style="width:200px"/>
-			1st row is column names? <select id="header" name="header"><option value=TRUE> TRUE </option> <option value=FALSE> FALSE </option> </select>
+			<input type=file id=files name=files style="width:200px"/></li>
+			<li>1st row is column names? <select id="header" name="header"><option value=TRUE> TRUE </option> <option value=FALSE> FALSE </option> </select>
 			</li>
 			</ul>
-<div id="">Four columns: 1) time period name, 2) # events, 3) total, 4) trial. <br/>
+<div>Four columns: 1) time period name, 2) # events, 3) total, 4) trial. <br/>
 For trial, 0 = pre-intervention or no trial and 1 = after intervention.<br/>
 Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add commas.</div>
-<div id="editor" style="width:500px;">1, 26,30, 0,
+<div id="editor" style="width:450px;">1, 26,30, 0,
 2, 24,30, 0,
 3, 25,30, 0
 </div>	
@@ -419,9 +419,9 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
             </select>
 			<br/>
 			<label>Goal (lower):</label> 			
-            <input type="text" id="goall" /> 
+            <input type="text" id="goall" style="width:50px;"/> 
 			<label>Goal (upper):</label>		
-            <input type="text" id="goalu" /> 
+            <input type="text" id="goalu" style="width:50px;"/> 
 			<br/>
             <label>Topic (for title - optional):</label> 
             <input type="text" id="topic" /> 
@@ -441,13 +441,13 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 		  <legend style="font-weight:bold">Example scenarios</legend>
 <h3 style="margin-bottom:0px;margin-top:2px">Baseline data</h3>
 <div><input type="radio" name="example" class="example" value="ex_0a" id="ex_0a" checked /><label for="ex_0a">Baseline data (run chart)</label></div>
-<div><input type="radio" name="example" class="example" value="ex_0b" id="ex_0b"/><label for="ex_0b">Baseline data (p-chart)</label> <i>What does this control chart add?</i></div>
-<div><input type="radio" name="example" class="example" value="ex_0c" id="ex_0c"/><label for="ex_0c">Baseline data (p-chart)</label> <i>The mean remains at 83.3%. What do the colored dots mean on this chart (hint: see infobox below chart)?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_0b" id="ex_0b"/><label for="ex_0b">Baseline data (p-chart)</label> <i>What does this control chart add? Is this process in control with only <a href="https://en.wikipedia.org/wiki/Common_cause_and_special_cause_%28statistics%29">common cause variation</a>?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_0c" id="ex_0c"/><label for="ex_0c">Baseline data (p-chart)</label> <i>The mean remains at 83.3%. What do the colored dots signal may be occurring (hint: see infobox below chart)?</i></div>
 <h3 style="margin-bottom:0px;margin-top:2px">QI project 1: implementing screening for depression</h3>
 <div>We now have added 3 months of data after an intervention to increase screening for depression.</div>
 <div><input type="radio" name="example" class="example" value="ex_1a" id="ex_1a"/><label for="ex_1a">First analysis (box chart)</label> <i>Did this intervention help?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Second analysis (p-chart)</label> <i><ul style="margin-top:1px;margin-bottom:1px;"><li>What does this control chart add to the box chart?</li><li>What are the significant findings?</li><li>What shape would the line have if the intervention were perfectly effective?</li></ul></i></div>
-<div><input type="radio" name="example" class="example" value="ex_1c" id="ex_1c"/><label for="ex_1c">Another scenario (note the events dropped from 15 to 10 in the 4th row)</label> <i>What is significant if the drop is more abrupt?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_1c" id="ex_1c"/><label for="ex_1c">Another scenario (note the events dropped from 15 to 9 in the 4th row)</label> <i>What is significant if the drop is more abrupt?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_1d" id="ex_1d"/><label for="ex_1d">Another scenario (longer trial)</label> <i>What is significant now?</i> <a href="How does multiple regression work.pdf">What is multivariable regression?</a></div>
 <div style="display:none" class="teach"><i>Why control for coincident interventions or trends over time?</i> <a href="#" class="hastip">Answer.</a>
 <div class="tooltiptext">
@@ -480,10 +480,10 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 <div>
 
 
-			<div id="spc-interpretation" style="float:left;display:block;width:400px;border:3px solid #6DC6E7;">
+			<div id="spc-interpretation" style="float:left;display:block;width:600px;border:3px solid #6DC6E7;">
 			<h3>Interpreting control charts</h3>
 			<h4>14 data points should be present to best use these rules</h4>
-			<div id="">This chart will automatically color <!-- points <span style="color:red;font-weight:bold">red</span> -->that fulfill criteria for being signals.</div>
+			<div id="">This chart will automatically color <!-- points <span style="color:red;font-weight:bold">red</span> -->points that fulfill criteria for being signals that suggest <a href="https://en.wikipedia.org/wiki/Common_cause_and_special_cause_%28statistics%29">special cause variation.</a></div>
 			<ol>
 				<li>Are all points within the 3-sigma control limits? If so, the process is in control.</li>
 				<li>Is there a signal that an effective change has occurred (if a prior QI effort has been done)?
@@ -504,6 +504,7 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
         <h3>About</h3>
         <h4>Technical details</h4>
         <p>This is an OpenCPU application.</p>
+		<p>Please help improve this application <br/>by editing the source code.</p>
         <table class="table table-striped">
           <tr><th>Resource</th> <th>link</th></tr>
           <tr><td>Package Info</td> <td><a href=".." target="blank">link</a></td></tr>       
