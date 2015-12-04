@@ -100,8 +100,9 @@ $( "#dialog" ).dialog();
   
   $("#type").on("change", function(e){
     e.preventDefault();
-    if ($("#type").val() == "C"){$("#countedshow").css("display","inline")}
-	else {$("#countedshow").css("display","none")}
+	$("#countedshow").css("display","none")
+    if ($("#type").val() == "SPC-C"){$("#countedshow").css("display","inline")}
+    if ($("#type").val() == "SR-C"){$("#countedshow").css("display","inline")}
   });
 
   $("#addcommas").on("click", function(e){
@@ -122,30 +123,35 @@ $(".example").click(function(){
 	$("#goall").val("");
 	$("#topic").val("");
 	$("#countedshow").css("display","inline");	if($(this).val()=="ex_0a") {$("#type").val("R");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25, 30, 0,\n",1);}
-	if($(this).val()=="ex_0b") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25, 30, 0,\n",1);$("#countedshow").css("display","none")}
-	if($(this).val()=="ex_0c") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25, 30, 0,\n4, 30,30,0,\n5, 15,30,0,\n6, 30,30,0,\n",1);$("#countedshow").css("display","none")}
-	//if($(this).val()=="ex_0c") {$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 28,30, 0,\n3, 21,30, 0,\n4, 19,30,0,\n5, 17,30,0,\n6, 20,30,0,\n7, 20,30,0,\n8, 17,30,0,\n9, 15,30,0,\n10, 16,30,0,\n11, 15,30,0,\n12, 14,30,0,\n13, 13,30,0,\n14, 12,30,0,\n15, 8,30,0",1);$("#countedshow").css("display","none")}
+	if($(this).val()=="ex_0b") {$("#type").val("SPC-P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25, 30, 0,\n",1);$("#countedshow").css("display","none")}
+	if($(this).val()=="ex_0c") {$("#type").val("SPC-P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25, 30, 0,\n4, 30,30,0,\n5, 15,30,0,\n6, 30,30,0,\n",1);$("#countedshow").css("display","none")}
+	//if($(this).val()=="ex_0c") {$("#type").val("SPC-P");editor.setValue("1, 26,30, 0,\n2, 28,30, 0,\n3, 21,30, 0,\n4, 19,30,0,\n5, 17,30,0,\n6, 20,30,0,\n7, 20,30,0,\n8, 17,30,0,\n9, 15,30,0,\n10, 16,30,0,\n11, 15,30,0,\n12, 14,30,0,\n13, 13,30,0,\n14, 12,30,0,\n15, 8,30,0",1);$("#countedshow").css("display","none")}
 	if($(this).val()=="ex_1a") {
 		$("#type").val("B");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25, 30, 0,\n4, 15,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);}
 	if($(this).val()=="ex_1b") {
-		//QI project 2: counseling for smoking cessation: Second analysis
-		$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 23, 30, 0,\n4, 15,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);$("#countedshow").css("display","none")
+		//QI project 2: counseling for smoking cessation: SPC
+		$("#type").val("SPC-P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 23, 30, 0,\n4, 15,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);$("#countedshow").css("display","none")
+		$("#outcome").val("nonconforming");
+		}
+	if($(this).val()=="ex_1b1") {
+		//QI project 2: counseling for smoking cessation: Regression
+		$("#type").val("SR-P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 23, 30, 0,\n4, 15,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);$("#countedshow").css("display","none")
 		$("#outcome").val("nonconforming");
 		}
 	if($(this).val()=="ex_1c") {
-		$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25, 30, 0,\n4, 9,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);$("#countedshow").css("display","none")
+		$("#type").val("SR-P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25, 30, 0,\n4, 9,30, 1,\n5, 10,30, 1,\n6, 5,30, 1",1);$("#countedshow").css("display","none")
 		$("#outcome").val("nonconforming");
 		}
 	if($(this).val()=="ex_1d") {
-		$("#type").val("P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25, 30, 0,\n4, 15,30, 1,\n5, 10,30, 1,\n6, 5,30, 1,\n6, 5,30, 1,\n6, 5,30, 1,\n6, 5,30, 1",1);$("#countedshow").css("display","none")
+		$("#type").val("SR-P");editor.setValue("1, 26,30, 0,\n2, 24,30, 0,\n3, 25, 30, 0,\n4, 15,30, 1,\n5, 10,30, 1,\n6, 5,30, 1,\n6, 5,30, 1,\n6, 5,30, 1,\n6, 5,30, 1",1);$("#countedshow").css("display","none")
 		$("#outcome").val("nonconforming");
 		}
 	if($(this).val()=="ex_2a") {
-		$("#type").val("P");editor.setValue("1, 1,1, 0,\n2, 1,1, 0,\n3, 1,1, 0,\n4, 0,1, 0,\n5, 2,3, 0,\n6, 2,5, 0,\n7, 1,4, 0,\n8, 7,8, 1,\n9, 9,19, 1,\n10, 9,20, 1,\n11, 10,23, 1",1);$("#countedshow").css("display","none")
+		$("#type").val("SPC-P");editor.setValue("1, 1,1, 0,\n2, 1,1, 0,\n3, 1,1, 0,\n4, 0,1, 0,\n5, 2,3, 0,\n6, 2,5, 0,\n7, 1,4, 0,\n8, 7,8, 1,\n9, 9,19, 1,\n10, 9,20, 1,\n11, 10,23, 1",1);$("#countedshow").css("display","none")
 		$("#outcome").val("nonconforming");
 		}
 	if($(this).val()=="ex_2b") {
-		$("#type").val("C");editor.setValue("1, 1,1, 0,\n2, 1,1, 0,\n3, 1,1, 0,\n4, 0,1, 0,\n5, 2,3, 0,\n6, 2,5, 0,\n7, 1,4, 0,\n8, 7,8, 1,\n9, 9,19, 1,\n10, 9,20, 1,\n11, 10,23, 1",1);$("#countedshow").css("display","inline");
+		$("#type").val("SPC-C");editor.setValue("1, 1,1, 0,\n2, 1,1, 0,\n3, 1,1, 0,\n4, 0,1, 0,\n5, 2,3, 0,\n6, 2,5, 0,\n7, 1,4, 0,\n8, 7,8, 1,\n9, 9,19, 1,\n10, 9,20, 1,\n11, 10,23, 1",1);$("#countedshow").css("display","inline");
 		$("#outcome").val("conforming");
 		}
 	if($(this).val()=="ex_3a")
@@ -279,8 +285,8 @@ fieldset{
 }
     
 #plotdiv {
-  width: 1000px;
-  height: 400px;
+  width: 800px;
+  height:400px;
   border: 1px solid #e3e3e3;
   border-radius: 4px;
 }
@@ -392,10 +398,12 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 
             <label>Plot type:</label> 
             <select id="type" name="type">
-              <option value="R" selected>Run chart</option>
-              <option value="B">Box chart (comparing average proportions)</option>
-              <option value="P">Control chart (proportions)</option>
-              <option value="C">Control chart (counts)</option>
+              <option value="SPC-P">Control chart (proportions)</option>
+              <option value="SPC-C">Control chart (counts)</option>
+              <option value="SR-P">Segmented regression (proportions)</option>
+              <option value="SR-C">Segmented regression (counts)</option>
+              <option value="R" selected>Run chart (avoid)</option>
+              <option value="B">Box chart for before-after (avoid)</option>
             </select>
 			<div id="countedshow" style="display:none">
 			<label>Plot:</label>
@@ -446,7 +454,8 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 <h3 style="margin-bottom:0px;margin-top:2px">QI project 1: implementing screening for depression</h3>
 <div>We now have added 3 months of data after an intervention to increase screening for depression.</div>
 <div><input type="radio" name="example" class="example" value="ex_1a" id="ex_1a"/><label for="ex_1a">First analysis (box chart)</label> <i>Did this intervention help?</i></div>
-<div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Second analysis (p-chart)</label> <i><ul style="margin-top:1px;margin-bottom:1px;"><li>What does this control chart add to the box chart?</li><li>What are the significant findings?</li><li>What shape would the line have if the intervention were perfectly effective?</li></ul></i></div>
+<div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Second analysis (p-chart)</label> <i>Did this intervention help?</i><i><ul style="margin-top:1px;margin-bottom:1px;"><li>What shape would the line have if the intervention were perfectly effective?</li></ul></i></div>
+<div><input type="radio" name="example" class="example" value="ex_1b1" id="ex_1b1"/><label for="ex_1b1">Second analysis (segmented and linear regression)</label> <i><ul style="margin-top:1px;margin-bottom:1px;"><li>What does this chart add?</li><li>What are the significant findings?</li></ul></i></div>
 <div><input type="radio" name="example" class="example" value="ex_1c" id="ex_1c"/><label for="ex_1c">Another scenario (note the events dropped from 15 to 9 in the 4th row)</label> <i>What is significant if the drop is more abrupt?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_1d" id="ex_1d"/><label for="ex_1d">Another scenario (longer trial)</label> <i>What is significant now?</i> <a href="How does multiple regression work.pdf">What is multivariable regression?</a></div>
 <div style="display:none" class="teach"><i>Why control for coincident interventions or trends over time?</i> <a href="#" class="hastip">Answer.</a>
@@ -473,7 +482,7 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 	</div>
 	
 	<div style="clear:both">&nbsp;</div>
-	<iframe id="target" style="width:1000px;height:600px;border: 3px solid #6DC6E7;" name="target" width="700px" height="600px" src="output.html">
+	<iframe id="target" style="width:1000px;height:600px;border: 3px solid #6DC6E7;" name="target" height="600px" src="output.html">
 	</iframe>
 	</div>
 

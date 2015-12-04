@@ -56,7 +56,7 @@ if (type == "r" || type == "R"){sequential = FALSE}
 
 if (sequential == FALSE)
 	{
-	if (type == "p" || type == "P")
+	if (toupper(type) == "P")
 		{
 		currentvalue <- count/total
 		spc <- qcc(count,sizes=total,type="p", xlab="",ylab="",title="",labels=myframe$period,ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
@@ -67,7 +67,7 @@ if (sequential == FALSE)
 		}
 	else 
 		{
-		if (type == "r" || type == "R") #Run chart
+		if (toupper(type) == "R") #Run chart
 			{
 			numerator = 0
 			denominator = 0
@@ -87,7 +87,7 @@ if (sequential == FALSE)
 			}
 		else
 			{
-			if (type == "b" || type == "B") #Box plot
+			if (toupper(type) == "B") #Box plot
 				{
 				#This does not make sense. Cannot do box chart outside of a trial
 				plot.new()
@@ -116,7 +116,7 @@ if (sequential == FALSE)
 		}
 	par(new=TRUE,xpd=NA)
 	plot.new()
-	if (type=="R" || type=="r")
+	if (toupper(type)=="R")
 		{
 		mtext(timeperiod, side=1, line=3, col=KUBlue , cex=1.5)
 		mtext(average, side=1, line=4.5, col=KUBlue , cex=1)
@@ -164,7 +164,7 @@ if (sequential == FALSE)
 	}
 else #sequential == TRUE
 	{
-	if (type == "b" || type == "B")
+	if (toupper(type) == "B")
 		{
 		cella = 0
 		cellb = 0
@@ -203,7 +203,7 @@ else #sequential == TRUE
 		}
 	else 
 		{
-		if (type == "p" || type == "P")
+		if (toupper(type) == "SPC-P")
 			{
 			currentvalue <- count/total
 			spc <- qcc(data=count[Trial=='0'],sizes=total[Trial=='0'],newdata=count[Trial=='1'], newsizes=total[Trial=='1'],type="p", xlab="",ylab="",title="",labels=periodname[Trial=='0'],newlabels=periodname[Trial=='1'],ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
@@ -222,8 +222,11 @@ else #sequential == TRUE
 				glm.out2=glm(currentvalue ~ as.numeric(period), family=binomial(logit),weights = total)
 				}
 			plot(spc, add.stats = TRUE, chart.all = TRUE, label.limits = c("LCL ", "UCL"), title = "", xlab="",ylab="", ylim=c(0,1),axes.las = 0, digits = 2)
+			par(new=TRUE,xpd=NA)
+			plot.new()
+			mtext(timeperiod, side=1, line=-1.1, col=KUBlue , cex=1.3, outer = FALSE)
 			}
-		if (type == "c" || type == "C")
+		if (toupper(type) == "SPC-C")
 			{
 			if (counted == "events") 
 				{
@@ -240,43 +243,127 @@ else #sequential == TRUE
 				{
 				currentvalue <- total
 				spc <- qcc(total[Trial=="0"],newdata=total[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+				#Should this regression have weights = count ? Seems to reduce standard error
+				#Per GLM: "For a binomial GLM prior weights are used to give the number of trials when the response is the proportion of successes: they would rarely be used for a Poisson GLM"
 				glm.out1=glm(currentvalue ~ as.numeric(Trial) + as.numeric(period), family=poisson(log))
 				glm.out2=glm(currentvalue ~ as.numeric(period), family=poisson(log))
 				#mtext("Count of encounters", side=2, line=2.5, col=KUBlue , cex=1.5)
 				subtitle = "c chart: before-after trial"
 				y.label = bquote("Count of encounters"~~bolditalic(.(outcome)))
 				}
-			mtext(side=3,line=1,"c chart: before-after trial", font=2)
-			average = paste("Average (pretrial) = ",round(spc$center,digits = 1),"", sep = "")
 			plot(spc, add.stats = TRUE, chart.all = TRUE, label.limits = c("LCL ", "UCL"), title = "", xlab="",ylab="", axes.las = 0, digits = 2)
+			par(new=TRUE,xpd=NA)
+			plot.new()
+			mtext(timeperiod, side=1, line=-1.1, col=KUBlue , cex=1.3, outer = FALSE)
+			#mtext(side=3,line=1,"c chart: before-after trial", font=2)
+			average = paste("Average (pretrial) = ",round(spc$center,digits = 1),"", sep = "")
 			}
+		if (grepl("SR", type, ignore.case = TRUE))
+			{
+			subtitle = "segmented regression analysis"
+			par(mar=c(8.5, 5, 4, 2) + 0.1)
+			if (toupper(type) == "SR-P")
+				{
+				myframe$currentvalue <- count/total
+				ylim=c(0,1.15)
+				}
+			if (toupper(type) == "SR-C")
+				{
+				if (counted == "events")
+					{myframe$currentvalue <- count}
+				if (counted == "total")
+					{myframe$currentvalue <- total}
+				ylim=c(0,max(myframe$currentvalue)+1)
+				}
+			plot(myframe$period,myframe$currentvalue,type="p", xaxt='n', xlab="",ylim=ylim, pch=16,ylab="", main="")
+			axis(1, at=myframe$period, labels=myframe$periodname)
+			mtext(timeperiod, side=1, line=2, col=KUBlue , cex=1.3, outer = FALSE)
+			y.label = bquote("Proportion of encounters"~~bolditalic(.(outcome)))
+			##Regression calibration data
+			lm.out<-lm(currentvalue[Trial=='0'] ~ as.numeric(period[Trial=='0']), weights = total[Trial=='0'], data=myframe)
+			y.slope <- lm.out$coef[2]
+			y.slope.se <- coef(summary(lm.out))[2, "Std. Error"]
+			y <- predict(lm.out,data.frame(period=c(seq(1, length(myframe$period[Trial=='0'])-1, by = 1),length(myframe$period[Trial=='0'])+1)),se.fit=TRUE,type="response")
+			lines(c(seq(1, length(myframe$period[Trial=='0'])-1, by = 1),length(myframe$period[Trial=='0'])+1),y$fit,col=SkyBlue, lwd=2)
+			##Regression trial data
+			lm.out<-lm(currentvalue[Trial=='1'] ~ as.numeric(period[Trial=='1']), weights = total[Trial=='1'], data=myframe)
+			yy.slope <- lm.out$coef[2]
+			yy.slope.se <- coef(summary(lm.out))[2, "Std. Error"]
+			yy <- predict(lm.out,se.fit=TRUE,type="response")
+			lines(na.omit(myframe$period[Trial=='1']), yy$fit,col=SkyBlue ,lwd=2)
+			##Sig testing
+			## Level change?
+			segments(length(myframe$period[Trial=='0'])+1, y$fit[length(myframe$period[Trial=='0'])],length(myframe$period[Trial=='0'])+1,yy$fit[1], col=KUBlue ,lwd=2)
+			points(length(myframe$period[Trial=='0'])+1,y$fit[length(myframe$period[Trial=='0'])],col=KUBlue ,bg="white",cex=1.5,pch=21)
+			#points(length(myframe$period[Trial=='0'])+1,yy$fit[1],col=KUBlue ,cex=1.5,pch=16)
+			level.change<-y$fit[length(myframe$period[Trial=='0'])]-yy$fit[1]
+			t <- (level.change)/sqrt(y$se.fit[length(myframe$period[Trial=='0'])]^2/length(myframe$period[Trial=='0']) + yy$se.fit[1]^2/length(myframe$period[Trial=='1']))
+			p.level <- 1- pt(t,length(myframe$period[Trial=='0']) + length(myframe$period[Trial=='1']) - 2);
+			if(p.level < 0.05) {color="red"; line.width=2}else{color="black"}
+			#text (4+strwidth("A"),y$fit[3],adj=c(0,0.5),paste(round(y$fit[3],2),"(",round(y$fit[3]-y$se.fit[3]*1.96,2)," to ",round(y$fit[3]+y$se.fit[3]*1.96,2),")", sep=""))
+			#text (4+strwidth("A"),yy$fit[1]+0.5*level.change,adj=c(0,0.5),paste(round(level.change,2)," (p = ",paste(format.pval(p.level,eps=0.001,digits = 3),")"), sep=""))
+			#text (4-strwidth("A"),yy$fit[1],adj=c(1,0.5),paste(round(yy$fit[1],2),"(",round(yy$fit[1]-yy$se.fit[1]*1.96,2)," to ",round(yy$fit[1]+yy$se.fit[1]*1.96,2),")", sep=""))
+			significance = paste("Level change at breakpoint (vertical dark line): ",round(level.change,2)," ; p = ",format.pval(p.level,eps=0.001,digits = 3), sep = "")
+			mtext(significance, side=1, line=3, col=color , cex=1,adj = 0)
+			##
+			mtext(paste("Enduring change detected after ",length(myframe$period)," observations?"), side=1, line=4, col="black" , cex=1,adj = 0)
+			## Slope difference?
+			slope.change<-y.slope-yy.slope;
+			t <- (slope.change)/sqrt(y.slope.se + yy.slope.se)
+			p.slope = 1- pt(t,length(myframe$period[Trial=='0']) + length(myframe$period[Trial=='1']) - 2);
+			if(p.slope < 0.05) {color="red"; line.width=2}else{color="black"}
+			#text (par("usr")[2],par("usr")[4]-strheight("A"),adj=c(1,1),paste("Slope before: ",round(y.slope,2),"(",round(y.slope+abs(y.slope.se) *1.96,2)," to ",round(y.slope-abs(y.slope.se) *1.96,2),")", sep=""))
+			#text (par("usr")[2],par("usr")[4]-2.3*strheight("A"),adj=c(1,1),paste("Slope after: ",round(yy.slope,2),"(",round(yy.slope+abs(yy.slope.se) *1.96,2)," to ",round(yy.slope-abs(yy.slope.se) *1.96,2),")", sep=""))
+			#text (par("usr")[2],par("usr")[4]-3.5*strheight("A"),adj=c(1,1),paste("P for difference: ",format.pval(p.slope,eps=0.001,digits = 3)))
+			significance = paste("    Slope change at breakpoint (segmented regression): p = ",format(round(p.slope,digits = 3), nsmall = 3), sep = "")
+			mtext(significance, side=1, line=5, col=color , cex=1,adj = 0)
+			## Linear or logistic regression
+			if (type == "SR-P")
+				{
+				if (max(myframe$currentvalue) == 1 || min(myframe$currentvalue == 0)){extremevalue=1}
+				if (extremevalue==1)
+					{
+					glm.out1 = glm(myframe$currentvalue ~ as.numeric(Trial) + as.numeric(period), family=quasibinomial(logit),weights = total)
+					}
+				else
+					{
+					glm.out1 = glm(myframe$currentvalue ~ as.numeric(Trial) + as.numeric(period), family=binomial(logit),weights = total)
+					}
+				}
+			if (type == "SR-C")
+				{
+				glm.out1     = glm(myframe$currentvalue ~ as.numeric(Trial) + as.numeric(period), family=poisson(log))
+				}
+			sum.sig <- summary(glm.out1)
+			##Trial by linear regression
+			significance = paste("    Mean rates, pre/post (linear regression controlling for secular change): p = ",format(round(coef(sum.sig)[2,4],digits = 3), nsmall = 3), sep = "")
+			if(coef(sum.sig)[2,4] < 0.05) {color="red"; line.width=2}else{color="black"}
+			mtext(significance, side=1, line=6, col=color , cex=1,adj = 0)
+			#Secular by linear regression
+			significance = paste("Secular change (linear regression controlling for intervention): p = ",format(round(coef(sum.sig)[3,4],digits = 3), nsmall = 3), sep = "")
+			if(coef(sum.sig)[3,4] < 0.05) {color="red"; line.width=2}else{color="black"}
+			mtext(significance, side=1, line=7, col=color , cex=1,adj = 0)
+			#Segmented regression
+			#davies.out<-davies.test(lm(currentvalue ~ as.numeric(period),weights = total),~ period, k=length(myframe$period)*100)
+			#lm.out<-lm(currentvalue ~ period, weights = total, data=myframe)
+			##THIS SEEMS BEST< BUT NOT WORKING 2015-11-11
+			##out.seg<-segmented(lm.out,seg.Z=~period,k=10,psi=list(period=trialstart-1))
+			#significance = paste("P-value (segmented regression at time period of ",format(round(davies.out$statistic,digits = 1)),") = ",format(round(davies.out$p.value,digits = 3), nsmall = 3), sep = "")
+			#mtext(significance, side=1, line=2, col=KUBlue , cex=1,adj = 1)
+			#Cosmetics
+			if (coef(sum.sig)[3,1]>0){legend.location="topright"}else{legend.location="topleft"}
+			legend("topright", legend="Projected rate if no intervention     ",lty=0, lwd = 1, col=KUBlue ,pt.bg=KUBlue, cex=0.75,pt.cex=1.25,pch=1, inset=0.05)
+			abline(v=length(myframe$period[Trial=='0'])+0.5,col="gray", lty="dotted")
+			text(length(myframe$period[Trial=='0'])+0.5+0.5*strwidth("A"),par("usr")[3]+0.5*strheight("A"),cex=0.8,adj=c(0,0),"Implementation started", font=1,col="gray")
+			}
+
 		par(new=TRUE,xpd=NA)
 		plot.new()
-		mtext(timeperiod, side=1, line=-1.1, col=KUBlue , cex=1.3, outer = FALSE)
-		mtext(average, side=1, line=-0.1, col=KUBlue , cex=1,  outer = FALSE)
+		#mtext(average, side=1, line=-0.1, col=KUBlue , cex=1,  outer = FALSE)
 		mtext(y.label, side=2, line=3.5, col=KUBlue , cex=1.5)
 		mtext(topic, side=3, line=2, col=KUBlue, font = 2, cex=3)
 		mtext(subtitle, side=3, line=0.8, col=KUBlue , cex=1.2)
 
-		sum.sig <- summary(glm.out1)
-		#coef(sum.sig)["Trial",4] or coef(sum.sig)[2,4]
-		#plot(period, count/total,xlab="", ylim=c(0,1))
-		#mtext(period, side=1, line=2, col=KUBlue , cex=1)
-		#lines(period, glm.out1$fitted,type="l",col="red")
-		##Sig testing
-			#Linear regression
-		#stop(trialstart)
-		significance = paste("P-value for secular change (linear regression) = ",format(round(coef(sum.sig)["as.numeric(period)",4],digits = 3), nsmall = 3), sep = "")
-		mtext(significance, side=1, line=0, col=KUBlue , cex=1,adj = 1)
-		significance = paste("P-value for trial (linear regression) = ",format(round(coef(sum.sig)["as.numeric(Trial)",4],digits = 3), nsmall = 3), sep = "")
-		mtext(significance, side=1, line=1, col=KUBlue , cex=1,adj = 1)
-			#Segmented regression
-		davies.out<-davies.test(lm(currentvalue ~ as.numeric(period),weights = total),~ period, k=length(myframe$period)*100)
-		lm.out<-lm(currentvalue ~ period, weights = total, data=myframe)
-		#THIS SEEMS BEST< BUT NOT WORKING 2015-11-11
-		#out.seg<-segmented(lm.out,seg.Z=~period,k=10,psi=list(period=trialstart-1))
-		significance = paste("P-value (segmented regression at time period of ",format(round(davies.out$statistic,digits = 1)),") = ",format(round(davies.out$p.value,digits = 3), nsmall = 3), sep = "")
-		mtext(significance, side=1, line=2, col=KUBlue , cex=1,adj = 1)
 		#Logo
 		if(theme=="KU"){display_logo(x=1.2,y=0.2)}
 		#Goals or targets
@@ -312,7 +399,7 @@ else #sequential == TRUE
 		}
 	}
 	#Shewhart rules start
-	if (type != "r" && type != "R" && type != "b" && type != "B")
+	if (grepl("SPC", type, ignore.case = TRUE))
 		{
 		lastvalue = 0
 		Trend = 0
