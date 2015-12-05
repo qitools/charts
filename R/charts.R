@@ -56,7 +56,7 @@ if (type == "r" || type == "R"){sequential = FALSE}
 
 if (sequential == FALSE)
 	{
-	if (toupper(type) == "P")
+	if (toupper(type) == "SPC-P")
 		{
 		currentvalue <- count/total
 		spc <- qcc(count,sizes=total,type="p", xlab="",ylab="",title="",labels=myframe$period,ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
@@ -139,7 +139,7 @@ if (sequential == FALSE)
 		polygon(regionx,regiony,col=rgb(0,1,0,alpha=0.05),border = NA)
 		axis(4,at=c(goall,goalu),labels=c(goall,goalu),col.ticks="green")
 		}
-	if (grepl("flu", topic, ignore.case = TRUE) > 0 && grepl("vaccin", topic, ignore.case = TRUE) > 0)
+	if (grepl("flu", topic, ignore.case = TRUE) > 0 && grepl("vacc", topic, ignore.case = TRUE) > 0)
 		{ #http://www.cdc.gov/flu/fluvaxview/reports/reporti1213/reportii/index.htm
 		  # http://www.healthypeople.gov/2020/topicsobjectives2020/objectiveslist.aspx?topicId=23
 			if (outcome == "nonconforming")
