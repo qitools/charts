@@ -258,8 +258,19 @@ else #sequential == TRUE
 			#mtext(side=3,line=1,"c chart: before-after trial", font=2)
 			average = paste("Average (pretrial) = ",round(spc$center,digits = 1),"", sep = "")
 			}
+		if (grepl("SPC", type, ignore.case = TRUE))
+			{
+			mtext(average, side=1, line=-0.1, col=KUBlue , cex=1, outer = FALSE)
+			sum.sig <- summary(glm.out1)
+			significance = paste("P-value for secular change (linear regression) = ",format(round(coef(sum.sig)["as.numeric(period)",4],digits = 3), nsmall = 3), sep = "")
+			mtext(significance, side=1, line=0, col=KUBlue , cex=1,adj = 1)
+			significance = paste("P-value for trial (linear regression) = ",format(round(coef(sum.sig)["as.numeric(Trial)",4],digits = 3), nsmall = 3), sep = "")
+			mtext(significance, side=1, line=1, col=KUBlue , cex=1,adj = 1)
+			}
 		if (grepl("SR", type, ignore.case = TRUE))
 			{
+			if (length(myframe$period[Trial=='0']) < 3){stop('Insufficent number of values before trial do conduct a segmented regression analysis')}
+			if (length(myframe$period[Trial=='1']) < 3){stop('Insufficent number of values after trial do conduct a segmented regression analysis')}
 			subtitle = "segmented regression analysis"
 			par(mar=c(8.5, 5, 4, 2) + 0.1)
 			if (toupper(type) == "SR-P")
