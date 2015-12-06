@@ -7,11 +7,11 @@ temp <- content
 temp <- gsub("\t", ' ', fixed = TRUE, temp)
 temp <- gsub(',', '","', fixed = TRUE, temp)
 temp <- paste('"',temp,'"',sep = '')
-temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=4, byrow=TRUE, dimnames = list(NULL, c("periodname", "count", "total","Trial")))',sep = '')
+temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=4, byrow=TRUE, dimnames = list(NULL, c("period.name", "count", "total","Trial")))',sep = '')
 x <- eval(parse(file = "", n = NULL, text = temp))
 myframe <- data.frame (x)
-myframe$period<-gsub("\'", '', fixed = TRUE, myframe$period)
-myframe$period<-str_trim(as.character(myframe$period))
+myframe$period.name<-gsub("\'", '', fixed = TRUE, myframe$period.name)
+myframe$period.name<-str_trim(as.character(myframe$period.name))
 myframe$count<-as.numeric(as.character(str_trim(myframe$count)))
 myframe$total<-as.numeric(as.character(str_trim(myframe$total)))
 if (length(timeperiod) > 0)
@@ -34,7 +34,7 @@ qcc.options("cex.stats"=0.9, "cex" = 2, "bg.margin"=SkyBlue,"run.length" = 6, "b
 sequential = FALSE
 period = 0
 trialstart = 0
-for(i in 1: length(myframe$periodname))
+for(i in 1: length(myframe$period.name))
 {
 period[i] = i
 if(myframe$Trial[i] == '1')
@@ -206,7 +206,7 @@ else #sequential == TRUE
 		if (toupper(type) == "SPC-P")
 			{
 			currentvalue <- count/total
-			spc <- qcc(data=count[Trial=='0'],sizes=total[Trial=='0'],newdata=count[Trial=='1'], newsizes=total[Trial=='1'],type="p", xlab="",ylab="",title="",labels=periodname[Trial=='0'],newlabels=periodname[Trial=='1'],ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+			spc <- qcc(data=count[Trial=='0'],sizes=total[Trial=='0'],newdata=count[Trial=='1'], newsizes=total[Trial=='1'],type="p", xlab="",ylab="",title="",labels=period.name[Trial=='0'],newlabels=period.name[Trial=='1'],ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 			subtitle = "p chart: before-after trial"
 			y.label = bquote("Proportion of encounters"~~bolditalic(.(outcome)))
 			average = paste("Average (pretrial) = ",round(spc$center*100,digits = 1),"%", sep = "")
@@ -231,7 +231,7 @@ else #sequential == TRUE
 			if (counted == "events") 
 				{
 				currentvalue <- count
-				spc <- qcc(count[Trial=="0"],newdata=count[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+				spc <- qcc(count[Trial=="0"],newdata=count[Trial=="1"],type="c", xlab="",ylab="",title="",labels=period.name[Trial=="0"],newlabels=period.name[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 				#Should this regression have weights = count ? Seems to reduce standard error
 				#Per GLM: "For a binomial GLM prior weights are used to give the number of trials when the response is the proportion of successes: they would rarely be used for a Poisson GLM"
 				glm.out1=glm(currentvalue ~ as.numeric(Trial) + as.numeric(period), family=poisson(log))
@@ -242,7 +242,7 @@ else #sequential == TRUE
 			if (counted == "total") 
 				{
 				currentvalue <- total
-				spc <- qcc(total[Trial=="0"],newdata=total[Trial=="1"],type="c", xlab="",ylab="",title="",labels=periodname[Trial=="0"],newlabels=periodname[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+				spc <- qcc(total[Trial=="0"],newdata=total[Trial=="1"],type="c", xlab="",ylab="",title="",labels=period.name[Trial=="0"],newlabels=period.name[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 				#Should this regression have weights = count ? Seems to reduce standard error
 				#Per GLM: "For a binomial GLM prior weights are used to give the number of trials when the response is the proportion of successes: they would rarely be used for a Poisson GLM"
 				glm.out1=glm(currentvalue ~ as.numeric(Trial) + as.numeric(period), family=poisson(log))
@@ -286,17 +286,19 @@ else #sequential == TRUE
 					{myframe$currentvalue <- total}
 				ylim=c(0,max(myframe$currentvalue)+1)
 				}
-			plot(myframe$period,myframe$currentvalue,type="p", xaxt='n', xlab="",ylim=ylim, pch=16,ylab="", main="")
-			axis(1, at=myframe$period, labels=myframe$periodname)
+			plot(myframe$period,myframe$currentvalue,type="p", xaxt='n', xlab="",xlim=c(min(myframe$period),max(myframe$period)), ylim=ylim,pch=16,ylab="", main="")
+			axis(1, at=myframe$period, labels=myframe$period.name)
 			mtext(timeperiod, side=1, line=2, col=KUBlue , cex=1.3, outer = FALSE)
 			y.label = bquote("Proportion of encounters"~~bolditalic(.(outcome)))
 			##Regression calibration data
+			## Should this be GLM with binomial or quasibionomia if proportions?
 			lm.out<-lm(currentvalue[Trial=='0'] ~ as.numeric(period[Trial=='0']), weights = total[Trial=='0'], data=myframe)
 			y.slope <- lm.out$coef[2]
 			y.slope.se <- coef(summary(lm.out))[2, "Std. Error"]
 			y <- predict(lm.out,data.frame(period=c(seq(1, length(myframe$period[Trial=='0'])-1, by = 1),length(myframe$period[Trial=='0'])+1)),se.fit=TRUE,type="response")
 			lines(c(seq(1, length(myframe$period[Trial=='0'])-1, by = 1),length(myframe$period[Trial=='0'])+1),y$fit,col=SkyBlue, lwd=2)
 			##Regression trial data
+			## Should this be GLM with binomial or quasibionomia if proportions?
 			lm.out<-lm(currentvalue[Trial=='1'] ~ as.numeric(period[Trial=='1']), weights = total[Trial=='1'], data=myframe)
 			yy.slope <- lm.out$coef[2]
 			yy.slope.se <- coef(summary(lm.out))[2, "Std. Error"]
