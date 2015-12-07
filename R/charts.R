@@ -209,22 +209,17 @@ else #sequential == TRUE
 			spc <- qcc(data=count[Trial=='0'],sizes=total[Trial=='0'],newdata=count[Trial=='1'], newsizes=total[Trial=='1'],type="p", xlab="",ylab="",title="",labels=period.name[Trial=='0'],newlabels=period.name[Trial=='1'],ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 			subtitle = "p chart: before-after trial"
 			y.label = bquote("Proportion of encounters"~~bolditalic(.(outcome)))
-			average = paste("Average (pretrial) = ",round(spc$center*100,digits = 1),"%", sep = "")
+			ylim=c(0,1.15)
 			if (max(myframe$currentvalue) == 1 || min(myframe$currentvalue == 0)){extremevalue=1}
 			if (extremevalue==1)
 				{
-				glm.out1=glm(currentvalue ~ as.numeric(Trial) + as.numeric(period), family=quasibinomial(logit),weights = total)
-				glm.out2=glm(currentvalue ~ as.numeric(period), family=quasibinomial(logit),weights = total)
+				distribution = family=quasibinomial(logit)
 				}
 			else
 				{
-				glm.out1=glm(currentvalue ~ as.numeric(Trial) + as.numeric(period), family=binomial(logit),weights = total)
-				glm.out2=glm(currentvalue ~ as.numeric(period), family=binomial(logit),weights = total)
+				distribution = family=binomial(logit)
 				}
-			plot(spc, add.stats = TRUE, chart.all = TRUE, label.limits = c("LCL ", "UCL"), title = "", xlab="",ylab="", ylim=c(0,1),axes.las = 0, digits = 2)
-			par(new=TRUE,xpd=NA)
-			plot.new()
-			mtext(timeperiod, side=1, line=-1.1, col=KUBlue , cex=1.3, outer = FALSE)
+			weights.type = total
 			}
 		if (toupper(type) == "SPC-C")
 			{
@@ -232,36 +227,30 @@ else #sequential == TRUE
 				{
 				currentvalue <- count
 				spc <- qcc(count[Trial=="0"],newdata=count[Trial=="1"],type="c", xlab="",ylab="",title="",labels=period.name[Trial=="0"],newlabels=period.name[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-				#Should this regression have weights = count ? Seems to reduce standard error
-				#Per GLM: "For a binomial GLM prior weights are used to give the number of trials when the response is the proportion of successes: they would rarely be used for a Poisson GLM"
-				glm.out1=glm(currentvalue ~ as.numeric(Trial) + as.numeric(period), family=poisson(log))
-				glm.out2=glm(currentvalue ~ as.numeric(period), family=poisson(log))
-				subtitle = "c chart: before-after trial"
-				y.label = bquote("Count of encounters"~~bolditalic(.(outcome)))
 				}
 			if (counted == "total") 
 				{
 				currentvalue <- total
 				spc <- qcc(total[Trial=="0"],newdata=total[Trial=="1"],type="c", xlab="",ylab="",title="",labels=period.name[Trial=="0"],newlabels=period.name[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-				#Should this regression have weights = count ? Seems to reduce standard error
-				#Per GLM: "For a binomial GLM prior weights are used to give the number of trials when the response is the proportion of successes: they would rarely be used for a Poisson GLM"
-				glm.out1=glm(currentvalue ~ as.numeric(Trial) + as.numeric(period), family=poisson(log))
-				glm.out2=glm(currentvalue ~ as.numeric(period), family=poisson(log))
-				#mtext("Count of encounters", side=2, line=2.5, col=KUBlue , cex=1.5)
-				subtitle = "c chart: before-after trial"
-				y.label = bquote("Count of encounters"~~bolditalic(.(outcome)))
 				}
-			plot(spc, add.stats = TRUE, chart.all = TRUE, label.limits = c("LCL ", "UCL"), title = "", xlab="",ylab="", axes.las = 0, digits = 2)
-			par(new=TRUE,xpd=NA)
-			plot.new()
-			mtext(timeperiod, side=1, line=-1.1, col=KUBlue , cex=1.3, outer = FALSE)
-			#mtext(side=3,line=1,"c chart: before-after trial", font=2)
-			average = paste("Average (pretrial) = ",round(spc$center,digits = 1),"", sep = "")
+			distribution = poisson(log)
+			#Should this regression have weights = count ? Seems to reduce standard error
+			#Per GLM: "For a binomial GLM prior weights are used to give the number of trials when the response is the proportion of successes: they would rarely be used for a Poisson GLM"
+			weights.type= NULL
+			subtitle = "c chart: before-after trial"
+			y.label = bquote("Count of encounters"~~bolditalic(.(outcome)))
+			ylim= NULL #c(0,max(currentvalue)+1)
 			}
 		if (grepl("SPC", type, ignore.case = TRUE))
 			{
+			plot(spc, add.stats = TRUE, chart.all = TRUE, label.limits = c("LCL ", "UCL"), title = "", xlab="",ylab="", ylim=ylim,axes.las = 0, digits = 2)
+			par(new=TRUE,xpd=NA)
+			plot.new()
+			mtext(timeperiod, side=1, line=-1.1, col=KUBlue , cex=1.3, outer = FALSE)
+			average = paste("Average (pretrial) = ",round(spc$center*100,digits = 1),"%", sep = "")
 			mtext(average, side=1, line=-0.1, col=KUBlue , cex=1, outer = FALSE)
-			sum.sig <- summary(glm.out1)
+			glm.out=glm(currentvalue ~ as.numeric(Trial) + as.numeric(period), family=distribution,weights = weights.type)
+			sum.sig <- summary(glm.out)
 			significance = paste("P-value for secular change (linear regression) = ",format(round(coef(sum.sig)["as.numeric(period)",4],digits = 3), nsmall = 3), sep = "")
 			mtext(significance, side=1, line=0, col=KUBlue , cex=1,adj = 1)
 			significance = paste("P-value for trial (linear regression) = ",format(round(coef(sum.sig)["as.numeric(Trial)",4],digits = 3), nsmall = 3), sep = "")
@@ -276,40 +265,51 @@ else #sequential == TRUE
 			if (toupper(type) == "SR-P")
 				{
 				myframe$currentvalue <- count/total
+				distribution = binomial(logit)
+				weight.type=total
+				if (max(myframe$currentvalue) == 1 || min(myframe$currentvalue == 0)){distribution=quasibinomial(logit)}
 				ylim=c(0,1.15)
+				y.label = bquote("Proportion of encounters"~~bolditalic(.(outcome)))
 				}
 			if (toupper(type) == "SR-C")
 				{
 				if (counted == "events")
-					{myframe$currentvalue <- count}
+					{
+					myframe$currentvalue <- count
+					y.label = bquote("Number of events"~~bolditalic(.(outcome)))
+					}
 				if (counted == "total")
-					{myframe$currentvalue <- total}
+					{
+					myframe$currentvalue <- total
+					y.label = bquote("Number of encounters"~~bolditalic(.(outcome)))
+					}
+				distribution = poisson(log)
+				#Should this regression have weights = count ? Seems to reduce standard error
+				#Per GLM: "For a binomial GLM prior weights are used to give the number of trials when the response is the proportion of successes: they would rarely be used for a Poisson GLM"
+				weight.type=NULL
 				ylim=c(0,max(myframe$currentvalue)+1)
 				}
 			plot(myframe$period,myframe$currentvalue,type="p", xaxt='n', xlab="",xlim=c(min(myframe$period),max(myframe$period)), ylim=ylim,pch=16,ylab="", main="")
 			axis(1, at=myframe$period, labels=myframe$period.name)
 			mtext(timeperiod, side=1, line=2, col=KUBlue , cex=1.3, outer = FALSE)
-			y.label = bquote("Proportion of encounters"~~bolditalic(.(outcome)))
 			##Regression calibration data
-			## Should this be GLM with binomial or quasibionomia if proportions?
-			lm.out<-lm(currentvalue[Trial=='0'] ~ as.numeric(period[Trial=='0']), weights = total[Trial=='0'], data=myframe)
-			y.slope <- lm.out$coef[2]
-			y.slope.se <- coef(summary(lm.out))[2, "Std. Error"]
-			y <- predict(lm.out,data.frame(period=c(seq(1, length(myframe$period[Trial=='0'])-1, by = 1),length(myframe$period[Trial=='0'])+1)),se.fit=TRUE,type="response")
+			glm.out<-glm(currentvalue[Trial=='0'] ~ as.numeric(period[Trial=='0']), family=distribution,weights = as.numeric(total[Trial=='0']), data=myframe)
+			y.slope <- glm.out$coef[2]
+			y.slope.se <- coef(summary(glm.out))[2, "Std. Error"]
+			y <- predict(glm.out,data.frame(period=c(seq(1, length(myframe$period[Trial=='0'])-1, by = 1),length(myframe$period[Trial=='0'])+1)),se.fit=TRUE,type="response")
 			lines(c(seq(1, length(myframe$period[Trial=='0'])-1, by = 1),length(myframe$period[Trial=='0'])+1),y$fit,col=SkyBlue, lwd=2)
 			##Regression trial data
-			## Should this be GLM with binomial or quasibionomia if proportions?
-			lm.out<-lm(currentvalue[Trial=='1'] ~ as.numeric(period[Trial=='1']), weights = total[Trial=='1'], data=myframe)
-			yy.slope <- lm.out$coef[2]
-			yy.slope.se <- coef(summary(lm.out))[2, "Std. Error"]
-			yy <- predict(lm.out,se.fit=TRUE,type="response")
+			glm.out<-glm(currentvalue[Trial=='1'] ~ as.numeric(period[Trial=='1']), family=distribution,weights = as.numeric(total[Trial=='1']), data=myframe)
+			yy.slope <- glm.out$coef[2]
+			yy.slope.se <- coef(summary(glm.out))[2, "Std. Error"]
+			yy <- predict(glm.out,se.fit=TRUE,type="response")
 			lines(na.omit(myframe$period[Trial=='1']), yy$fit,col=SkyBlue ,lwd=2)
 			##Sig testing
-			## Level change?
+			##Segmented regression
+			### Level change?
 			segments(length(myframe$period[Trial=='0'])+1, y$fit[length(myframe$period[Trial=='0'])],length(myframe$period[Trial=='0'])+1,yy$fit[1], col=KUBlue ,lwd=2)
 			points(length(myframe$period[Trial=='0'])+1,y$fit[length(myframe$period[Trial=='0'])],col=KUBlue ,bg="white",cex=1.5,pch=21)
-			#points(length(myframe$period[Trial=='0'])+1,yy$fit[1],col=KUBlue ,cex=1.5,pch=16)
-			level.change<-y$fit[length(myframe$period[Trial=='0'])]-yy$fit[1]
+			level.change<-abs(y$fit[length(myframe$period[Trial=='0'])]-yy$fit[1])
 			t <- (level.change)/sqrt(y$se.fit[length(myframe$period[Trial=='0'])]^2/length(myframe$period[Trial=='0']) + yy$se.fit[1]^2/length(myframe$period[Trial=='1']))
 			p.level <- 1- pt(t,length(myframe$period[Trial=='0']) + length(myframe$period[Trial=='1']) - 2);
 			if(p.level < 0.05) {color="red"; line.width=2}else{color="black"}
@@ -318,9 +318,9 @@ else #sequential == TRUE
 			#text (4-strwidth("A"),yy$fit[1],adj=c(1,0.5),paste(round(yy$fit[1],2),"(",round(yy$fit[1]-yy$se.fit[1]*1.96,2)," to ",round(yy$fit[1]+yy$se.fit[1]*1.96,2),")", sep=""))
 			significance = paste("Level change at breakpoint (vertical dark line): ",round(level.change,2)," ; p = ",format.pval(p.level,eps=0.001,digits = 3), sep = "")
 			mtext(significance, side=1, line=3, col=color , cex=1,adj = 0)
-			##
+
 			mtext(paste("Enduring change detected after ",length(myframe$period)," observations?"), side=1, line=4, col="black" , cex=1,adj = 0)
-			## Slope difference?
+			### Slope difference?
 			slope.change<-y.slope-yy.slope;
 			t <- (slope.change)/sqrt(y.slope.se + yy.slope.se)
 			p.slope = 1- pt(t,length(myframe$period[Trial=='0']) + length(myframe$period[Trial=='1']) - 2);
@@ -331,22 +331,7 @@ else #sequential == TRUE
 			significance = paste("    Slope change at breakpoint (segmented regression): p = ",format(round(p.slope,digits = 3), nsmall = 3), sep = "")
 			mtext(significance, side=1, line=5, col=color , cex=1,adj = 0)
 			## Linear or logistic regression
-			if (type == "SR-P")
-				{
-				if (max(myframe$currentvalue) == 1 || min(myframe$currentvalue == 0)){extremevalue=1}
-				if (extremevalue==1)
-					{
-					glm.out1 = glm(myframe$currentvalue ~ as.numeric(Trial) + as.numeric(period), family=quasibinomial(logit),weights = total)
-					}
-				else
-					{
-					glm.out1 = glm(myframe$currentvalue ~ as.numeric(Trial) + as.numeric(period), family=binomial(logit),weights = total)
-					}
-				}
-			if (type == "SR-C")
-				{
-				glm.out1     = glm(myframe$currentvalue ~ as.numeric(Trial) + as.numeric(period), family=poisson(log))
-				}
+			glm.out1     = glm(myframe$currentvalue ~ as.numeric(Trial) + as.numeric(period), family=distribution, weights=weight.type)
 			sum.sig <- summary(glm.out1)
 			##Trial by linear regression
 			significance = paste("    Mean rates, pre/post (linear regression controlling for secular change): p = ",format(round(coef(sum.sig)[2,4],digits = 3), nsmall = 3), sep = "")
@@ -356,7 +341,7 @@ else #sequential == TRUE
 			significance = paste("Secular change (linear regression controlling for intervention): p = ",format(round(coef(sum.sig)[3,4],digits = 3), nsmall = 3), sep = "")
 			if(coef(sum.sig)[3,4] < 0.05) {color="red"; line.width=2}else{color="black"}
 			mtext(significance, side=1, line=7, col=color , cex=1,adj = 0)
-			#Segmented regression
+			#Segmented regression with Davies - don't use as does not model a level change at the breakpoint
 			#davies.out<-davies.test(lm(currentvalue ~ as.numeric(period),weights = total),~ period, k=length(myframe$period)*100)
 			#lm.out<-lm(currentvalue ~ period, weights = total, data=myframe)
 			##THIS SEEMS BEST< BUT NOT WORKING 2015-11-11
@@ -364,8 +349,8 @@ else #sequential == TRUE
 			#significance = paste("P-value (segmented regression at time period of ",format(round(davies.out$statistic,digits = 1)),") = ",format(round(davies.out$p.value,digits = 3), nsmall = 3), sep = "")
 			#mtext(significance, side=1, line=2, col=KUBlue , cex=1,adj = 1)
 			#Cosmetics
-			if (coef(sum.sig)[3,1]>0){legend.location="topright"}else{legend.location="topleft"}
-			legend("topright", legend="Projected rate if no intervention     ",lty=0, lwd = 1, col=KUBlue ,pt.bg=KUBlue, cex=0.75,pt.cex=1.25,pch=1, inset=0.05)
+			if (coef(sum.sig)[3,1]<0){legend.location="topright"}else{legend.location="topleft"}
+			legend(legend.location, legend="Projected rate if no intervention     ",lty=0, lwd = 1, col=KUBlue ,pt.bg=KUBlue, cex=0.75,pt.cex=1.25,pch=1, inset=0.05)
 			abline(v=length(myframe$period[Trial=='0'])+0.5,col="gray", lty="dotted")
 			text(length(myframe$period[Trial=='0'])+0.5+0.5*strwidth("A"),par("usr")[3]+0.5*strheight("A"),cex=0.8,adj=c(0,0),"Implementation started", font=1,col="gray")
 			}
