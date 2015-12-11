@@ -416,19 +416,20 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
 <div>Four columns: 1) time period name, 2) # events, 3) total, 4) trial. <br/>
 For trial, 0 = pre-intervention or no trial and 1 = after intervention.<br/>
 Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add commas.</div>
-<div id="editor" style="width:450px;">1, 26,30, 0,
-2, 24,30, 0,
-3, 25,30, 0
+<div id="editor" style="width:450px;">1, 26, 30, 0,
+2, 24, 30, 0,
+3, 25, 30, 0,
 </div>	
             <br />
 
             <label>Plot type:</label> 
             <select id="type" name="type">
+              <option value="" selected>**Select chart type</option>
               <option value="SPC-P">Control chart (proportions)</option>
               <option value="SPC-C">Control chart (counts)</option>
               <option value="SR-P">Segmented regression (proportions)</option>
               <option value="SR-C">Segmented regression (counts)</option>
-              <option value="R" selected>Run chart (avoid)</option>
+              <option value="R">Run chart (avoid)</option>
               <option value="B">Box chart for before-after (avoid)</option>
             </select>
 			<div id="countedshow" style="display:none">
@@ -475,7 +476,7 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
           <fieldset>
 		  <legend style="font-weight:bold">Example scenarios</legend>
 <h3 style="margin-bottom:0px;margin-top:2px">Baseline data</h3>
-<div><input type="radio" name="example" class="example" value="ex_0a" id="ex_0a" checked /><label for="ex_0a">Baseline data (run chart)</label></div>
+<div><input type="radio" name="example" class="example" value="ex_0a" id="ex_0a" /><label for="ex_0a">Baseline data (run chart)</label></div>
 <div><input type="radio" name="example" class="example" value="ex_0b" id="ex_0b"/><label for="ex_0b">Baseline data (p-chart)</label> <i>What does this control chart add? Is this process in control with only <a href="https://en.wikipedia.org/wiki/Common_cause_and_special_cause_%28statistics%29">common cause variation</a>?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_0c" id="ex_0c"/><label for="ex_0c">Baseline data (p-chart)</label> <i>The mean remains at 83.3%. What do the colored dots signal may be occurring (hint: see infobox below chart)?</i></div>
 <h3 style="margin-bottom:0px;margin-top:2px">QI project 1: implementing screening for depression</h3>
