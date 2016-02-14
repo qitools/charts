@@ -59,9 +59,9 @@ if (sequential == FALSE)
 	if (toupper(type) == "SPC-P")
 		{
 		currentvalue <- count/total
-		spc <- qcc(count,sizes=total,type="p", xlab="",ylab="",title="",labels=myframe$period,ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-		#mtext(bquote("Proportion of encounters"~~bolditalic(.(outcome))), side=2, line=2.5, col=KUBlue , cex=1.5)
-		y.label = bquote("Proportion of encounters"~~bolditalic(.(outcome)))
+		spc <- qcc(count,sizes=total,type="p", xlab="",ylab="",title="",labels=myframe$period.name, ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+		#mtext(bquote("Proportion "~~bolditalic(.(outcome))), side=2, line=2.5, col=KUBlue , cex=1.5)
+		y.label = bquote("Proportion "~~bolditalic(.(outcome)))
 		average = paste("Average ",outcome," = ",round(spc$center*100,digits = 1),"%", sep = "")
 		if(theme=="KU"){display_logo(x=1.2,y=0.2)}
 		}
@@ -78,10 +78,10 @@ if (sequential == FALSE)
 				}
 			par(fin=c(8.8,6))
 			plot (row(myframe)[,1],count/total, ylim=c(0,1), xlab="", ylab="", type="b",xaxs="r",axes=F,,xaxt="n")
-			axis(side=1,at=1:length(myframe$period),labels=myframe$period)
+			axis(side=1,at=1:length(myframe$period),labels=myframe$period.name)
 			axis(2,  xaxp=c(0,1,10))
 			box()
-			mtext(bquote("Proportion of encounters"~~bolditalic(.(outcome))), side=2, line=2.5, col=KUBlue , cex=1.5)
+			mtext(bquote("Proportion "~~bolditalic(.(outcome))), side=2, line=2.5, col=KUBlue , cex=1.5)
 			average = paste("Average ",outcome," = ",round(100*numerator/denominator,digits = 1),"%", collapse = NULL)
 			if(theme=="KU"){display_logo(x=1.15,y=0.06)}
 			}
@@ -100,13 +100,13 @@ if (sequential == FALSE)
 				if (counted == "events") 
 					{
 					currentvalue <- count
-					spc <- qcc(count,type="c", xlab="",ylab="",title="",labels=myframe$period, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
-					y.label = bquote("Count of encounters"~~bolditalic(.(outcome)))
+					spc <- qcc(count,type="c", xlab="",ylab="",title="",labels=myframe$period.name, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+					y.label = bquote("Count "~~bolditalic(.(outcome)))
 					}
 				if (counted == "total")  
 					{
 					currentvalue <- total
-					spc <- qcc(total,type="c", xlab="",ylab="",title="",labels=myframe$period, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
+					spc <- qcc(total,type="c", xlab="",ylab="",title="",labels=myframe$period.name, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 					y.label = bquote("Count of "~~bolditalic(total)~~"encounters")
 					}
 				average = paste("Average ",outcome," = ",round(spc$center,digits = 1),"", sep = "")
@@ -188,7 +188,7 @@ else #sequential == TRUE
 		print(twobytwo)
 		names(Trial) <- c("Baseline","Trial")
 		par(cex.main = 3)
-		boxplot(count/total ~ Trial,ylab=bquote("Mean proportion of encounters"~~bolditalic(.(outcome))),main=topic, ylim=c(0,1),names.arg=c("Baseline","Trial"))
+		boxplot(count/total ~ Trial,ylab=bquote("Mean proportion "~~bolditalic(.(outcome))),main=topic, ylim=c(0,1),names.arg=c("Baseline","Trial"))
 		axis(1, at= 1:2, lab=c("Baseline","Trial"),tick=FALSE, cex = 2)
 		mtext(side=3,line=0.2,"(before and after analysis)", font=1)
 		mm<-tapply(count/total,Trial, median,na.rm=TRUE)
@@ -208,7 +208,7 @@ else #sequential == TRUE
 			currentvalue <- count/total
 			spc <- qcc(data=count[Trial=='0'],sizes=total[Trial=='0'],newdata=count[Trial=='1'], newsizes=total[Trial=='1'],type="p", xlab="",ylab="",title="",labels=period.name[Trial=='0'],newlabels=period.name[Trial=='1'],ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 			subtitle = "p chart: before-after trial"
-			y.label = bquote("Proportion of encounters"~~bolditalic(.(outcome)))
+			y.label = bquote("Proportion "~~bolditalic(.(outcome)))
 			ylim=c(0,1.15)
 			if (max(myframe$currentvalue) == 1 || min(myframe$currentvalue == 0)){extremevalue=1}
 			if (extremevalue==1)
@@ -238,7 +238,7 @@ else #sequential == TRUE
 			#Per GLM: "For a binomial GLM prior weights are used to give the number of trials when the response is the proportion of successes: they would rarely be used for a Poisson GLM"
 			weights.type= NULL
 			subtitle = "c chart: before-after trial"
-			y.label = bquote("Count of encounters"~~bolditalic(.(outcome)))
+			y.label = bquote("Count "~~bolditalic(.(outcome)))
 			ylim= NULL #c(0,max(currentvalue)+1)
 			}
 		if (grepl("SPC", type, ignore.case = TRUE))
@@ -269,7 +269,7 @@ else #sequential == TRUE
 				weight.type=total
 				if (max(myframe$currentvalue) == 1 || min(myframe$currentvalue == 0)){distribution=quasibinomial(logit)}
 				ylim=c(0,1.15)
-				y.label = bquote("Proportion of encounters"~~bolditalic(.(outcome)))
+				y.label = bquote("Proportion "~~bolditalic(.(outcome)))
 				}
 			if (toupper(type) == "SR-C")
 				{
@@ -281,7 +281,7 @@ else #sequential == TRUE
 				if (counted == "total")
 					{
 					myframe$currentvalue <- total
-					y.label = bquote("Number of encounters"~~bolditalic(.(outcome)))
+					y.label = bquote("Number "~~bolditalic(.(outcome)))
 					}
 				distribution = poisson(log)
 				#Should this regression have weights = count ? Seems to reduce standard error
