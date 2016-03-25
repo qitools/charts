@@ -205,7 +205,7 @@ else #sequential == TRUE
 		{
 		if (toupper(type) == "SPC-P")
 			{
-			currentvalue <- count/total
+			myframe$currentvalue <- count/total
 			spc <- qcc(data=count[Trial=='0'],sizes=total[Trial=='0'],newdata=count[Trial=='1'], newsizes=total[Trial=='1'],type="p", xlab="",ylab="",title="",labels=period.name[Trial=='0'],newlabels=period.name[Trial=='1'],ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 			subtitle = "p chart: before-after trial"
 			y.label = bquote("Proportion "~~bolditalic(.(outcome)))
@@ -213,11 +213,11 @@ else #sequential == TRUE
 			if (max(myframe$currentvalue) == 1 || min(myframe$currentvalue == 0)){extremevalue=1}
 			if (extremevalue==1)
 				{
-				distribution = family=quasibinomial(logit)
+				mydistribution = quasibinomial(logit)
 				}
 			else
 				{
-				distribution = family=binomial(logit)
+				mydistribution = binomial(logit)
 				}
 			weights.type = total
 			}
@@ -225,15 +225,15 @@ else #sequential == TRUE
 			{
 			if (counted == "events") 
 				{
-				currentvalue <- count
+				myframe$currentvalue <- count
 				spc <- qcc(count[Trial=="0"],newdata=count[Trial=="1"],type="c", xlab="",ylab="",title="",labels=period.name[Trial=="0"],newlabels=period.name[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 				}
 			if (counted == "total") 
 				{
-				currentvalue <- total
+				myframe$currentvalue <- total
 				spc <- qcc(total[Trial=="0"],newdata=total[Trial=="1"],type="c", xlab="",ylab="",title="",labels=period.name[Trial=="0"],newlabels=period.name[Trial=="1"], digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 				}
-			distribution = poisson(log)
+			mydistribution = poisson(log)
 			#Should this regression have weights = count ? Seems to reduce standard error
 			#Per GLM: "For a binomial GLM prior weights are used to give the number of trials when the response is the proportion of successes: they would rarely be used for a Poisson GLM"
 			weights.type= NULL
@@ -249,12 +249,13 @@ else #sequential == TRUE
 			mtext(timeperiod, side=1, line=-1.1, col=KUBlue , cex=1.3, outer = FALSE)
 			average = paste("Average (pretrial) = ",round(spc$center*100,digits = 1),"%", sep = "")
 			mtext(average, side=1, line=-0.1, col=KUBlue , cex=1, outer = FALSE)
-			glm.out=glm(currentvalue ~ as.numeric(Trial) + as.numeric(period), family=distribution,weights = weights.type)
+			glm.out=glm(currentvalue ~ as.numeric(Trial) + as.numeric(period), family=mydistribution,weights = weights.type, data=myframe)
 			sum.sig <- summary(glm.out)
 			significance = paste("P-value for secular change (linear regression) = ",format(round(coef(sum.sig)["as.numeric(period)",4],digits = 3), nsmall = 3), sep = "")
 			mtext(significance, side=1, line=0, col=KUBlue , cex=1,adj = 1)
 			significance = paste("P-value for trial (linear regression) = ",format(round(coef(sum.sig)["as.numeric(Trial)",4],digits = 3), nsmall = 3), sep = "")
 			mtext(significance, side=1, line=1, col=KUBlue , cex=1,adj = 1)
+			#mtext(myframe$currentvalue, side=1, line=2, col=KUBlue , cex=1,adj = 1) #troubleshooting
 			}
 		if (grepl("SR", type, ignore.case = TRUE))
 			{
@@ -265,9 +266,17 @@ else #sequential == TRUE
 			if (toupper(type) == "SR-P")
 				{
 				myframe$currentvalue <- count/total
-				distribution = binomial(logit)
-				weight.type=total
-				if (max(myframe$currentvalue) == 1 || min(myframe$currentvalue == 0)){distribution=quasibinomial(logit)}
+				if (max(myframe$currentvalue) == 1 || min(myframe$currentvalue == 0)){extremevalue=1}
+				if (extremevalue==1)
+					{
+					mydistribution = quasibinomial(logit)
+					}
+				else
+					{
+					mydistribution = binomial(logit)
+					}
+				weights.type=total
+				if (max(myframe$currentvalue) == 1 || min(myframe$currentvalue == 0)){mydistribution=quasibinomial(logit)}
 				ylim=c(0,1.15)
 				y.label = bquote("Proportion "~~bolditalic(.(outcome)))
 				}
@@ -283,23 +292,23 @@ else #sequential == TRUE
 					myframe$currentvalue <- total
 					y.label = bquote("Number "~~bolditalic(.(outcome)))
 					}
-				distribution = poisson(log)
+				mydistribution = poisson(log)
 				#Should this regression have weights = count ? Seems to reduce standard error
 				#Per GLM: "For a binomial GLM prior weights are used to give the number of trials when the response is the proportion of successes: they would rarely be used for a Poisson GLM"
-				weight.type=NULL
+				weights.type=NULL
 				ylim=c(0,max(myframe$currentvalue)+1)
 				}
 			plot(myframe$period,myframe$currentvalue,type="p", xaxt='n', xlab="",xlim=c(min(myframe$period),max(myframe$period)), ylim=ylim,pch=16,ylab="", main="")
 			axis(1, at=myframe$period, labels=myframe$period.name)
 			mtext(timeperiod, side=1, line=2, col=KUBlue , cex=1.3, outer = FALSE)
 			##Regression calibration data
-			glm.out<-glm(currentvalue[Trial=='0'] ~ as.numeric(period[Trial=='0']), family=distribution,weights = as.numeric(total[Trial=='0']), data=myframe)
+			glm.out<-glm(currentvalue[Trial=='0'] ~ as.numeric(period[Trial=='0']), family=mydistribution,weights = weights.type[Trial=='0'], data=myframe)
 			y.slope <- glm.out$coef[2]
 			y.slope.se <- coef(summary(glm.out))[2, "Std. Error"]
 			y <- predict(glm.out,data.frame(period=c(seq(1, length(myframe$period[Trial=='0'])-1, by = 1),length(myframe$period[Trial=='0'])+1)),se.fit=TRUE,type="response")
 			lines(c(seq(1, length(myframe$period[Trial=='0'])-1, by = 1),length(myframe$period[Trial=='0'])+1),y$fit,col=SkyBlue, lwd=2)
 			##Regression trial data
-			glm.out<-glm(currentvalue[Trial=='1'] ~ as.numeric(period[Trial=='1']), family=distribution,weights = as.numeric(total[Trial=='1']), data=myframe)
+			glm.out<-glm(currentvalue[Trial=='1'] ~ as.numeric(period[Trial=='1']), family=mydistribution,weights = weights.type[Trial=='1'], data=myframe)
 			yy.slope <- glm.out$coef[2]
 			yy.slope.se <- coef(summary(glm.out))[2, "Std. Error"]
 			yy <- predict(glm.out,se.fit=TRUE,type="response")
@@ -320,6 +329,7 @@ else #sequential == TRUE
 			mtext(significance, side=1, line=3, col=color , cex=1,adj = 0)
 
 			mtext(paste("Enduring change detected after ",length(myframe$period)," observations?"), side=1, line=4, col="black" , cex=1,adj = 0)
+			
 			### Slope difference?
 			slope.change<-y.slope-yy.slope;
 			t <- (slope.change)/sqrt(y.slope.se + yy.slope.se)
@@ -331,7 +341,7 @@ else #sequential == TRUE
 			significance = paste("    Slope change at breakpoint (segmented regression): p = ",format(round(p.slope,digits = 3), nsmall = 3), sep = "")
 			mtext(significance, side=1, line=5, col=color , cex=1,adj = 0)
 			## Linear or logistic regression
-			glm.out1     = glm(myframe$currentvalue ~ as.numeric(Trial) + as.numeric(period), family=distribution, weights=weight.type)
+			glm.out1     = glm(currentvalue ~ as.numeric(Trial) + as.numeric(period), family=mydistribution, weights=weights.type, data=myframe)
 			sum.sig <- summary(glm.out1)
 			##Trial by linear regression
 			significance = paste("    Mean rates, pre/post (linear regression controlling for secular change): p = ",format(round(coef(sum.sig)[2,4],digits = 3), nsmall = 3), sep = "")
@@ -339,8 +349,10 @@ else #sequential == TRUE
 			mtext(significance, side=1, line=6, col=color , cex=1,adj = 0)
 			#Secular by linear regression
 			significance = paste("Secular change (linear regression controlling for intervention): p = ",format(round(coef(sum.sig)[3,4],digits = 3), nsmall = 3), sep = "")
+			# equivalent: significance = paste("P-value for secular change (linear regression) = ",format(round(coef(sum.sig)["as.numeric(period)",4],digits = 3), nsmall = 3), sep = "")
 			if(coef(sum.sig)[3,4] < 0.05) {color="red"; line.width=2}else{color="black"}
 			mtext(significance, side=1, line=7, col=color , cex=1,adj = 0)
+			#mtext(myframe$currentvalue, side=1, line=8, col=color , cex=1,adj = 0) #troubleshooting
 			#Segmented regression with Davies - don't use as does not model a level change at the breakpoint
 			#davies.out<-davies.test(lm(currentvalue ~ as.numeric(period),weights = total),~ period, k=length(myframe$period)*100)
 			#lm.out<-lm(currentvalue ~ period, weights = total, data=myframe)
@@ -402,19 +414,19 @@ else #sequential == TRUE
 		lastvalue = 0
 		Trend = 0
 		Trend.items <- numeric()
-		#currentvalue <- numeric()
+		#myframe$currentvalue <- numeric()
 		for(i in 1: length (myframe$period))
 		{
 		# $IHI rules http://www.ihi.org/knowledge/Pages/Tools/RunChart.aspx
 		# IHI1: Trend of 5 or more consecutively changing in the same direction
 		# if (type=="p" || type=="P") {currentvalue[i] <- myframe$d[i]/myframe$total[i]}
 		# if (type=="c" || type=="C") {currentvalue[i] <- myframe$d[i]}
-		if(currentvalue[i] > lastvalue)
+		if(myframe$currentvalue[i] > lastvalue)
 			{
 			if (Trend < 0) {Trend = 2}
 			else {Trend = Trend + 1}
 			}
-		if(currentvalue[i] < lastvalue)
+		if(myframe$currentvalue[i] < lastvalue)
 			{
 			if (Trend > 0) {Trend = - 2}
 			else{Trend = Trend - 1}
@@ -425,7 +437,7 @@ else #sequential == TRUE
 			}
 		# IHI2: Run of 6 or more on same size of median
 		# Built in so not coded here
-		lastvalue = currentvalue[i]
+		lastvalue = myframe$currentvalue[i]
 		}
 		#Trend.items
 
@@ -437,9 +449,9 @@ else #sequential == TRUE
 			{
 			#2014-04-01: This causes the last point to be missplaced
 			# Cannot easily be fixed with new QCC library
-			#points ((i-1)/(length(myframe$period) - 1),currentvalue[i], col="black",pch=16, cex = 1)
+			#points ((i-1)/(length(myframe$period) - 1),myframe$currentvalue[i], col="black",pch=16, cex = 1)
 			#For debugging
-			#text (row(myframe)[i,1],currentvalue[i],i,adj = c(0,-1))
+			#text (row(myframe)[i,1],myframe$currentvalue[i],i,adj = c(0,-1))
 			}
 
 		# IHI1: Trend of 5 or more consecutively changing in the same direction
@@ -456,13 +468,13 @@ else #sequential == TRUE
 		Trend.items <- unique(Trend.items)
 		for(i in 1: length (Trend.items))
 			{
-			#points (Trend.items[i],currentvalue[Trend.items[i]], col="blue",pch=21, cex = 1.5)
-			#lines ((Trend.items[i]-1)/(length (myframe$period) - 1),currentvalue[Trend.items[i]],col="blue",lwd=1.5)
+			#points (Trend.items[i],myframe$currentvalue[Trend.items[i]], col="blue",pch=21, cex = 1.5)
+			#lines ((Trend.items[i]-1)/(length (myframe$period) - 1),myframe$currentvalue[Trend.items[i]],col="blue",lwd=1.5)
 			}
 		#Below will work if can adjust for margins top and bottom
-		#lines ((Trend.items-1)/(length (myframe$period) - 1),currentvalue[Trend.items],type="l",col="blue",lwd=1.5)
+		#lines ((Trend.items-1)/(length (myframe$period) - 1),myframe$currentvalue[Trend.items],type="l",col="blue",lwd=1.5)
 		#Below empirically derived 2014-09-02
-		lines ((Trend.items-1)/(length (myframe$period) - 1),(currentvalue[Trend.items] + 0.12) * 0.9,type="l",col="blue",lwd=1.5)
+		lines ((Trend.items-1)/(length (myframe$period) - 1),(myframe$currentvalue[Trend.items] + 0.12) * 0.9,type="l",col="blue",lwd=1.5)
 
 		# IHI2: Run of 6 or more on same size of median
 		# shewhart$violating.runs
@@ -470,14 +482,14 @@ else #sequential == TRUE
 		for(i in 1: length (vr))
 			{
 			#Below will work better if can adjust for margins top and bottom
-			#points ((vr[i] - 1)/(length (myframe$period) - 1),currentvalue[vr[i]], col="orange",pch=16, cex = 1)
+			#points ((vr[i] - 1)/(length (myframe$period) - 1),myframe$currentvalue[vr[i]], col="orange",pch=16, cex = 1)
 			}			
 
 		# IHI4:astronomical points
 		for(i in 1: length (shewhart$beyond.limits))
 			{
 			#Not needed with new library
-			#points ((shewhart$beyond.limits[i] - 1)/(length (myframe$period) - 1),currentvalue[shewhart$beyond.limits[i]], col="red",pch=21, cex = 2)
+			#points ((shewhart$beyond.limits[i] - 1)/(length (myframe$period) - 1),myframe$currentvalue[shewhart$beyond.limits[i]], col="red",pch=21, cex = 2)
 			}
 		#Shewhart rules end
 		}
