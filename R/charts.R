@@ -58,7 +58,7 @@ if (sequential == FALSE)
 	{
 	if (toupper(type) == "SPC-P")
 		{
-		currentvalue <- count/total
+		myframe$currentvalue <- count/total
 		spc <- qcc(count,sizes=total,type="p", xlab="",ylab="",title="",labels=myframe$period.name, ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 		#mtext(bquote("Proportion "~~bolditalic(.(outcome))), side=2, line=2.5, col=KUBlue , cex=1.5)
 		y.label = bquote("Proportion "~~bolditalic(.(outcome)))
