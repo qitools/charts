@@ -474,7 +474,8 @@ else #sequential == TRUE
 		#Below will work if can adjust for margins top and bottom
 		#lines ((Trend.items-1)/(length (myframe$period) - 1),myframe$currentvalue[Trend.items],type="l",col="blue",lwd=1.5)
 		#Below empirically derived 2014-09-02
-		lines ((Trend.items-1)/(length (myframe$period) - 1),(myframe$currentvalue[Trend.items] + 0.12) * 0.9,type="l",col="blue",lwd=1.5)
+		#Below then removed 2016-04-12
+		#lines ((Trend.items-1)/(length (myframe$period) - 1),(myframe$currentvalue[Trend.items] + 0.12) * 0.9,type="l",col="blue",lwd=1.5)
 
 		# IHI2: Run of 6 or more on same size of median
 		# shewhart$violating.runs
