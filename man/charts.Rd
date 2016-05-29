@@ -9,15 +9,15 @@ This function executes an interrupted time series analysis.
 charts(content, topic, outcome, counted, timeperiod, goalu, goall, type, theme)
 }
 \arguments{
-  \item{content}
-  \item{topic}
-  \item{outcome}
-  \item{counted}
-  \item{timeperiod}
-  \item{goalu}
-  \item{goall}
-  \item{type}
-  \item{theme}
+  \item{content}{matrix of data}
+  \item{topic}{Title for the plot}
+  \item{outcome}{Label for y-axis for the plot, either 'conforming' or 'non-conforming'}
+  \item{counted}{If c-chart: events or total}
+  \item{timeperiod}{day, week, month, year}
+  \item{goalu}{optional horizontal line to indicate the upper boundry of the goal range}
+  \item{goall}{optional horizontal line to indicate the lower boundry of the goal range}
+  \item{type}{Either: Control chart (proportions), Control chart (counts), Segmented regression (proportions), Segmented regression (counts), Run chart (avoid), Box chart for before-after (avoid)}
+  \item{theme}{not implemented}
 }
 \details{
 %%  Names of periods, either numbers, or characters surrounded by single quoates and without embedded commas.
