@@ -208,6 +208,7 @@ else #sequential == TRUE
 			myframe$currentvalue <- count/total
 			spc <- qcc(data=count[Trial=='0'],sizes=total[Trial=='0'],newdata=count[Trial=='1'], newsizes=total[Trial=='1'],type="p", xlab="",ylab="",title="",labels=period.name[Trial=='0'],newlabels=period.name[Trial=='1'],ylim=c(0,1), digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 			subtitle = "p chart: before-after trial"
+			average = paste("Average (pretrial) = ",round(spc$center*100,digits = 1),"%", sep = "")
 			y.label = bquote("Proportion "~~bolditalic(.(outcome)))
 			ylim=c(0,1.15)
 			if (max(myframe$currentvalue) == 1 || min(myframe$currentvalue == 0)){extremevalue=1}
@@ -238,6 +239,7 @@ else #sequential == TRUE
 			#Per GLM: "For a binomial GLM prior weights are used to give the number of trials when the response is the proportion of successes: they would rarely be used for a Poisson GLM"
 			weights.type= NULL
 			subtitle = "c chart: before-after trial"
+			average = paste("Average (pretrial) = ",round(spc$center,digits = 1),"", sep = "")
 			y.label = bquote("Count "~~bolditalic(.(outcome)))
 			ylim= NULL #c(0,max(currentvalue)+1)
 			}
@@ -247,7 +249,6 @@ else #sequential == TRUE
 			par(new=TRUE,xpd=NA)
 			plot.new()
 			mtext(timeperiod, side=1, line=-1.1, col=KUBlue , cex=1.3, outer = FALSE)
-			average = paste("Average (pretrial) = ",round(spc$center*100,digits = 1),"%", sep = "")
 			mtext(average, side=1, line=-0.1, col=KUBlue , cex=1, outer = FALSE)
 			glm.out=glm(currentvalue ~ as.numeric(Trial) + as.numeric(period), family=mydistribution,weights = weights.type, data=myframe)
 			sum.sig <- summary(glm.out)
@@ -415,12 +416,13 @@ else #sequential == TRUE
 		Trend = 0
 		Trend.items <- numeric()
 		#myframe$currentvalue <- numeric()
-		for(i in 1: length (myframe$period))
+		for(i in 1: length (myframe$timeperiod))
 		{
 		# $IHI rules http://www.ihi.org/knowledge/Pages/Tools/RunChart.aspx
 		# IHI1: Trend of 5 or more consecutively changing in the same direction
 		# if (type=="p" || type=="P") {currentvalue[i] <- myframe$d[i]/myframe$total[i]}
 		# if (type=="c" || type=="C") {currentvalue[i] <- myframe$d[i]}
+		#HERE 12/2016
 		if(myframe$currentvalue[i] > lastvalue)
 			{
 			if (Trend < 0) {Trend = 2}
