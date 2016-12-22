@@ -416,13 +416,14 @@ else #sequential == TRUE
 		Trend = 0
 		Trend.items <- numeric()
 		#myframe$currentvalue <- numeric()
-		for(i in 1: length (myframe$timeperiod))
+		for(i in 1: length (myframe$period))
 		{
 		# $IHI rules http://www.ihi.org/knowledge/Pages/Tools/RunChart.aspx
 		# IHI1: Trend of 5 or more consecutively changing in the same direction
 		# if (type=="p" || type=="P") {currentvalue[i] <- myframe$d[i]/myframe$total[i]}
 		# if (type=="c" || type=="C") {currentvalue[i] <- myframe$d[i]}
 		#HERE 12/2016
+	  #stop (paste("i=",i,sep="")
 		if(myframe$currentvalue[i] > lastvalue)
 			{
 			if (Trend < 0) {Trend = 2}
