@@ -123,7 +123,6 @@ $(".example").click(function(){
 	$("#goall").val("");
 	$("#topic").val("");
 	$("#countedshow").css("display","inline");	
-	// Baseline data examples:
 	if($(this).val()=="ex_0a") {
 		$("#type").val("R");
 		editor.setValue("1, 26, 30, 0,\n2, 24, 30, 0,\n3, 25, 30, 0,\n",1);
@@ -140,41 +139,36 @@ $(".example").click(function(){
 		$("#topic").val("SPC chart (p-chart)");
 		}
 	//if($(this).val()=="ex_0c") {$("#type").val("SPC-P");editor.setValue("1, 26,30, 0,\n2, 28,30, 0,\n3, 21,30, 0,\n4, 19,30,0,\n5, 17,30,0,\n6, 20,30,0,\n7, 20,30,0,\n8, 17,30,0,\n9, 15,30,0,\n10, 16,30,0,\n11, 15,30,0,\n12, 14,30,0,\n13, 13,30,0,\n14, 12,30,0,\n15, 8,30,0",1);$("#countedshow").css("display","none")}
-	//QI project 1: depression screening:
 	if($(this).val()=="ex_1a") {
-		// Before-after analysis
 		$("#type").val("B");
-		editor.setValue("1,  5, 30, 0,\n2, 10, 30, 0,\n3, 15, 30, 0,\n4, 25, 30, 1,\n5, 24, 30, 1,\n6, 26, 30, 1",1);
+		editor.setValue("1, 26, 30, 0,\n2, 24, 30, 0,\n3, 25, 30, 0,\n4, 15, 30, 1,\n5, 10, 30, 1,\n6, 5, 30, 1",1);
 		$("#topic").val("Screening for depression: before and after comparison");
 		}
 	if($(this).val()=="ex_1b") {
-		// SPC
+		//QI project 2: counseling for smoking cessation: SPC
 		$("#type").val("SPC-P");
-		editor.setValue("1,  5, 30, 0,\n2, 10, 30, 0,\n3, 15, 30, 0,\n4, 25, 30, 1,\n5, 24, 30, 1,\n6, 26, 30, 1",1);$("#countedshow").css("display","none")
-		$("#outcome").val("conforming");
+		editor.setValue("1, 26, 30, 0,\n2, 24, 30, 0,\n3, 25, 30, 0,\n4, 15, 30, 1,\n5, 10, 30, 1,\n6, 5, 30, 1",1);$("#countedshow").css("display","none")
+		$("#outcome").val("nonconforming");
 		$("#topic").val("Screening for depression");
 		}
 	if($(this).val()=="ex_1b1") {
-		// Segmented regression
+		//QI project 2: counseling for smoking cessation: Regression
 		$("#type").val("SR-P"); 
-		editor.setValue("1,  5, 30, 0,\n2, 10, 30, 0,\n3, 15, 30, 0,\n4, 25, 30, 1,\n5, 24, 30, 1,\n6, 26, 30, 1",1);$("#countedshow").css("display","none")
-		$("#outcome").val("conforming");
+		editor.setValue("1, 26, 30, 0,\n2, 24, 30, 0,\n3, 25, 30, 0,\n4, 15, 30, 1,\n5, 10, 30, 1,\n6, 5, 30, 1",1);$("#countedshow").css("display","none")
+		$("#outcome").val("nonconforming");
 		$("#topic").val("Screening for depression");
 		}
 	if($(this).val()=="ex_1c") {
-		// Segmented regression: stronger trial
 		$("#type").val("SR-P"); 
-		editor.setValue(""1,  5, 30, 0,\n2, 10, 30, 0,\n3,  9, 30, 0,\n4, 25, 30, 1,\n5, 24, 30, 1,\n6, 26, 30, 1",1);$("#countedshow").css("display","none")
-		$("#outcome").val("conforming");
+		editor.setValue("1, 26, 30, 0,\n2, 24, 30, 0,\n3, 25, 30, 0,\n4,  9, 30, 1,\n5, 10, 30, 1,\n6, 5, 30, 1",1);$("#countedshow").css("display","none")
+		$("#outcome").val("nonconforming");
 		$("#topic").val("Screening for depression: stronger trial");
 		}
 	if($(this).val()=="ex_1d") {
-		// Segmented regression: longer trial
-		$("#type").val("SR-P"); editor.setValue("1,  5, 30, 0,\n2, 10, 30, 0,\n3, 15, 30, 0,\n4, 25, 30, 1,\n5, 24, 30, 1,\n6, 26, 30, 1,\n7, 25, 30, 1,\n8, 24, 30, 1,\n9, 25, 30, 1",1);$("#countedshow").css("display","none")
-		$("#outcome").val("conforming");
+		$("#type").val("SR-P"); editor.setValue("1, 26, 30, 0,\n2, 24, 30, 0,\n3, 25, 30, 0,\n4, 15, 30, 1,\n5, 10, 30, 1,\n6, 5, 30, 1,\n7, 5, 30, 1,\n8, 6, 30, 1,\n9, 5,30, 1",1);$("#countedshow").css("display","none")
+		$("#outcome").val("nonconforming");
 		$("#topic").val("Screening for depression: longer trial");
 		}
-	//QI project 2: counseling for smoking cessation:
 	if($(this).val()=="ex_2a") {
 		$("#type").val("SPC-P");editor.setValue("1, 1, 1, 0,\n2, 1, 1, 0,\n3, 1, 1, 0,\n4, 0, 1, 0,\n5, 2, 3, 0,\n6, 2, 5, 0,\n7, 1, 4, 0,\n8, 7,8, 1,\n9, 9, 19, 1,\n10, 9, 20, 1,\n11, 10, 23, 1",1);$("#countedshow").css("display","none")
 		$("#outcome").val("nonconforming");
