@@ -161,6 +161,13 @@ $(".example").click(function(){
 		$("#outcome").val("conforming");
 		$("#topic").val("Screening for depression: SCP p-chart");
 		}
+	if($(this).val()=="ex_1cb") { //Analysis 4
+		// SPC - longer trials
+		$("#type").val("SPC-P");
+		editor.setValue("1,  5, 30, 0,\n2, 10, 30, 0,\n3, 15, 30, 0,\n4, 25, 30, 1,\n5, 24, 30, 1,\n6, 26, 30, 1,\n7, 25, 30, 1,\n8, 24, 30, 1,\n9, 25, 30, 1",1);$("#countedshow").css("display","none")
+		$("#outcome").val("conforming");
+		$("#topic").val("Screening for depression: SCP p-chart");
+		}
 	if($(this).val()=="ex_1d") {
 		// Segmented regression
 		$("#type").val("SR-P"); 
@@ -502,6 +509,7 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 <div><input type="radio" name="example" class="example" value="ex_1a" id="ex_1a"/><label for="ex_1a">First analysis (box chart)</label> <i>Did this intervention help?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Second analysis (run chart)</label> <i>Did this intervention help?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_1c" id="ex_1c"/><label for="ex_1c">Third analysis (p-chart)</label> <i>Did this intervention help?</i><i><ul style="margin-top:1px;margin-bottom:1px;"><li>What shape would the line be if the intervention were perfect?</li></ul></i></div>
+<div><input type="radio" name="example" class="example" value="ex_1cb" id="ex_1cb"/><label for="ex_1cb">P-chart with longer trial</label> <i>Did this intervention help?</i><i><ul style="margin-top:1px;margin-bottom:1px;"><li>What is different now?</li></ul></i></div>
 <div><input type="radio" name="example" class="example" value="ex_1d" id="ex_1d"/><label for="ex_1d">Fourth analysis (segmented and multivariable regression)</label> <a href="How does multiple regression work.pdf" title="What is multivariable regression?">Huh?</a></<i><ul style="margin-top:1px;margin-bottom:1px;"><li>What does this chart add?</li><li>What are the significant findings?</li></ul></i></div>
 <div><input type="radio" name="example" class="example" value="ex_1e" id="ex_1e"/><label for="ex_1e">Another scenario (note the events dropped from 15 to 9 in the 4th row)</label> <i>What is significant if the drop is more abrupt?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_1f" id="ex_1f"/><label for="ex_1f">Longer trial</label> <i>What is significant now?</i></div>
