@@ -81,6 +81,7 @@ if (sequential == FALSE)
 			axis(side=1,at=1:length(myframe$period),labels=myframe$period.name)
 			axis(2,  xaxp=c(0,1,10))
 			box()
+			if (max(Trial) == 1) {abline(v=length(myframe$period[Trial=='0'])+0.5,col="gray", lty="dotted")}
 			mtext(bquote("Proportion "~~bolditalic(.(outcome))), side=2, line=2.5, col=KUBlue , cex=1.5)
 			average = paste("Average ",outcome," = ",round(100*numerator/denominator,digits = 1),"%", collapse = NULL)
 			if(theme=="KU"){display_logo(x=1.15,y=0.06)}
