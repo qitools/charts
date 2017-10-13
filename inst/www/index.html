@@ -144,31 +144,38 @@ $(".example").click(function(){
 	if($(this).val()=="ex_1a") {
 		// Before-after analysis
 		$("#type").val("B");
-		editor.setValue("1,  5, 30, 0,\n2, 10, 30, 0,\n3, 15, 30, 0,\n4, 25, 30, 1,\n5, 24, 30, 1,\n6, 26, 30, 1",1);
+		editor.setValue("1,  4, 30, 0,\n2,  6, 30, 0,\n3,  5, 30, 0,\n4, 15, 30, 1,\n5, 20, 30, 1,\n6, 25, 30, 1",1);$("#countedshow").css("display","none")
 		$("#topic").val("Screening for depression: before and after comparison");
 		}
 	if($(this).val()=="ex_1b") {
+		// Run chart
+		$("#type").val("R");
+		editor.setValue("1,  4, 30, 0,\n2,  6, 30, 0,\n3,  5, 30, 0,\n4, 15, 30, 0,\n5, 20, 30, 0,\n6, 25, 30, 0",1);$("#countedshow").css("display","none")
+		$("#outcome").val("conforming");
+		$("#topic").val("Screening for depression: run chart");
+		}
+	if($(this).val()=="ex_1c") {
 		// SPC
 		$("#type").val("SPC-P");
-		editor.setValue("1,  5, 30, 0,\n2, 10, 30, 0,\n3, 15, 30, 0,\n4, 25, 30, 1,\n5, 24, 30, 1,\n6, 26, 30, 1",1);$("#countedshow").css("display","none")
+		editor.setValue("1,  4, 30, 0,\n2,  6, 30, 0,\n3,  5, 30, 0,\n4, 15, 30, 1,\n5, 20, 30, 1,\n6, 25, 30, 1",1);$("#countedshow").css("display","none")
 		$("#outcome").val("conforming");
-		$("#topic").val("Screening for depression");
+		$("#topic").val("Screening for depression: SCP p-chart");
 		}
-	if($(this).val()=="ex_1b1") {
+	if($(this).val()=="ex_1d") {
 		// Segmented regression
 		$("#type").val("SR-P"); 
 		editor.setValue("1,  5, 30, 0,\n2, 10, 30, 0,\n3, 15, 30, 0,\n4, 25, 30, 1,\n5, 24, 30, 1,\n6, 26, 30, 1",1);$("#countedshow").css("display","none")
 		$("#outcome").val("conforming");
-		$("#topic").val("Screening for depression");
+		$("#topic").val("Screening for depression: Segmented regression");
 		}
-	if($(this).val()=="ex_1c") {
+	if($(this).val()=="ex_1e") {
 		// Segmented regression: stronger trial
 		$("#type").val("SR-P"); 
 		editor.setValue("1,  5, 30, 0,\n2, 10, 30, 0,\n3,  9, 30, 0,\n4, 25, 30, 1,\n5, 24, 30, 1,\n6, 26, 30, 1",1);$("#countedshow").css("display","none")
 		$("#outcome").val("conforming");
 		$("#topic").val("Screening for depression: stronger trial");
 		}
-	if($(this).val()=="ex_1d") {
+	if($(this).val()=="ex_1f") {
 		// Segmented regression: longer trial
 		$("#type").val("SR-P"); editor.setValue("1,  5, 30, 0,\n2, 10, 30, 0,\n3, 15, 30, 0,\n4, 25, 30, 1,\n5, 24, 30, 1,\n6, 26, 30, 1,\n7, 25, 30, 1,\n8, 24, 30, 1,\n9, 25, 30, 1",1);$("#countedshow").css("display","none")
 		$("#outcome").val("conforming");
@@ -422,9 +429,12 @@ http://code.google.com/p/jquery-csv/wiki/API -> instructions
 <div>Four columns: 1) time period name, 2) # events, 3) total, 4) trial. <br/>
 For trial, 0 = pre-intervention or no trial and 1 = after intervention.<br/>
 Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add commas.</div>
-<div id="editor" style="width:450px;">1, 26, 30, 0,
-2, 24, 30, 0,
-3, 25, 30, 0,
+<div id="editor" style="width:450px;">1,  4, 30, 0,
+2,  6, 30, 0,
+3,  5, 30, 0,
+4, 15, 30, 0,
+5, 20, 30, 0,
+6, 25, 30, 0
 </div>	
             <br />
 
@@ -481,17 +491,20 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 	          <form name="form2" action="#" style="width:450px;">
           <fieldset>
 		  <legend style="font-weight:bold">Example scenarios</legend>
-<h3 style="margin-bottom:0px;margin-top:2px">Baseline data</h3>
+<!--
+		  <h3 style="margin-bottom:0px;margin-top:2px">Baseline data</h3>
 <div><input type="radio" name="example" class="example" value="ex_0a" id="ex_0a" /><label for="ex_0a">Baseline data (run chart)</label></div>
 <div><input type="radio" name="example" class="example" value="ex_0b" id="ex_0b"/><label for="ex_0b">Baseline data (p-chart)</label> <i>What does this control chart add? Is this process in control with only <a href="https://en.wikipedia.org/wiki/Common_cause_and_special_cause_%28statistics%29">common cause variation</a>?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_0c" id="ex_0c"/><label for="ex_0c">Baseline data (p-chart)</label> <i>The mean remains at 83.3%. What do the colored dots signal may be occurring (hint: see infobox below chart)?</i></div>
+-->
 <h3 style="margin-bottom:0px;margin-top:2px">QI project 1: implementing screening for depression</h3>
 <div>We now have added 3 months of data after an intervention to increase screening for depression.</div>
 <div><input type="radio" name="example" class="example" value="ex_1a" id="ex_1a"/><label for="ex_1a">First analysis (box chart)</label> <i>Did this intervention help?</i></div>
-<div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Second analysis (p-chart)</label> <i>Did this intervention help?</i><i><ul style="margin-top:1px;margin-bottom:1px;"><li>What shape would the line be if the intervention were perfect?</li></ul></i></div>
-<div><input type="radio" name="example" class="example" value="ex_1b1" id="ex_1b1"/><label for="ex_1b1">Third analysis (segmented and multivariable regression)</label> <a href="How does multiple regression work.pdf" title="What is multivariable regression?">Huh?</a></<i><ul style="margin-top:1px;margin-bottom:1px;"><li>What does this chart add?</li><li>What are the significant findings?</li></ul></i></div>
-<div><input type="radio" name="example" class="example" value="ex_1c" id="ex_1c"/><label for="ex_1c">Another scenario (note the events dropped from 15 to 9 in the 4th row)</label> <i>What is significant if the drop is more abrupt?</i></div>
-<div><input type="radio" name="example" class="example" value="ex_1d" id="ex_1d"/><label for="ex_1d">Longer trial</label> <i>What is significant now?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_1b" id="ex_1b"/><label for="ex_1b">Second analysis (run chart)</label> <i>Did this intervention help?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_1c" id="ex_1c"/><label for="ex_1c">Third analysis (p-chart)</label> <i>Did this intervention help?</i><i><ul style="margin-top:1px;margin-bottom:1px;"><li>What shape would the line be if the intervention were perfect?</li></ul></i></div>
+<div><input type="radio" name="example" class="example" value="ex_1d" id="ex_1d"/><label for="ex_1d">Fourth analysis (segmented and multivariable regression)</label> <a href="How does multiple regression work.pdf" title="What is multivariable regression?">Huh?</a></<i><ul style="margin-top:1px;margin-bottom:1px;"><li>What does this chart add?</li><li>What are the significant findings?</li></ul></i></div>
+<div><input type="radio" name="example" class="example" value="ex_1e" id="ex_1e"/><label for="ex_1e">Another scenario (note the events dropped from 15 to 9 in the 4th row)</label> <i>What is significant if the drop is more abrupt?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_1f" id="ex_1f"/><label for="ex_1f">Longer trial</label> <i>What is significant now?</i></div>
 <div style="display:none" class="teach"><i>Why control for coincident interventions or trends over time?</i> <a href="#" class="hastip">Answer.</a>
 <div class="tooltiptext">
 	To control for these, use of these analyses:
@@ -502,14 +515,18 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 	<div id="">1. Fan E, Laupacis A, Pronovost PJ, Guyatt GH, Needham DM. How to use an article about quality improvement. JAMA. 2010. PMID: <a href="http://pubmed.gov/21098772">21098772</a></div>
 </div>
 </div>
+<!--
 <h3 style="margin-bottom:0px;margin-top:2px">QI project 2: counseling for smoking cessation</h3>
 <div><input type="radio" name="example" class="example" value="ex_2a" id="ex_2a"/><label for="ex_2a">First analysis (p-chart)</label> <i>Does the intervention help?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_0a" id="ex_0a" /><label for="ex_0a">Baseline data (run chart)</label></div>
+
 <div><input type="radio" name="example" class="example" value="ex_2b" id="ex_2b" /><label for="ex_2b">Second analysis (c-chart)</label> <i>Why do these charts contradict?</i></div>
 
 <h3 style="margin-bottom:0px;margin-top:2px">QI project 3: audit and feedback and benchmarking</h3>
 <div><i>Currently,  benchmarks will be placed on run charts when the topic contains either 'readmission' or 'flu' and vacc'.</i></div>
 <div><input type="radio" name="example" class="example" value="ex_3a" id="ex_3a"/><label for="ex_3a">Comparing to an external benchmark.</label> <i><ul style="margin-top:1px;margin-bottom:1px;"><li>Are we performing better or worse than national comparisons?</li><li>How can we compare ourselves to an external rate?</li></ul></i></div>
 <div><input type="radio" name="example" class="example" value="ex_3b" id="ex_3b"/><label for="ex_3b">Placing goals and benchmarks on a chart for audit and feedback</label> <i>What motivates people at work?</i></div>
+-->
 </fieldset>
 </form>
 	  </form>
