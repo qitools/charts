@@ -100,13 +100,13 @@ if (sequential == FALSE)
 				{
 				if (counted == "events") 
 					{
-					currentvalue <- count
+					myframe$currentvalue <- count
 					spc <- qcc(count,type="c", xlab="",ylab="",title="",labels=myframe$period.name, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 					y.label = bquote("Count "~~bolditalic(.(outcome)))
 					}
 				if (counted == "total")  
 					{
-					currentvalue <- total
+					myframe$currentvalue <- total
 					spc <- qcc(total,type="c", xlab="",ylab="",title="",labels=myframe$period.name, digits=2,nsigmas=3,chart.all=TRUE,add.stats=TRUE)
 					y.label = bquote("Count of "~~bolditalic(total)~~"encounters")
 					}
@@ -121,6 +121,12 @@ if (sequential == FALSE)
 		{
 		mtext(timeperiod, side=1, line=3, col=KUBlue , cex=1.5)
 		mtext(average, side=1, line=4.5, col=KUBlue , cex=1)
+		}
+	else if (grepl("SPC", type, ignore.case = TRUE) > 0)
+		{
+		#mtext(y.label, side=2, line=3.5, col=KUBlue , cex=1.5)
+		#mtext(timeperiod, side=1, line=3.401, col=KUBlue , cex=1.5)
+		#mtext(average, side=1, line=3.70, col=KUBlue , cex=1)
 		}
 	else
 		{
@@ -418,31 +424,33 @@ else #sequential == TRUE
 		Trend.items <- numeric()
 		#myframe$currentvalue <- numeric()
 		for(i in 1: length (period))
-		{
-		# $IHI rules http://www.ihi.org/knowledge/Pages/Tools/RunChart.aspx
-		# IHI1: Trend of 5 or more consecutively changing in the same direction
-		# if (type=="p" || type=="P") {currentvalue[i] <- myframe$d[i]/myframe$total[i]}
-		# if (type=="c" || type=="C") {currentvalue[i] <- myframe$d[i]}
-		#HERE 12/2016
-	  #stop (paste("i=",i,sep="")
-		if(myframe$currentvalue[i] > lastvalue)
 			{
-			if (Trend < 0) {Trend = 2}
-			else {Trend = Trend + 1}
+			# $IHI rules http://www.ihi.org/knowledge/Pages/Tools/RunChart.aspx
+			# IHI1: Trend of 5 or more consecutively changing in the same direction
+			# if (type=="p" || type=="P") {currentvalue[i] <- myframe$d[i]/myframe$total[i]}
+			# if (type=="c" || type=="C") {currentvalue[i] <- myframe$d[i]}
+			# HERE 12/2016
+			# stop (paste("myframe$currentvalue[i]",myframe$currentvalue[length (period))],sep=" "))
+			# stop (paste("length (period)",length (period),sep=" "))
+			# stop (paste("i=",i,sep=" "))
+			if(myframe$currentvalue[i] > lastvalue)
+				{
+				if (Trend < 0) {Trend = 2}
+				else {Trend = Trend + 1}
+				}
+			if(myframe$currentvalue[i] < lastvalue)
+				{
+				if (Trend > 0) {Trend = - 2}
+				else{Trend = Trend - 1}
+				}
+			if (Trend > 4 || Trend < -4)
+				{
+				Trend.items <- c(Trend.items, i)
+				}
+			# IHI2: Run of 6 or more on same size of median
+			# Built in so not coded here
+			lastvalue = myframe$currentvalue[i]
 			}
-		if(myframe$currentvalue[i] < lastvalue)
-			{
-			if (Trend > 0) {Trend = - 2}
-			else{Trend = Trend - 1}
-			}
-		if (Trend > 4 || Trend < -4)
-			{
-			Trend.items <- c(Trend.items, i)
-			}
-		# IHI2: Run of 6 or more on same size of median
-		# Built in so not coded here
-		lastvalue = myframe$currentvalue[i]
-		}
 		#Trend.items
 
 		shewhart <- shewhart.rules(spc, run.length = 6)
