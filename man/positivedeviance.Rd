@@ -1,7 +1,7 @@
-\name{make_charts}
-\alias{make_charts}
+\name{make_positivedeviance}
+\alias{make_positivedeviance}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{make_charts}
+\title{make_positivedeviance}
 \description{
 This function executes an interrupted time series analysis.
 }
