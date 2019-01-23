@@ -1,6 +1,6 @@
 charts <- function(content, topic, outcome, counted, timeperiod, goalu, goall, type, theme) {
 temp <- content
-# http://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html
+# http://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html .
 #temp <- gsub('\n', '', fixed = TRUE, temp, perl = TRUE)
 #temp <- gsub("\\s+$", "", temp, perl = TRUE) #Removing trailing whitespace
 #temp <- gsub(",+$", "", temp, perl = TRUE) #Remove trailing comma if accidentally added by user online
