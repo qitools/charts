@@ -1,4 +1,4 @@
-export(positivedeviance)
+export(charts)
 export(display_logo)
 import(RJSONIO)
 import(ggplot2)

@@ -1,4 +1,4 @@
-Package: positivedeviance
+Package: charts
 Type: OpenCPU Application
 Title: QItools application for OpenCPU
 Version: 0.1
@@ -16,5 +16,5 @@ Imports:
 	qcc,
 	segmented
 Collate:
-	'positivedeviance.R'
+	'charts.R'
 	'display_logo.R'

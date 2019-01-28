@@ -1,4 +1,4 @@
-OpenCPU App: positivedeviance
+OpenCPU App: charts
 ---------------------
 
 Simple OpenCPU Application. 
@@ -12,12 +12,12 @@ To install in R on your computer:
     install_github("positivedeviance", "qitools")
 
     library(opencpu)
-    opencpu$browse("library/positivedeviance/www")
+    opencpu$browse("library/charts/www")
 
 Use the same function using a local webserver on your computer:
 
-    library(positivedeviance)
-    positivedeviance()
-    ?positivedeviance
+    library(charts)
+    charts()
+    ?charts
 
 For more information about OpenCPU apps, see [opencpu.js](https://github.com/jeroenooms/opencpu.js#readme)
