@@ -260,15 +260,15 @@ else #sequential == TRUE
 			glm.out=glm(currentvalue ~ as.numeric(Trial) + as.numeric(period), family=mydistribution,weights = weights.type, data=myframe)
 			sum.sig <- summary(glm.out)
 			significance = paste("P-value for secular change (linear regression) = ",format(round(coef(sum.sig)["as.numeric(period)",4],digits = 3), nsmall = 3), sep = "")
-			mtext(significance, side=1, line=0, col=KUBlue , cex=1,adj = 1)
+			#mtext(significance, side=1, line=0, col=KUBlue , cex=1,adj = 1)
 			significance = paste("P-value for trial (linear regression) = ",format(round(coef(sum.sig)["as.numeric(Trial)",4],digits = 3), nsmall = 3), sep = "")
-			mtext(significance, side=1, line=1, col=KUBlue , cex=1,adj = 1)
-			#mtext(myframe$currentvalue, side=1, line=2, col=KUBlue , cex=1,adj = 1) #troubleshooting
+			#mtext(significance, side=1, line=1, col=KUBlue , cex=1,adj = 1)
+			##mtext(myframe$currentvalue, side=1, line=2, col=KUBlue , cex=1,adj = 1) #troubleshooting
 			}
 		if (grepl("SR", type, ignore.case = TRUE))
 			{
-			if (length(myframe$period[Trial=='0']) < 3){stop('Insufficent number of values before trial do conduct a segmented regression analysis')}
-			if (length(myframe$period[Trial=='1']) < 3){stop('Insufficent number of values after trial do conduct a segmented regression analysis')}
+			if (length(myframe$period[Trial=='0']) < 3){stop('Insufficient number of values before trial do conduct a segmented regression analysis')}
+			if (length(myframe$period[Trial=='1']) < 3){stop('Insufficient number of values after trial do conduct a segmented regression analysis')}
 			subtitle = "segmented regression analysis"
 			par(mar=c(8.5, 5, 4, 2) + 0.1)
 			if (toupper(type) == "SR-P")
@@ -352,11 +352,11 @@ else #sequential == TRUE
 			glm.out1     = glm(currentvalue ~ as.numeric(Trial) + as.numeric(period), family=mydistribution, weights=weights.type, data=myframe)
 			sum.sig <- summary(glm.out1)
 			##Trial by linear regression
-			significance = paste("    Mean rates, pre/post (linear regression controlling for secular change): p = ",format(round(coef(sum.sig)[2,4],digits = 3), nsmall = 3), sep = "")
+			significance = paste("    Mean rates, pre/post (linear regression *controlling for* secular change): p = ",format(round(coef(sum.sig)[2,4],digits = 3), nsmall = 3), sep = "")
 			if(coef(sum.sig)[2,4] < 0.05) {color="red"; line.width=2}else{color="black"}
 			mtext(significance, side=1, line=6, col=color , cex=1,adj = 0)
 			#Secular by linear regression
-			significance = paste("Secular change (linear regression controlling for intervention): p = ",format(round(coef(sum.sig)[3,4],digits = 3), nsmall = 3), sep = "")
+			significance = paste("Secular change (linear regression *controlling for* intervention): p = ",format(round(coef(sum.sig)[3,4],digits = 3), nsmall = 3), sep = "")
 			# equivalent: significance = paste("P-value for secular change (linear regression) = ",format(round(coef(sum.sig)["as.numeric(period)",4],digits = 3), nsmall = 3), sep = "")
 			if(coef(sum.sig)[3,4] < 0.05) {color="red"; line.width=2}else{color="black"}
 			mtext(significance, side=1, line=7, col=color , cex=1,adj = 0)
