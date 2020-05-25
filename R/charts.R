@@ -340,7 +340,7 @@ else #sequential == TRUE
 			
 			### Slope difference?
 			slope.change<-y.slope-yy.slope;
-			t <- abs(slope.change)/sqrt(y.slope.se + yy.slope.se)
+			t <- abs(slope.change)/sqrt(y.slope.se + yy.slope.se) # https://www.bmj.com/about-bmj/resources-readers/publications/statistics-square-one/7-t-tests
 			p.slope = 1- pt(t,length(myframe$period[Trial=='0']) + length(myframe$period[Trial=='1']) - 2);
 			if(p.slope < 0.05) {color="red"; line.width=2}else{color="black"}
 			#text (par("usr")[2],par("usr")[4]-strheight("A"),adj=c(1,1),paste("Slope before: ",round(y.slope,2),"(",round(y.slope+abs(y.slope.se) *1.96,2)," to ",round(y.slope-abs(y.slope.se) *1.96,2),")", sep=""))
@@ -352,7 +352,9 @@ else #sequential == TRUE
 			glm.out1     = glm(currentvalue ~ as.numeric(Trial) + as.numeric(period), family=mydistribution, weights=weights.type, data=myframe)
 			sum.sig <- summary(glm.out1)
 			##Trial by linear regression
-			significance = paste("    Mean rates, pre/post (linear regression *controlling for* secular change): p = ",format(round(coef(sum.sig)[2,4],digits = 3), nsmall = 3), sep = "")
+			pretrialmean <- round(mean(currentvalue[Trial=='0']),2) #New 2020-05-25
+			posttrialmean <- round(mean(currentvalue[Trial=='1']),2)
+			significance = paste("    Mean rates, pre/post (linear regression *controlling for* secular change): ", pretrialmean, " vs ", posttrialmean ,"p = ",format(round(coef(sum.sig)[2,4],digits = 3), nsmall = 3), sep = "")
 			if(coef(sum.sig)[2,4] < 0.05) {color="red"; line.width=2}else{color="black"}
 			mtext(significance, side=1, line=6, col=color , cex=1,adj = 0)
 			#Secular by linear regression
