@@ -352,8 +352,8 @@ else #sequential == TRUE
 			glm.out1     = glm(currentvalue ~ as.numeric(Trial) + as.numeric(period), family=mydistribution, weights=weights.type, data=myframe)
 			sum.sig <- summary(glm.out1)
 			##Trial by linear regression
-			pretrialmean <- round(mean(currentvalue[Trial=='0']),2) #New 2020-05-25
-			posttrialmean <- round(mean(currentvalue[Trial=='1']),2)
+			pretrialmean <- round(mean(myframe$currentvalue[myframe$Trial=='0']),2) #New 2020-05-25
+			posttrialmean <- round(mean(myframe$currentvalue[myframe$Trial=='1']),2)
 			significance = paste("    Mean rates, pre/post (linear regression *controlling for* secular change): ", pretrialmean, " vs ", posttrialmean ,"p = ",format(round(coef(sum.sig)[2,4],digits = 3), nsmall = 3), sep = "")
 			if(coef(sum.sig)[2,4] < 0.05) {color="red"; line.width=2}else{color="black"}
 			mtext(significance, side=1, line=6, col=color , cex=1,adj = 0)
