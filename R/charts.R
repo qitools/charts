@@ -340,7 +340,7 @@ else #sequential == TRUE
 			
 			### Slope difference?
 			slope.change<-y.slope-yy.slope;
-			t <- (slope.change)/sqrt(y.slope.se + yy.slope.se)
+			t <- abs(slope.change)/sqrt(y.slope.se + yy.slope.se)
 			p.slope = 1- pt(t,length(myframe$period[Trial=='0']) + length(myframe$period[Trial=='1']) - 2);
 			if(p.slope < 0.05) {color="red"; line.width=2}else{color="black"}
 			#text (par("usr")[2],par("usr")[4]-strheight("A"),adj=c(1,1),paste("Slope before: ",round(y.slope,2),"(",round(y.slope+abs(y.slope.se) *1.96,2)," to ",round(y.slope-abs(y.slope.se) *1.96,2),")", sep=""))
