@@ -1,4 +1,4 @@
-charts <- function(content, topic, outcome, counted, timeperiod, goalu, goall, type, theme) { 
+charts <- function(content, topic, outcome, counted, timeperiod, goalu, goall, type, theme) {    
 temp <- content
 # http://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html
 #temp <- gsub('\n', '', fixed = TRUE, temp, perl = TRUE)
