@@ -232,7 +232,7 @@ $(".example").click(function(){
 		$("#type").val("SR-M");
 		$("#counted").val("means");
 		$("#timeperiod").val("Month");
-		editor.setValue("1, 51, 27, 13, 0,\n2, 54, 42, 10, 0,\n3, 66, 76, 3, 0,\n4, 100, 805, 15, 1,\n5, 150, 207, 13, 1,\n6, 300, 148, 11, 1",1);$("#countedshow").css("display","none")
+		editor.setValue("1, 200, 405, 15, 0,\n2, 150, 207, 13, 0,\n3, 175, 148, 11, 0,\n4, 66, 76, 3, 1,\n5, 54, 42, 10, 1,\n6, 51, 27, 13, 1,\n",1);$("#countedshow").css("display","none")
 		$("#outcome").val("conforming");
 		$("#topic").val("Speeding antibiotics for sepsis: regression");
 		}
@@ -486,6 +486,7 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
             <select id="outcome">
               <option value="nonconforming" selected>nonconforming</option>
               <option value="conforming">conforming</option>
+              <option value="means">means</option>
             </select>&nbsp;&nbsp;
 			<label>Time period:</label> 			
             <select id="timeperiod">
@@ -544,7 +545,7 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 </div>
 <h3 style="margin-bottom:0px;margin-top:2px">QI project 2: speeding antibiotics in sepsis</h3>
 <div>We have 3 months of of baseline data than 3 months of data after an intervention.</div>
-<div><input type="radio" name="example" class="example" value="ex_4a" id="ex_4a"/><label for="ex_1a">First analysis (interrupted time series)</label> <i>Did this intervention help?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_4a" id="ex_4a"/><label for="ex_4a">First analysis (interrupted time series)</label> <i>Did this intervention help?</i></div>
 <!--
 <h3 style="margin-bottom:0px;margin-top:2px">QI project 2: counseling for smoking cessation</h3>
 <div><input type="radio" name="example" class="example" value="ex_2a" id="ex_2a"/><label for="ex_2a">First analysis (p-chart)</label> <i>Does the intervention help?</i></div>

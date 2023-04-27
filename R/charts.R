@@ -7,18 +7,38 @@ temp <- content
 temp <- gsub("\t", ' ', fixed = TRUE, temp)
 temp <- gsub(',', '","', fixed = TRUE, temp)
 temp <- paste('"',temp,'"',sep = '')
-temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=4, byrow=TRUE, dimnames = list(NULL, c("period.name", "count", "total","Trial")))',sep = '')
-x <- eval(parse(file = "", n = NULL, text = temp))
-myframe <- data.frame (x)
-myframe$period.name<-gsub("\'", '', fixed = TRUE, myframe$period.name)
-myframe$period.name<-str_trim(as.character(myframe$period.name))
-myframe$count<-as.numeric(as.character(str_trim(myframe$count)))
-myframe$total<-as.numeric(as.character(str_trim(myframe$total)))
-if (length(timeperiod) > 0)
-	{timeperiod<-paste("Time period (",timeperiod,")",sep="")}
-#myframe$Trial<-as.logical(str_trim(myframe$Trial))
-myframe$Trial<-str_trim(as.character(myframe$Trial))
-#myframe$Trial<-str_trim(myframe$Trial)
+
+if (counted != 'means'){
+  temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=4, byrow=TRUE, dimnames = list(NULL, c("period.name", "count", "total","Trial")))',sep = '')
+  x <- eval(parse(file = "", n = NULL, text = temp))
+  myframe <- data.frame (x)
+  myframe$period.name<-gsub("\'", '', fixed = TRUE, myframe$period.name)
+  myframe$period.name<-str_trim(as.character(myframe$period.name))
+  myframe$count<-as.numeric(as.character(str_trim(myframe$count)))
+  myframe$total<-as.numeric(as.character(str_trim(myframe$total)))
+  if (length(timeperiod) > 0)
+  	{timeperiod<-paste("Time period (",timeperiod,")",sep="")}
+  #myframe$Trial<-as.logical(str_trim(myframe$Trial))
+  myframe$Trial<-str_trim(as.character(myframe$Trial))
+  #myframe$Trial<-str_trim(myframe$Trial)
+  }
+else 
+  {
+  temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=5, byrow=TRUE, dimnames = list(NULL, c("period.name", "mean", "std", "total","Trial")))',sep = '')
+  x <- eval(parse(file = "", n = NULL, text = temp))
+  myframe <- data.frame (x)
+  myframe$period.name<-gsub("\'", '', fixed = TRUE, myframe$period.name)
+  myframe$period.name<-str_trim(as.character(myframe$period.name))
+  myframe$mean<-as.numeric(as.character(str_trim(myframe$mean)))
+  myframe$std<-as.numeric(as.character(str_trim(myframe$std)))
+  myframe$total<-as.numeric(as.character(str_trim(myframe$total)))
+  if (length(timeperiod) > 0)
+  {timeperiod<-paste("Time period (",timeperiod,")",sep="")}
+  myframe$Trial<-str_trim(as.character(myframe$Trial))
+  }
+
+#stop("myframe made")
+
 if (goalu < 0){goalu = 0}
 if (goall < 0){goall = 0}
 goalu <- as.numeric(goalu)
@@ -203,9 +223,9 @@ else #sequential == TRUE
 		text(2-0.4,mm[2],round(mm[2],2),pos=2)
 		#median<-wilcox.test(count/total ~ Trial, alternative="two.sided")
 		#text(2,0.95,paste("p=", round(median$p.value[1],3),"\n(non-parametric)"),adj=0,font=1,col='black')
-		mean<-fisher.test(twobytwo)
-		text(2,0.95,paste("p=", sprintf("%.3f",mean$p.value[1]),"\n(Fisher's Exact)"),adj=0,font=1,col='black')
-		print (paste("p=",sprintf("%.3f",mean$p.value[1])))
+		means<-fisher.test(twobytwo)
+		text(2,0.95,paste("p=", sprintf("%.3f",means$p.value[1]),"\n(Fisher's Exact)"),adj=0,font=1,col='black')
+		print (paste("p=",sprintf("%.3f",means$p.value[1])))
 		if(theme=="KU"){display_logo(x=1.2,y=0.05)}
 		}
 	else 
@@ -306,11 +326,36 @@ else #sequential == TRUE
 				weights.type=NULL
 				ylim=c(0,max(myframe$currentvalue)+1)
 				}
-			plot(myframe$period,myframe$currentvalue,type="p", xaxt='n', xlab="",xlim=c(min(myframe$period),max(myframe$period)), ylim=ylim,pch=16,ylab="", main="")
+
+			if (toupper(type) == "SR-M")
+			{
+			  if (counted == "means")
+			  {
+			   # stop(myframe$mean)
+			    myframe$currentvalue <- myframe$mean
+			    y.label = bquote("Mean per time period") # ~~bolditalic(.(outcome)))
+			    mydistribution = Gamma("inverse") # Gamma("inverse") or gaussian
+			  }
+			  if (counted == "total")
+			  {
+			    myframe$currentvalue <- myframe$total
+			    y.label = bquote("Number "~~bolditalic(.(outcome)))
+			    mydistribution = poisson(log)
+			  }
+			  #Should this regression have weights = count ? Seems to reduce standard error
+			  #Per GLM: "For a binomial GLM prior weights are used to give the number of trials when the response is the proportion of successes: they would rarely be used for a Poisson GLM"
+			  weights.type=1/std # total
+			  ylim=c(0,max(myframe$currentvalue)+1)
+			}
+						
+			#stop("Start plot")
+			plot(myframe$period,myframe$currentvalue, type="p", xaxt='n', xlab="",xlim=c(min(myframe$period),max(myframe$period)), ylim=ylim,pch=16,ylab="", main="")
 			axis(1, at=myframe$period, labels=myframe$period.name)
 			mtext(timeperiod, side=1, line=2, col=KUBlue , cex=1.3, outer = FALSE)
 			##Regression calibration data
-			glm.out<-glm(currentvalue[Trial=='0'] ~ as.numeric(period[Trial=='0']), family=mydistribution,weights = weights.type[Trial=='0'], data=myframe)
+			#stop("Start regression")
+			glm.out<-glm(currentvalue[Trial=='0'] ~ as.numeric(period[Trial=='0']), family=mydistribution, weights = weights.type[Trial=='0'], data=myframe)
+			#stop("Stop regression")
 			y.slope <- glm.out$coef[2]
 			y.slope.se <- coef(summary(glm.out))[2, "Std. Error"]
 			y <- predict(glm.out,data.frame(period=c(seq(1, length(myframe$period[Trial=='0'])-1, by = 1),length(myframe$period[Trial=='0'])+1)),se.fit=TRUE,type="response")
@@ -372,7 +417,7 @@ else #sequential == TRUE
 			#mtext(significance, side=1, line=2, col=KUBlue , cex=1,adj = 1)
 			#Cosmetics
 			if (coef(sum.sig)[3,1]<0){legend.location="topright"}else{legend.location="topleft"}
-			legend(legend.location, legend="Projected rate if no intervention     ",lty=0, lwd = 1, col=KUBlue ,pt.bg=KUBlue, cex=0.75,pt.cex=1.25,pch=1, inset=0.05)
+			legend(legend.location, legend="Projected if no intervention     ",lty=0, lwd = 1, col=KUBlue ,pt.bg=KUBlue, cex=0.75,pt.cex=1.25,pch=1, inset=0.05)
 			abline(v=length(myframe$period[Trial=='0'])+0.5,col="gray", lty="dotted")
 			text(length(myframe$period[Trial=='0'])+0.5+0.5*strwidth("A"),par("usr")[3]+0.5*strheight("A"),cex=0.8,adj=c(0,0),"Implementation started", font=1,col="gray")
 			}
