@@ -1,4 +1,4 @@
-<!DOCTYPE html>  
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <title>Run charts, control charts, interrupted time series and logistic regression.</title>
@@ -33,6 +33,9 @@
 <script> 
 $(document).ready(function(){
 
+  //optional, requires jquery-ui.
+  $("#plotdiv").resizable()
+
 $(function() {
 $( "#dialog" ).dialog();
 });
@@ -55,9 +58,6 @@ $( "#dialog" ).dialog();
     if(isAPIAvailable()) {
       $('#files').bind('change', handleFileSelect);
     }
-
-  //optional, requires jquery-ui.
-  $("#plotdiv").resizable()
 
   //For Ajax.org Cloud9 Editor
   var editor = ace.edit("editor");
@@ -226,6 +226,15 @@ $(".example").click(function(){
 		$("#topic").val("Influenza vaccination in clinic");
 		editor.setValue("\'10-7 to 10-11\', 25, 57,0,\n\'10-14 to 10-18\', 30, 64,0,\n\'10-21 to 10-25\', 23, 58,0,\n\'10-28 to 11-1\', 18, 44,0,\n\'11-4 to 11-8\', 20, 52,0,",1);
 		$("#countedshow").css("display","none");
+		}
+	if($(this).val()=="ex_4a") {
+		// Sepsis aby administration
+		$("#type").val("SR-M");
+		$("#counted").val("means");
+		$("#timeperiod").val("Month");
+		editor.setValue("1, 51, 27, 13, 0,\n2, 54, 42, 10, 0,\n3, 66, 76, 3, 0,\n4, 100, 805, 15, 1,\n5, 150, 207, 13, 1,\n6, 300, 148, 11, 1",1);$("#countedshow").css("display","none")
+		$("#outcome").val("conforming");
+		$("#topic").val("Speeding antibiotics for sepsis: regression");
 		}
   });
 
@@ -437,7 +446,11 @@ color:#FFFFFF;
 			<li>1st row is column names? <select id="header" name="header"><option value=TRUE> TRUE </option> <option value=FALSE> FALSE </option> </select>
 			</li>
 			</ul>
-<div>Four columns: 1) time period name, 2) # events, 3) total, 4) trial. <br/>
+<div>
+Columns: 1) time period, 2) events or means & STD, 3) total, 4) trial. <br/>
+<!--<b>Continuous outcomes</b> has four columns: 1) time period name, 2) means, 3) standard deviation, 4) total, 5) trial. <br/>
+Commented out as might be cause of example 2 error 'plot region too large'
+-->
 For trial, 0 = pre-intervention or no trial and 1 = after intervention.<br/>
 Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add commas.</div>
 <div id="editor" style="width:450px;">1,  4, 30, 0,
@@ -455,6 +468,7 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
               <option value="SPC-P">Control chart (proportions)</option>
               <option value="SPC-C">Control chart (counts)</option>
               <option value="SR-P">Segmented regression (proportions)</option>
+              <option value="SR-M">Segmented regression (means)</option>
               <option value="SR-C">Segmented regression (counts)</option>
               <option value="R">Run chart (avoid)</option>
               <option value="B">Box chart for before-after (avoid)</option>
@@ -464,6 +478,7 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
             <select id="counted" name="counted">
               <option value="events" selected>Events</option>
               <option value="total">Total</option>
+              <option value="means">Means</option>
             </select>
 			</div>
 			<br/>
@@ -527,11 +542,16 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 	<div id="">1. Fan E, Laupacis A, Pronovost PJ, Guyatt GH, Needham DM. How to use an article about quality improvement. JAMA. 2010. PMID: <a href="http://pubmed.gov/21098772">21098772</a></div>
 </div>
 </div>
+<h3 style="margin-bottom:0px;margin-top:2px">QI project 2: speeding antibiotics in sepsis</h3>
+<div>We have 3 months of of baseline data than 3 months of data after an intervention.</div>
+<div><input type="radio" name="example" class="example" value="ex_4a" id="ex_4a"/><label for="ex_1a">First analysis (interrupted time series)</label> <i>Did this intervention help?</i></div>
 <!--
 <h3 style="margin-bottom:0px;margin-top:2px">QI project 2: counseling for smoking cessation</h3>
 <div><input type="radio" name="example" class="example" value="ex_2a" id="ex_2a"/><label for="ex_2a">First analysis (p-chart)</label> <i>Does the intervention help?</i></div>
 <div><input type="radio" name="example" class="example" value="ex_0a" id="ex_0a" /><label for="ex_0a">Baseline data (run chart)</label></div>
+
 <div><input type="radio" name="example" class="example" value="ex_2b" id="ex_2b" /><label for="ex_2b">Second analysis (c-chart)</label> <i>Why do these charts contradict?</i></div>
+
 <h3 style="margin-bottom:0px;margin-top:2px">QI project 3: audit and feedback and benchmarking</h3>
 <div><i>Currently,  benchmarks will be placed on run charts when the topic contains either 'readmission' or 'flu' and vacc'.</i></div>
 <div><input type="radio" name="example" class="example" value="ex_3a" id="ex_3a"/><label for="ex_3a">Comparing to an external benchmark.</label> <i><ul style="margin-top:1px;margin-bottom:1px;"><li>Are we performing better or worse than national comparisons?</li><li>How can we compare ourselves to an external rate?</li></ul></i></div>
