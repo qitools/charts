@@ -69,14 +69,15 @@ $( "#dialog" ).dialog();
   // drawplot
   function drawplot(){
     $("#plotbutton").attr("disabled", "disabled")
-	$('#target').contents().find('#plotdiv').find('#baselineimage').css("display","none")
+	//$('#target').contents().find('#plotdiv').find('#baselineimage').css("display","none")
 	temp = editor.getSession().getValue()
 	//Three replacements below are not required on a local server, but are at https://public.opencpu.org/ocpu/github/
 	temp = temp.replace(/\r?\n/g, '')
 	temp = temp.replace(/\s+$/g, '')
 	temp = temp.replace(/$\s+/g, '')
 	temp = temp.replace(/,$/g, '')
-	var req = $('#target').contents().find('#plotdiv').r_fun_plot("charts", {
+	//var req = $('#target').contents().find('#plotdiv').r_fun_plot("charts", {
+	var req = $('#plotdiv').r_fun_plot("charts", {
 	  content: temp,
 	  topic: $("#topic").val(),
 	  outcome: $("#outcome").val(),
@@ -239,9 +240,10 @@ $(".example").click(function(){
 	if($(this).val()=="ex_4a") {
 		// Sepsis aby administration
 		$("#type").val("SR-M");
+		$("#counted").val("means");
 		$("#timeperiod").val("Month");
 		editor.setValue("1, 200, 405, 15, 0,\n2, 150, 207, 13, 0,\n3, 175, 148, 11, 0,\n4, 66, 76, 3, 1,\n5, 54, 42, 10, 1,\n6, 51, 27, 13, 1,\n",1);$("#countedshow").css("display","none")
-		$("#outcome").val("means");
+		$("#outcome").val("conforming");
 		$("#topic").val("Speeding antibiotics for sepsis: regression");
 		}
   });
@@ -353,7 +355,7 @@ fieldset{
 }
     
 #plotdiv {
-  width: 800px;
+  width: 1000px;
   height:400px;
   border: 1px solid #e3e3e3;
   border-radius: 4px;
@@ -572,10 +574,21 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 	</div>
 	
 	<div style="clear:both">&nbsp;</div>
+	</div>
+	<!--
 	<div >Hint: if bad spacing between title/footer text and the plot, click 'png' file type in upper right of plot. Then after the image opens in a new browser window, alter the image's dimensions in the url of the window. <a href="images/plot.resize.png" title="Click to display example in a new window" target="_blank">Click here to see screen capture of an example</a>.&nbsp;<img src="images/External.svg.png" alt="opens in new window" width="13"></div>
 	<iframe id="target" style="width:1000px;height:600px;border: 3px solid #6DC6E7;" name="target" height="600px" src="output.html">
 	</iframe>
-	</div>
+	-->
+	<div >Hint: if bad spacing between title/footer text and the plot, click 'png' file type in upper right of plot. Then after the image opens in a new browser window, alter the image's dimensions in the url of the window. <a href="images/plot.resize.png" title="Click to display example in a new window" target="_blank">Click here to see screen capture of an example</a>.&nbsp;<img src="images/External.svg.png" alt="opens in new window" width="13"></div>
+      <div class="span9">
+        <div id="plotdiv"></div>
+	  </div>
+	  </div>
+	  </div>
+	  </div>
+	  </div>
+	  </div>
 
 <div>
 

@@ -15,7 +15,7 @@
 <script src="opencpu/opencpu.js"> </script>
 
 <!-- some optional styling stuff -->
-<script src="bootstrap/js/bootstrap.js"> </script>   
+<script src="bootstrap/js/bootstrap.js"> </script>
 <script src="jqueryui/jquery-ui-1.10.3.custom.js"> </script>
 
 <!-- jquery-csv from http://code.google.com/p/jquery-csv/ -->
@@ -32,9 +32,6 @@
 
 <script> 
 $(document).ready(function(){
-
-  //optional, requires jquery-ui.
-  $("#plotdiv").resizable()
 
 $(function() {
 $( "#dialog" ).dialog();
@@ -58,6 +55,9 @@ $( "#dialog" ).dialog();
     if(isAPIAvailable()) {
       $('#files').bind('change', handleFileSelect);
     }
+
+  //optional, requires jquery-ui.
+  $("#plotdiv").resizable()
 
   //For Ajax.org Cloud9 Editor
   var editor = ace.edit("editor");
@@ -100,19 +100,10 @@ $( "#dialog" ).dialog();
   });
   
   $("#type").on("change", function(e){
-    // if analysis is for counts, ask if counting events or totals
-	e.preventDefault();
-	//if ($("#type").val() == "SPC-C"){$("#countedshow").css("display","inline")}
-    //if ($("#type").val() == "SR-C"){$("#countedshow").css("display","inline")}
-
-    if ($("#type").val() == "SPC-C" || $("#type").val() == "SR-C"){
-		$("#countedshow").css("display","inline") 
-		}
-	else {
-		$("#countedshow").css("display","none");
-		$("#counted").val("");
-		}
-
+    e.preventDefault();
+	$("#countedshow").css("display","none")
+    if ($("#type").val() == "SPC-C"){$("#countedshow").css("display","inline")}
+    if ($("#type").val() == "SR-C"){$("#countedshow").css("display","inline")}
   });
 
   $("#addcommas").on("click", function(e){
@@ -239,9 +230,10 @@ $(".example").click(function(){
 	if($(this).val()=="ex_4a") {
 		// Sepsis aby administration
 		$("#type").val("SR-M");
+		$("#counted").val("means");
 		$("#timeperiod").val("Month");
-		editor.setValue("1, 200, 405, 15, 0,\n2, 150, 207, 13, 0,\n3, 175, 148, 11, 0,\n4, 66, 76, 3, 1,\n5, 54, 42, 10, 1,\n6, 51, 27, 13, 1,\n",1);$("#countedshow").css("display","none")
-		$("#outcome").val("means");
+		editor.setValue("1, 51, 27, 13, 0,\n2, 54, 42, 10, 0,\n3, 66, 76, 3, 0,\n4, 100, 805, 15, 1,\n5, 150, 207, 13, 1,\n6, 300, 148, 11, 1",1);$("#countedshow").css("display","none")
+		$("#outcome").val("conforming");
 		$("#topic").val("Speeding antibiotics for sepsis: regression");
 		}
   });
@@ -455,7 +447,7 @@ color:#FFFFFF;
 			</li>
 			</ul>
 <div>
-Columns: 1) time period, 2) events or means & STD, 3) total, 4) trial. <br/>
+Columns: 1) time period, 2) events or means,STD, 3) total, 4) trial. <br/>
 <!--<b>Continuous outcomes</b> has four columns: 1) time period name, 2) means, 3) standard deviation, 4) total, 5) trial. <br/>
 Commented out as might be cause of example 2 error 'plot region too large'
 -->
@@ -486,7 +478,7 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
             <select id="counted" name="counted">
               <option value="events" selected>Events</option>
               <option value="total">Total</option>
-              <!-- <option value="means">Means</option> -->
+              <option value="means">Means</option>
             </select>
 			</div>
 			<br/>
@@ -494,7 +486,6 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
             <select id="outcome">
               <option value="nonconforming" selected>nonconforming</option>
               <option value="conforming">conforming</option>
-              <option value="means">means</option>
             </select>&nbsp;&nbsp;
 			<label>Time period:</label> 			
             <select id="timeperiod">
@@ -553,7 +544,7 @@ Separate columns with commas. <a id="addcommas" href="#">Click here</a> to add c
 </div>
 <h3 style="margin-bottom:0px;margin-top:2px">QI project 2: speeding antibiotics in sepsis</h3>
 <div>We have 3 months of of baseline data than 3 months of data after an intervention.</div>
-<div><input type="radio" name="example" class="example" value="ex_4a" id="ex_4a"/><label for="ex_4a">First analysis (interrupted time series)</label> <i>Did this intervention help?</i></div>
+<div><input type="radio" name="example" class="example" value="ex_4a" id="ex_4a"/><label for="ex_1a">First analysis (interrupted time series)</label> <i>Did this intervention help?</i></div>
 <!--
 <h3 style="margin-bottom:0px;margin-top:2px">QI project 2: counseling for smoking cessation</h3>
 <div><input type="radio" name="example" class="example" value="ex_2a" id="ex_2a"/><label for="ex_2a">First analysis (p-chart)</label> <i>Does the intervention help?</i></div>

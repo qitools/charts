@@ -8,7 +8,9 @@ temp <- gsub("\t", ' ', fixed = TRUE, temp)
 temp <- gsub(',', '","', fixed = TRUE, temp)
 temp <- paste('"',temp,'"',sep = '')
 
-if (counted != 'means'){
+#stop("temps made")
+
+if (outcome != 'means'){
   temp <- paste('Mymatrix <- matrix(c(',temp,'), ncol=4, byrow=TRUE, dimnames = list(NULL, c("period.name", "count", "total","Trial")))',sep = '')
   x <- eval(parse(file = "", n = NULL, text = temp))
   myframe <- data.frame (x)
@@ -96,7 +98,7 @@ if (sequential == FALSE)
 				numerator <- numerator + count[i]
 				denominator <- denominator + total[i]
 				}
-			par(fin=c(8.8,6))
+			# par(fin=c(8.8,6)) removed to fix too large error 05/16/2023
 			plot (row(myframe)[,1],count/total, ylim=c(0,1), xlab="", ylab="", type="b",xaxs="r",axes=F,,xaxt="n")
 			axis(side=1,at=1:length(myframe$period),labels=myframe$period.name)
 			axis(2,  xaxp=c(0,1,10))
@@ -287,8 +289,8 @@ else #sequential == TRUE
 			}
 		if (grepl("SR", type, ignore.case = TRUE))
 			{
-			if (length(myframe$period[Trial=='0']) < 3){stop('Insufficient number of values before trial do conduct a segmented regression analysis')}
-			if (length(myframe$period[Trial=='1']) < 3){stop('Insufficient number of values after trial do conduct a segmented regression analysis')}
+			#if (length(myframe$period[Trial=='0']) < 3){stop('Insufficient number of values before trial do conduct a segmented regression analysis')}
+			#if (length(myframe$period[Trial=='1']) < 3){stop('Insufficient number of values after trial do conduct a segmented regression analysis')}
 			subtitle = "segmented regression analysis"
 			par(mar=c(8.5, 5, 4, 2) + 0.1)
 			if (toupper(type) == "SR-P")
@@ -329,7 +331,7 @@ else #sequential == TRUE
 
 			if (toupper(type) == "SR-M")
 			{
-			  if (counted == "means")
+			  if (outcome == "means")
 			  {
 			   # stop(myframe$mean)
 			    myframe$currentvalue <- myframe$mean
