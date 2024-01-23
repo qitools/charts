@@ -1,4 +1,5 @@
 charts <- function(content, topic, outcome, counted, timeperiod, goalu, goall, type, theme) {    
+# Minor edit to force delivery
 temp <- content
 # http://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html
 #temp <- gsub('\n', '', fixed = TRUE, temp, perl = TRUE)
