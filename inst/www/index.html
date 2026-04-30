@@ -35,7 +35,11 @@
 
 <!-- http://www.w3schools.com/jsref/jsref_obj_regexp.asp -->
 
+
 <script>
+
+ocpu.seturl("../R");
+
 $(document).ready(function(){
 
   //optional, requires jquery-ui.
@@ -71,32 +75,48 @@ $( "#dialog" ).dialog();
   editor.setFontSize("14px");
   editor.getSession().setUseWrapMode(true);
   
-  // drawplot
-  function drawplot(){
-    $("#plotbutton").attr("disabled", "disabled")
-	$('#target').contents().find('#plotdiv').find('#baselineimage').css("display","none")
-	temp = editor.getSession().getValue()
-	//Three replacements below are not required on a local server, but are at https://public.opencpu.org/ocpu/github/
-	temp = temp.replace(/\r?\n/g, '')
-	temp = temp.replace(/\s+$/g, '')
-	temp = temp.replace(/$\s+/g, '')
-	temp = temp.replace(/,$/g, '')
-	var req = $('#target').contents().find('#plotdiv').r_fun_plot("charts", {
-	  content: temp,
-	  topic: $("#topic").val(),
-	  outcome: $("#outcome").val(),
-	  counted: $("#counted").val(),
-	  timeperiod: $("#timeperiod").val(),
-	  goalu: $("#goalu").val(),
-	  goall: $("#goall").val(),
-	  type: $("#type").val(),
-	  theme : $("#theme").val()
-    }).always(function(){
-      $("#plotbutton").removeAttr("disabled");
-    }).fail(function(){
-      alert("HTTP error " + req.status + ": " + req.responseText);
-    });
-  }
+// drawplot
+// drawplot
+function drawplot(){
+  $("#plotbutton").attr("disabled", "disabled");
+
+  var $plotdiv = $('#target').contents().find('#plotdiv');
+  $plotdiv.find('#baselineimage').css("display", "none");
+
+  var temp = editor.getSession().getValue();
+
+  temp = temp.replace(/\r?\n/g, '');
+  temp = temp.replace(/\s+$/g, '');
+  temp = temp.replace(/^\s+/g, '');
+  temp = temp.replace(/,$/g, '');
+
+  var req = ocpu.call("charts", {
+    content: temp,
+    topic: $("#topic").val(),
+    outcome: $("#outcome").val(),
+    counted: $("#counted").val(),
+    timeperiod: $("#timeperiod").val(),
+    goalu: $("#goalu").val(),
+    goall: $("#goall").val(),
+    type: $("#type").val(),
+    theme: $("#theme").val()
+  }, function(session) {
+
+    $plotdiv.html(
+      '<img src="' + session.getLoc() + 'graphics/1/png" alt="plot">'
+    );
+
+  });
+
+  req.fail(function() {
+    alert("HTTP error " + req.status + ": " + req.responseText);
+  });
+
+  req.always(function() {
+    $("#plotbutton").removeAttr("disabled");
+  });
+}
+
 
   //button handlers
   $("#plotbutton").on("click", function(e){
