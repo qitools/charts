@@ -5,22 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-<!--<script src="jquery/jquery-1.9.1.js"> </script>-->
-<script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
-	
+<!-- jQuery: load once, before qTip, Bootstrap, jQuery UI, and OpenCPU -->
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+
 <!-- tooltip -->
 <script type="text/javascript" src="qtip/jquery.qtip.min.js"></script>
 <link rel="stylesheet" type="text/css" href="qtip/jquery.qtip.min.css" />
 
-<!-- ocpu library -->
-<script src="opencpu/opencpu.js"> </script>
-
 <!-- some optional styling stuff -->
 <!-- <script src="jqueryui/jquery-ui-1.10.3.custom.js"> </script> -->
-<script src="bootstrap/js/bootstrap.js"> </script>   
+<script src="bootstrap/js/bootstrap.js"></script>
 
-<script src="//code.jquery.com/jquery-1.10.2.min.js"></script> 
-<script src="//www.opencpu.org/js/archive/opencpu-0.4.js"></script>
+<!-- OpenCPU library used by the older r_fun_plot() call below -->
+<script src="opencpu/opencpu-0.4.js"></script>
 
 <!-- jquery-csv from http://code.google.com/p/jquery-csv/ -->
 <!-- <script src="https://jquery-csv.googlecode.com/git/src/jquery.csv.js"></script> -->
@@ -28,14 +25,16 @@
 
 <!-- http://jqueryui.com/dialog/ -->
 <!--<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>-->
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"
+        integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0="
+        crossorigin="anonymous"></script>
 
 <!-- Ajax.org Cloud9 Editor from http://ace.c9.io/#nav=api&api=editor -->
 <script src="src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 
 <!-- http://www.w3schools.com/jsref/jsref_obj_regexp.asp -->
 
-<script> 
+<script>
 $(document).ready(function(){
 
   //optional, requires jquery-ui.
